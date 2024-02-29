@@ -6,7 +6,7 @@ ng g library AlphaLbs
 
 cd projects/alpha-lbs
 
-... edit project
+... edit project, readme, unit tests...
 
 npm init --scope @pvway
 

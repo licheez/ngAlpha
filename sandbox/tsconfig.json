@@ -5,6 +5,9 @@
     "paths": {
       "AlphaLbs": [
         "dist/alpha-lbs"
+      ],
+      "AlphaLsApi": [
+        "dist/alpha-ls-api"
       ]
     },
     "baseUrl": "./",
