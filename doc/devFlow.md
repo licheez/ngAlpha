@@ -10,6 +10,10 @@ cd projects/alpha-lbs
 
 npm init --scope @pvway
 
+edit the name into the angular.json file
+
 ng build AlphaLbs
 
 cd ../../dist/alpha-lbs
+
+npm publish --access public

@@ -8,6 +8,9 @@
       ],
       "AlphaLsApi": [
         "dist/alpha-ls-api"
+      ],
+      "AlphaTs": [
+        "dist/alpha-ts"
       ]
     },
     "baseUrl": "./",
