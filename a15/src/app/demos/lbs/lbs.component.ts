@@ -1,21 +1,22 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AlphaLbsService} from "@pvway/alpha-lbs";
+import {AlphaLbsService} from "../../../../projects/alpha-lbs/src/lib/alpha-lbs.service";
 
 @Component({
-  selector: 'app-lbs-demo',
-  templateUrl: './lbs-demo.component.html',
-  styleUrls: ['./lbs-demo.component.scss']
+  selector: 'app-lbs',
+  templateUrl: './lbs.component.html',
+  styleUrls: ['./lbs.component.scss']
 })
-export class LbsDemoComponent implements  OnInit, OnDestroy{
+export class LbsComponent implements OnInit, OnDestroy {
 
   /**
    * payload : { hours: number, minutes: number, seconds: number }
    */
-  static readonly CLOCK_CHANNEL = LbsDemoComponent.name + 'clock_channel1';
+  static readonly CLOCK_CHANNEL = 'LbsComponent.clock_channel';
 
   clock: {hours: number, minutes: number, seconds: number};
 
   private sub = -1;
+
   constructor(
     private mLbs: AlphaLbsService) {
     const now = new Date();
@@ -30,7 +31,7 @@ export class LbsDemoComponent implements  OnInit, OnDestroy{
     this.sub = this.mLbs.subscribe(
       (clock:  {hours: number, minutes: number, seconds: number}) =>
         this.clock = clock,
-      LbsDemoComponent.CLOCK_CHANNEL);
+      LbsComponent.CLOCK_CHANNEL);
 
     setInterval(
       () => {
@@ -39,7 +40,7 @@ export class LbsDemoComponent implements  OnInit, OnDestroy{
             hours: now.getHours(),
             minutes: now.getMinutes(),
             seconds: now.getSeconds()},
-          LbsDemoComponent.CLOCK_CHANNEL);
+          LbsComponent.CLOCK_CHANNEL);
       }, 800);
   }
 
