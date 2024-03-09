@@ -1,3 +1,5 @@
+import {Injectable} from "@angular/core";
+
 class Subscriber {
   callback: (payload: any) => void;
   channel?: string;
@@ -9,7 +11,9 @@ class Subscriber {
     this.channel = channel;
   }
 }
-
+@Injectable({
+  providedIn: 'root'
+})
 export class AlphaLbsService {
 
   private subscribers = new Map<number, Subscriber>();

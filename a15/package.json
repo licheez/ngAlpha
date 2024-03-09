@@ -21,7 +21,7 @@
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0",
-    "@pvway/alpha-lbs": "^15.2.1",
+    "@pvway/alpha-lbs": "^15.2.2",
     "@pvway/alpha-ls": "^15.2.0"
   },
   "devDependencies": {
