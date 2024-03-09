@@ -3,5 +3,4 @@
  */
 
 export * from './lib/alpha-ts.service';
-export * from './lib/alpha-ts.component';
 export * from './lib/alpha-ts.module';
