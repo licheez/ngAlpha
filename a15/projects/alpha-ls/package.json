@@ -1,6 +1,6 @@
 {
-  "name": "alpha-ls",
-  "version": "0.0.1",
+  "name": "@pvway/alpha-ls",
+  "version": "15.2.0",
   "peerDependencies": {
     "@angular/common": "^15.2.0",
     "@angular/core": "^15.2.0"
@@ -8,5 +8,29 @@
   "dependencies": {
     "tslib": "^2.3.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "description": "This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.0.",
+  "main": "index.js",
+  "scripts": {
+    "test": "ng test AlphaLs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/licheez/ngAlpha.git#develop"
+  },
+  "keywords": [
+    "client",
+    "side",
+    "error",
+    "loging",
+    "page",
+    "navigation",
+    "statistics"
+  ],
+  "author": "Pierre Van Wallendael",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/licheez/ngAlpha/issues"
+  },
+  "homepage": "https://github.com/licheez/ngAlpha/tree/develop#readme"
 }
