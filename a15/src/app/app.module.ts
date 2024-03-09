@@ -3,9 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { LbsComponent } from './demos/lbs/lbs.component';
-import {AlphaLbsModule} from "../../projects/alpha-lbs/src/lib/alpha-lbs.module";
 import { LsComponent } from './demos/ls/ls.component';
-
 
 @NgModule({
   declarations: [
@@ -14,10 +12,10 @@ import { LsComponent } from './demos/ls/ls.component';
     LsComponent
   ],
   imports: [
-    BrowserModule,
-    AlphaLbsModule
+    BrowserModule
   ],
-  providers: [],
+  providers: [
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

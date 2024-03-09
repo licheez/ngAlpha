@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LbsComponent } from './lbs.component';
-import {AlphaLbsModule} from "../../../../projects/alpha-lbs/src/lib/alpha-lbs.module";
-import {AlphaLbsService} from "../../../../projects/alpha-lbs/src/lib/alpha-lbs.service";
+import {AlphaLbsModule} from "@pvway/alpha-lbs";
 
 describe('LbsComponent', () => {
   let component: LbsComponent;

@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AlphaLbsService} from "../../../../projects/alpha-lbs/src/lib/alpha-lbs.service";
+import {AlphaLbsService} from "@pvway/alpha-lbs";
 
 @Component({
   selector: 'app-lbs',

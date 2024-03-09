@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AlphaLsService} from "../../../../projects/alpha-ls/src/lib/alpha-ls.service";
+import {AlphaLsService} from "@pvway/alpha-ls";
 
 @Component({
   selector: 'app-ls',
