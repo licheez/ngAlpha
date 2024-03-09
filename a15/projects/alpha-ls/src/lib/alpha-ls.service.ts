@@ -64,10 +64,12 @@ export class AlphaLsService {
       .pipe(
         catchError(
           (err: HttpErrorResponse) => {
-            console.error(err);
             return throwError(() => err);
           }));
-    req.subscribe();
+    req.subscribe({
+      next: () => {},
+      error: e => console.error(e)
+    });
   }
 
   usePostErrorLog(postErrorLog: (context: string, method: string, error: string) => any) {
@@ -93,10 +95,12 @@ export class AlphaLsService {
       .pipe(
         catchError(
           (err: HttpErrorResponse) => {
-            console.error(err);
             return throwError(() => err);
           }));
-    req.subscribe();
+    req.subscribe({
+      next: () => {},
+      error: e => console.error(e)
+    });
   }
 
 }

@@ -39,7 +39,7 @@ export class AlphaLbsService {
   /**
    * Broadcasts a given payload on a given channel.
    *
-   * @param {T} payload - The payload to be published.
+   * @param payload - The payload to be published.
    * @param {string} channel - The channel on which the payload will be broad-casted.
    * @return {number} - The number of subscribers who received the payload.
    */
@@ -57,7 +57,7 @@ export class AlphaLbsService {
                 // no wild car found -> exact match
                 send = subscriberChannel === channel;
                 break;
-              case 1:
+              case 0:
                 // starts with a wild card -> always send
                 break;
               default:

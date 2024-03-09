@@ -51,7 +51,7 @@ describe('AlphaLbsService', () => {
     expect(nbHits).toEqual(3);
   });
 
-  it('should broadcast', () => {
+  it('should broadcast when publishing to all', () => {
     service.subscribe(
       payload =>
         expect(payload).toEqual('test'),
@@ -59,9 +59,31 @@ describe('AlphaLbsService', () => {
     service.subscribe(
       payload =>
         expect(payload).toEqual('test'),
-      'channel2');
+      'chan*');
+    service.subscribe(
+      payload =>
+        expect(payload).toEqual('test'),
+      '*');
     const nbHits = service.publish('test', '*');
+    expect(nbHits).toEqual(3);
+  });
+
+  it('should work when publishing to a specific channel', () => {
+    service.subscribe(
+      payload =>
+        expect(payload).toEqual('test'),
+      'channel1');
+    service.subscribe(
+      payload =>
+        expect(payload).toEqual('test'),
+      'chan*');
+    service.subscribe(
+      payload =>
+        expect(payload).toEqual('test'),
+      '*');
+    const nbHits = service.publish('test', 'chan');
     expect(nbHits).toEqual(2);
   });
+
 
 });

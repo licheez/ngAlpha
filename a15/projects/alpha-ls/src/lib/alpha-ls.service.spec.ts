@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { AlphaLsService } from './alpha-ls.service';
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
+import {HttpErrorResponse} from "@angular/common/http";
 
 describe('AlphaLsService', () => {
   let service: AlphaLsService;
@@ -18,7 +19,6 @@ describe('AlphaLsService', () => {
     });
     service = TestBed.inject(AlphaLsService);
     httpMock = TestBed.inject(HttpTestingController);
-
   });
 
   afterEach(() => {
@@ -52,10 +52,28 @@ describe('AlphaLsService', () => {
     const postNavigationLog =
       (path: string, title: string) => {
         expect(path).toEqual('somePath');
+        expect(title).toEqual('someTitle');
       };
     service.usePostNavigationLog(postNavigationLog);
     service.postNavigationLog(
       'somePath','someTitle');
+  });
+
+  it('usePostNavigationLog should fail', () => {
+    const errorResponse =
+      new HttpErrorResponse(
+        {
+          error: 'test 400 error',
+          status: 400,
+          statusText: 'Bad Request'});
+    const url = 'http://localhost:8080';
+    service.init(undefined, url);
+    spyOn(console, 'error');
+    service.postNavigationLog(
+      'somePath', 'someTitle');
+    const req = httpMock.expectOne(url);
+    req.flush({}, errorResponse);
+    expect(console.error).toHaveBeenCalled();
   });
 
   it('tests postErrorLog method when null', () => {
@@ -82,11 +100,30 @@ describe('AlphaLsService', () => {
     const postErrorLog =
       (context: string, method: string, error: string) => {
         expect(context).toEqual('someContext');
+        expect(method).toEqual('someMethod');
+        expect(error).toEqual('someError');
       };
     service.usePostErrorLog(postErrorLog);
     service.postErrorLog(
       'someContext',
       'someMethod', 'someError');
+  });
+
+  it('usePostErrorLog should fail', () => {
+    const errorResponse =
+      new HttpErrorResponse(
+      {
+            error: 'test 400 error',
+            status: 400,
+            statusText: 'Bad Request'});
+    const url = 'http://localhost:8080';
+    service.init(url);
+    spyOn(console, 'error');
+    service.postErrorLog(
+      'someContext', 'someMethod', 'someError');
+    const req = httpMock.expectOne(url);
+    req.flush({}, errorResponse);
+    expect(console.error).toHaveBeenCalled();
   });
 
 });
