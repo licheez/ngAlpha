@@ -2,23 +2,57 @@
 
 This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.0.
 
-## Code scaffolding
+## Description
 
-Run `ng generate component component-name --project AlphaLbs` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project AlphaLbs`.
-> Note: Don't forget to add `--project AlphaLbs` or else it will be added to the default project in your `angular.json` file. 
-
-## Build
-
-Run `ng build AlphaLbs` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Publishing
-
-After building your library with `ng build AlphaLbs`, go to the dist folder `cd dist/alpha-lbs` and run `npm publish`.
+This package is a tiny local message bus service that enables components and services to communicate via publish/subscribe
 
 ## Running unit tests
 
 Run `ng test AlphaLbs` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Further help
+## Usage
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+We have a component or a service that will broadcast a clock object to all listening services or components.
+
+``` typescript
+
+  /**
+   * payload : { hours: number, minutes: number, seconds: number }
+  */
+  static readonly CLOCK_CHANNEL = AppComponent.name + 'clock_channel';
+
+  constructor(private  mLbs: AlphaLbsService) {  }
+
+  ngOnInit() {
+    setInterval( 
+      () => {
+        const now = new Date();
+        this.mLbs.publish({
+          hours: now.getHours(), 
+          minutes: now.getMinutes(), 
+          seconds: now.getSeconds()}, 
+          AppComponent.CLOCK_CHANNEL);
+      }, 800);
+  }
+  
+```
+
+We can now have another component that listens to that given channel and console.log the time
+
+```typescript
+  sub = -1;
+
+  constructor(private  mLbs: AlphaLbsService) {  }
+
+  ngOnInit(): void {
+    this.sub = this.mLbs.subscribe(
+      (clock:  {hours: number, minutes: number, seconds: number}) =>
+        console.log(clock),
+      AppComponent.CLOCK_CHANNEL);
+  }
+
+  ngOnDestroy(): void {
+    this.mLbs.unsubscribe(this.sub);
+  }
+
+```

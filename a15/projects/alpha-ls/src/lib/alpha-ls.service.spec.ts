@@ -37,7 +37,7 @@ describe('AlphaLsService', () => {
   });
 
   it('tests postNavigationLog method', () => {
-    const url = 'http://test-url.com';
+    const url = 'https://test-url.com';
     service.init(undefined, url);
     service.postNavigationLog('somePath', 'someTitle');
     const req = httpMock.expectOne(url);
@@ -84,10 +84,9 @@ describe('AlphaLsService', () => {
   });
 
   it('tests postErrorLog method', () => {
-    const url = 'http://test-url.com';
+    const url = 'https://test-url.com';
     service.init(url);
-    service.postErrorLog('someContext',
-      'someMethod', 'someError');
+    service.postErrorLog('someContext','someMethod', 'someError');
     const req = httpMock.expectOne(url);
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toBeDefined();

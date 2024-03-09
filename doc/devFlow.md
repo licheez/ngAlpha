@@ -22,7 +22,7 @@ npm publish --access public
 ## Install Karma
 
 Angular removes e2e testing starting from version 11 and the default configuration does not include a Karma setup. The deprecation notice goes as follows:
-As of Angular CLI 12, we are no longer include E2E in new projects and we will be working towards removing them from the Angular ecosystem while providing better integration with Cypress and other popular tooling.
+As of Angular CLI 12, we are no longer include E2E in new projects, and we will be working towards removing them from the Angular ecosystem while providing better integration with Cypress and other popular tooling.
 In order to incorporate unit testing and Karma/Jasmine configurations into your project, please follow this guide.
 First, you'll need to install the required dependencies:
 
@@ -92,21 +92,23 @@ This will set up the Angular testing environment.
 Update your angular.json file and add the following configuration under the projects -> your-project-name section:
 
 ```json lines
-"test": {
-  "builder": "@angular-devkit/build-angular:karma",
-  "options": {
-    "main": "src/test.ts",
-    "karmaConfig": "./karma.conf.js",
-    "polyfills": "src/polyfills.ts",
-    "tsConfig": "./tsconfig.spec.json",
-    "scripts": [],
-    "styles": [
-      "styles.css"
-    ],
-    "assets": [
-      "favicon.ico",
-      "assets"
-    ]
-  }
+{
+    "test": {
+      "builder": "@angular-devkit/build-angular:karma",
+      "options": {
+        "main": "src/test.ts",
+        "karmaConfig": "./karma.conf.js",
+        "polyfills": "src/polyfills.ts",
+        "tsConfig": "./tsconfig.spec.json",
+        "scripts": [],
+        "styles": [
+          "styles.css"
+        ],
+        "assets": [
+          "favicon.ico",
+          "assets"
+        ]
+      }
+    }
 }
 ```
