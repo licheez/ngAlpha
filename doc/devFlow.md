@@ -112,3 +112,8 @@ Update your angular.json file and add the following configuration under the proj
     }
 }
 ```
+
+# Jest
+https://medium.com/@zeeshankhan8838/unit-testing-angular-with-jest-configuration-e324ec61620c
+
+
