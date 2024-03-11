@@ -123,4 +123,64 @@ For information about custom transformations, see:
 https://jestjs.io/docs/code-transformation
 
 
+## Setting up jest for library
 
+### create file _setup.jest.ts_ in src
+
+in the source dir src add the setup.jest.ts file with the following content
+
+```json lines
+import 'jest-preset-angular/setup-jest.js';
+
+// @ts-ignore
+module.exports = {
+  transform: {
+    '^.+\\.tsx?$': ['ts-jest', {
+      "tsconfig": "<rootDir>/tsconfig.spec.json",
+      "stringifyContentPathRegex": "\\.html$"
+    }],
+  },
+}
+```
+
+### Edit the _package.json_ file
+
+Add the following lines
+
+``` json lines
+
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
+    "jest-preset-angular": "^14.0.3"
+  },
+  "jest": {
+    "preset": "jest-preset-angular",
+    "setupFilesAfterEnv": [
+      "./src/setup.jest.ts"
+    ]
+  }
+
+```
+
+and run **npm install**
+
+### Edit _tsconfig.spec.json_ file
+
+replace
+```json lines
+{
+  "types": [
+    "jasmine"
+  ]
+}
+```
+by
+```json lines
+{
+  "types": [
+    "jest",
+    "node"
+  ]
+}
+```
