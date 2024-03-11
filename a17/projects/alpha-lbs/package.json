@@ -1,5 +1,5 @@
 {
-  "name": "alpha-lbs",
+  "name": "@pvway/alpha-lbs",
   "version": "17.0.0",
   "peerDependencies": {
     "@angular/common": "^17.2.0",
@@ -19,5 +19,28 @@
     "setupFilesAfterEnv": [
       "./src/setup.jest.ts"
     ]
-  }
+  },
+  "description": "This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.0.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/licheez/ngAlpha.git"
+  },
+  "keywords": [
+    "hub",
+    "message",
+    "queue",
+    "bus",
+    "local",
+    "ipc"
+  ],
+  "author": "Pierre Van Wallendael",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/licheez/ngAlpha/issues"
+  },
+  "homepage": "https://github.com/licheez/ngAlpha#readme"
 }
