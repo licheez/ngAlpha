@@ -9,8 +9,6 @@
   },
   "files": ["src/setup.jest.ts"],
   "include": [
-    "projects/**/*.spec.ts",
-    "projects/**/*.d.ts",
     "src/**/*.spec.ts",
     "src/**/*.d.ts"
   ]
