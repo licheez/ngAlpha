@@ -116,4 +116,11 @@ Update your angular.json file and add the following configuration under the proj
 # Jest
 https://medium.com/@zeeshankhan8838/unit-testing-angular-with-jest-configuration-e324ec61620c
 
+You'll find more details and examples of these config options in the docs:
+https://jestjs.io/docs/configuration
+
+For information about custom transformations, see:
+https://jestjs.io/docs/code-transformation
+
+
 
