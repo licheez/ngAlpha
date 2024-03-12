@@ -1,42 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1710243728261" clover="3.2.0">
-  <project timestamp="1710243728261" name="All files">
-    <metrics statements="33" coveredstatements="33" conditionals="2" coveredconditionals="2" methods="9" coveredmethods="9" elements="44" coveredelements="44" complexity="0" loc="33" ncloc="33" packages="1" files="1" classes="1"/>
+<coverage generated="1710257368197" clover="3.2.0">
+  <project timestamp="1710257368197" name="All files">
+    <metrics statements="101" coveredstatements="101" conditionals="8" coveredconditionals="8" methods="28" coveredmethods="28" elements="137" coveredelements="137" complexity="0" loc="101" ncloc="101" packages="1" files="3" classes="3"/>
     <file name="alpha-translation-cache.ts" path="C:\gitHub\ngAlpha\a17\projects\alpha-ts\src\lib\alpha-translation-cache.ts">
       <metrics statements="33" coveredstatements="33" conditionals="2" coveredconditionals="2" methods="9" coveredmethods="9"/>
+      <line num="5" count="3" type="stmt"/>
+      <line num="6" count="3" type="stmt"/>
+      <line num="8" count="3" type="stmt"/>
+      <line num="212" count="4" type="stmt"/>
+      <line num="218" count="19" type="stmt"/>
+      <line num="219" count="19" type="stmt"/>
+      <line num="225" count="13" type="stmt"/>
+      <line num="227" count="13" type="stmt"/>
+      <line num="231" count="15" type="stmt"/>
+      <line num="232" count="14" type="stmt"/>
+      <line num="233" count="14" type="stmt"/>
+      <line num="235" count="495" type="stmt"/>
+      <line num="236" count="495" type="stmt"/>
+      <line num="237" count="495" type="stmt"/>
+      <line num="239" count="495" type="stmt"/>
+      <line num="240" count="495" type="stmt"/>
+      <line num="242" count="1485" type="stmt"/>
+      <line num="246" count="1485" type="stmt"/>
+      <line num="249" count="495" type="stmt"/>
+      <line num="253" count="495" type="stmt"/>
+      <line num="256" count="14" type="stmt"/>
+      <line num="260" count="2" type="stmt"/>
+      <line num="262" count="2" type="stmt"/>
+      <line num="263" count="1" type="stmt"/>
+      <line num="267" count="5" type="stmt"/>
+      <line num="268" count="5" type="cond" truecount="2" falsecount="0"/>
+      <line num="269" count="2" type="stmt"/>
+      <line num="270" count="2" type="stmt"/>
+      <line num="271" count="2" type="stmt"/>
+      <line num="272" count="2" type="stmt"/>
+      <line num="274" count="3" type="stmt"/>
+      <line num="282" count="2" type="stmt"/>
+      <line num="283" count="2" type="stmt"/>
+    </file>
+    <file name="alpha-ts-api.service.ts" path="C:\gitHub\ngAlpha\a17\projects\alpha-ts\src\lib\alpha-ts-api.service.ts">
+      <metrics statements="26" coveredstatements="26" conditionals="2" coveredconditionals="2" methods="9" coveredmethods="9"/>
+      <line num="1" count="2" type="stmt"/>
+      <line num="2" count="2" type="stmt"/>
+      <line num="4" count="2" type="stmt"/>
+      <line num="5" count="2" type="stmt"/>
+      <line num="6" count="2" type="stmt"/>
+      <line num="11" count="2" type="stmt"/>
+      <line num="13" count="15" type="stmt"/>
+      <line num="15" count="15" type="stmt"/>
+      <line num="18" count="15" type="stmt"/>
+      <line num="19" count="15" type="stmt"/>
+      <line num="22" count="4" type="stmt"/>
+      <line num="27" count="3" type="stmt"/>
+      <line num="31" count="7" type="stmt"/>
+      <line num="36" count="4" type="stmt"/>
+      <line num="37" count="4" type="cond" truecount="1" falsecount="0"/>
+      <line num="38" count="1" type="stmt"/>
+      <line num="40" count="1" type="stmt"/>
+      <line num="41" count="1" type="stmt"/>
+      <line num="45" count="3" type="stmt"/>
+      <line num="47" count="3" type="stmt"/>
+      <line num="54" count="2" type="cond" truecount="1" falsecount="0"/>
+      <line num="55" count="1" type="stmt"/>
+      <line num="57" count="1" type="stmt"/>
+      <line num="58" count="1" type="stmt"/>
+      <line num="61" count="2" type="stmt"/>
+      <line num="62" count="2" type="stmt"/>
+    </file>
+    <file name="alpha-ts.service.ts" path="C:\gitHub\ngAlpha\a17\projects\alpha-ts\src\lib\alpha-ts.service.ts">
+      <metrics statements="42" coveredstatements="42" conditionals="4" coveredconditionals="4" methods="10" coveredmethods="10"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="3" count="1" type="stmt"/>
+      <line num="4" count="1" type="stmt"/>
       <line num="5" count="1" type="stmt"/>
       <line num="6" count="1" type="stmt"/>
-      <line num="8" count="1" type="stmt"/>
-      <line num="212" count="2" type="stmt"/>
-      <line num="218" count="6" type="stmt"/>
-      <line num="219" count="6" type="stmt"/>
-      <line num="225" count="3" type="stmt"/>
-      <line num="227" count="3" type="stmt"/>
-      <line num="231" count="4" type="stmt"/>
-      <line num="232" count="4" type="stmt"/>
-      <line num="233" count="4" type="stmt"/>
-      <line num="235" count="115" type="stmt"/>
-      <line num="236" count="115" type="stmt"/>
-      <line num="237" count="115" type="stmt"/>
-      <line num="239" count="115" type="stmt"/>
-      <line num="240" count="115" type="stmt"/>
-      <line num="242" count="345" type="stmt"/>
-      <line num="246" count="345" type="stmt"/>
-      <line num="249" count="115" type="stmt"/>
-      <line num="253" count="115" type="stmt"/>
-      <line num="256" count="4" type="stmt"/>
-      <line num="260" count="1" type="stmt"/>
-      <line num="262" count="1" type="stmt"/>
-      <line num="263" count="1" type="stmt"/>
-      <line num="267" count="2" type="stmt"/>
-      <line num="268" count="2" type="cond" truecount="2" falsecount="0"/>
-      <line num="269" count="1" type="stmt"/>
-      <line num="270" count="1" type="stmt"/>
-      <line num="271" count="1" type="stmt"/>
-      <line num="272" count="1" type="stmt"/>
-      <line num="274" count="1" type="stmt"/>
-      <line num="281" count="1" type="stmt"/>
-      <line num="282" count="1" type="stmt"/>
+      <line num="7" count="1" type="stmt"/>
+      <line num="14" count="1" type="stmt"/>
+      <line num="16" count="8" type="stmt"/>
+      <line num="18" count="8" type="stmt"/>
+      <line num="21" count="8" type="stmt"/>
+      <line num="22" count="8" type="stmt"/>
+      <line num="24" count="8" type="stmt"/>
+      <line num="27" count="8" type="stmt"/>
+      <line num="28" count="1" type="stmt"/>
+      <line num="39" count="5" type="stmt"/>
+      <line num="51" count="3" type="stmt"/>
+      <line num="54" count="3" type="stmt"/>
+      <line num="55" count="3" type="stmt"/>
+      <line num="57" count="3" type="cond" truecount="1" falsecount="0"/>
+      <line num="58" count="1" type="stmt"/>
+      <line num="60" count="1" type="stmt"/>
+      <line num="61" count="1" type="stmt"/>
+      <line num="64" count="2" type="stmt"/>
+      <line num="69" count="1" type="cond" truecount="1" falsecount="0"/>
+      <line num="70" count="1" type="stmt"/>
+      <line num="71" count="1" type="stmt"/>
+      <line num="73" count="1" type="stmt"/>
+      <line num="74" count="1" type="stmt"/>
+      <line num="77" count="1" type="stmt"/>
+      <line num="79" count="1" type="stmt"/>
+      <line num="92" count="5" type="stmt"/>
+      <line num="94" count="42" type="stmt"/>
+      <line num="96" count="5" type="cond" truecount="1" falsecount="0"/>
+      <line num="99" count="4" type="stmt"/>
+      <line num="101" count="4" type="stmt"/>
+      <line num="102" count="9" type="stmt"/>
+      <line num="103" count="4" type="cond" truecount="1" falsecount="0"/>
+      <line num="104" count="3" type="stmt"/>
+      <line num="108" count="1" type="stmt"/>
+      <line num="110" count="1" type="stmt"/>
+      <line num="111" count="1" type="stmt"/>
+      <line num="113" count="1" type="stmt"/>
     </file>
   </project>
 </coverage>

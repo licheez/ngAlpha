@@ -272,7 +272,8 @@ export class AlphaTranslationCache implements IAlphaTranslationCache {
       return new AlphaTranslationCache(dt, translations);
     } else {
       return new AlphaTranslationCache(
-        new Date(1970, 0, 1, 0, 0, 0, 0),
+        new Date(1970, 0, 1,
+          0, 0, 0, 0),
         []);
     }
   }

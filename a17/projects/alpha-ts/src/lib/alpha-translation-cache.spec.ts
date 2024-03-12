@@ -1,5 +1,4 @@
 import { AlphaTranslationCache } from './alpha-translation-cache';
-import {cache} from "@babel/traverse";
 
 describe('AlphaTranslationCache', () => {
 
