@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1710243728261" clover="3.2.0">
+  <project timestamp="1710243728261" name="All files">
+    <metrics statements="33" coveredstatements="33" conditionals="2" coveredconditionals="2" methods="9" coveredmethods="9" elements="44" coveredelements="44" complexity="0" loc="33" ncloc="33" packages="1" files="1" classes="1"/>
+    <file name="alpha-translation-cache.ts" path="C:\gitHub\ngAlpha\a17\projects\alpha-ts\src\lib\alpha-translation-cache.ts">
+      <metrics statements="33" coveredstatements="33" conditionals="2" coveredconditionals="2" methods="9" coveredmethods="9"/>
+      <line num="5" count="1" type="stmt"/>
+      <line num="6" count="1" type="stmt"/>
+      <line num="8" count="1" type="stmt"/>
+      <line num="212" count="2" type="stmt"/>
+      <line num="218" count="6" type="stmt"/>
+      <line num="219" count="6" type="stmt"/>
+      <line num="225" count="3" type="stmt"/>
+      <line num="227" count="3" type="stmt"/>
+      <line num="231" count="4" type="stmt"/>
+      <line num="232" count="4" type="stmt"/>
+      <line num="233" count="4" type="stmt"/>
+      <line num="235" count="115" type="stmt"/>
+      <line num="236" count="115" type="stmt"/>
+      <line num="237" count="115" type="stmt"/>
+      <line num="239" count="115" type="stmt"/>
+      <line num="240" count="115" type="stmt"/>
+      <line num="242" count="345" type="stmt"/>
+      <line num="246" count="345" type="stmt"/>
+      <line num="249" count="115" type="stmt"/>
+      <line num="253" count="115" type="stmt"/>
+      <line num="256" count="4" type="stmt"/>
+      <line num="260" count="1" type="stmt"/>
+      <line num="262" count="1" type="stmt"/>
+      <line num="263" count="1" type="stmt"/>
+      <line num="267" count="2" type="stmt"/>
+      <line num="268" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="269" count="1" type="stmt"/>
+      <line num="270" count="1" type="stmt"/>
+      <line num="271" count="1" type="stmt"/>
+      <line num="272" count="1" type="stmt"/>
+      <line num="274" count="1" type="stmt"/>
+      <line num="281" count="1" type="stmt"/>
+      <line num="282" count="1" type="stmt"/>
+    </file>
+  </project>
+</coverage>
