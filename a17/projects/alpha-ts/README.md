@@ -27,7 +27,7 @@ Actually, the exact structure of the data returned by the Web Api is the followi
     "alpha.buttons.delete": {
       "en": "Delete",
       "fr": "Supprimer",
-      "nl": "Deleten"
+      "nl": "Verwijderen"
     }
 }
 ```
@@ -103,7 +103,7 @@ As you can see the user will have to wait until the translations are loaded befo
 
 ## Usage
 
-With this service all translations will be manage by the code... that makes your html much clearer and easier to maintain.
+With this service all translations will be managed by the code... that makes your html much clearer and easier to maintain.
 
 ```typescript
 @Component({
@@ -177,7 +177,7 @@ export class TsDemoComponent implements OnInit, OnDestroy {
 
 This implementation uses the AlphaLbsService.
 
-The component that update the user language uses also the AlphaLbsService for publishing the value of the selected user language with the channel 'LANGUAGE_CODE_UPDATED';
+A component that updates the user language could also use the AlphaLbsService for publishing the value of the selected user language with the channel 'LANGUAGE_CODE_UPDATED';
 
 ```typescript
 onLanguageChanged(languageCode: string): void {
@@ -189,7 +189,7 @@ As a side effect of this publication your component will change the language cod
 
 for more information see [AlphaLbsService](https://www.npmjs.com/package/@pvway/alpha-lbs).
 
-## Overriding the standard Api call
+## Overriding the standard API call
 
 If needed you can also override the standard behaviour of the translation service Api (the service that gets the translations from the backend);
 
