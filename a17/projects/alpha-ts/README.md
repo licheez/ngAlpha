@@ -131,3 +131,74 @@ and the template looks like this.
 ```
 
 With this principle in place your template should never contain any translations.
+
+## Advanced usage
+
+```typescript
+
+@Component({
+  selector: 'app-ts-demo',
+  standalone: true,
+  imports: [],
+  templateUrl: './ts-demo.component.html',
+  styleUrl: './ts-demo.component.scss'
+})
+export class TsDemoComponent implements OnInit, OnDestroy {
+
+  private sub = -1;
+
+  titleLit: string | undefined;
+  private setLiterals() {
+    this.titleLit = this.mTs.getTr('demoTs.title');
+  }
+
+  constructor(
+    private mTs: AlphaTsService,
+    private mLbs: AlphaLbsService) {
+    this.setLiterals();
+  }
+
+  ngOnInit(): void {
+    this.sub = this.mLbs.subscribe(
+      (lc: string) => {
+        this.mTs.changeLanguageCode(lc);
+        this.setLiterals();
+      },
+      'LANGUAGE_CODE_UPDATED');
+  }
+
+  ngOnDestroy() {
+    this.mLbs.unsubscribe(this.sub);
+  }
+
+}
+
+```
+
+This implementation uses the AlphaLbsService.
+
+The component that update the user language uses also the AlphaLbsService for publishing the value of the selected user language with the channel 'LANGUAGE_CODE_UPDATED';
+
+```typescript
+onLanguageChanged(languageCode: string): void {
+    this.mLbs.publish(languageCode, 'LANGUAGE_CODE_UPDATED');
+}
+```
+
+As a side effect of this publication your component will change the language code used by the translation service and re-populate the literals.
+
+for more information see [AlphaLbsService](https://www.npmjs.com/package/@pvway/alpha-lbs).
+
+## Overriding the standard Api call
+
+If needed you can also override the standard behaviour of the translation service Api (the service that gets the translations from the backend);
+
+For this you may use the following method:
+
+```typescript
+useGetTranslationCacheUpdate(getTranslationCacheUpdate: (lastUpdateDate: Date) =>
+  Observable<IAlphaTranslationCache | null>): void;
+```
+
+And you provide your own method that returns an observable with an ITranslationCache object for a given date.
+
