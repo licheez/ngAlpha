@@ -6,6 +6,9 @@
       "AlphaLbs": [
         "./dist/alpha-lbs"
       ],
+      "AlphaLs": [
+        "./dist/alpha-ls"
+      ],
       "AlphaTs": [
         "./dist/alpha-ts"
       ]
