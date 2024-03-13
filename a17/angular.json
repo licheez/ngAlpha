@@ -182,6 +182,39 @@
           }
         }
       }
+    },
+    "AlphaOas": {
+      "projectType": "library",
+      "root": "projects/alpha-oas",
+      "sourceRoot": "projects/alpha-oas/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/alpha-oas/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/alpha-oas/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/alpha-oas/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "tsConfig": "projects/alpha-oas/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {

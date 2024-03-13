@@ -9,6 +9,9 @@
       "AlphaLs": [
         "./dist/alpha-ls"
       ],
+      "AlphaOas": [
+        "./dist/alpha-oas"
+      ],
       "AlphaTs": [
         "./dist/alpha-ts"
       ]
