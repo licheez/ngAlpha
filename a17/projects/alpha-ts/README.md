@@ -50,6 +50,44 @@ The client stores the new dictionary in its localStorage.
 
 However, when the client translations are up to date, the server only return 'isUpToDate' set to true. The client does not need to refresh its localStorage as its translations are still valid.
 
+## Dependencies
+
+### AlphaLoggingService (a.k.a. alpha-ls)
+
+AlphaLsService (when initialized) is used for logging any error and also to report any missing translation so that those translations gaps can be fixed by the dev team.
+
+If your application uses alpha-ls it might be already initialized. 
+
+Otherwise, you can also initialize it using the init method. (see initialization section here after.)
+
+### AlphaLocalBusService (a.k.a. alpha-lbs)
+
+AlphaLbsService is used to listen the local bus channel 'LANGUAGE_CODE_UPDATE';
+
+When, in your application, the user language changes, you should publish the new languageCode (iso) to the LocalBus.
+
+If you do so, the TranslationService will intercept this change and update its private mLanguageCode variable.
+
+See the service constructor here after.
+
+```typescript
+...
+  private mLanguageCode = 'en';
+
+constructor(
+  private mApi: AlphaTsApiService,
+  private mLs: AlphaLsService,
+  lbs: AlphaLbsService) {
+  this.mTranslationCache = AlphaTranslationCache.default;
+
+  // listen to any update of the language code
+  lbs.subscribe((languageCode: string) =>
+      this.changeLanguageCode(languageCode),
+    "LANGUAGE_CODE_UPDATED");
+}
+...
+```
+
 ## Initialization
 
 As usual there is a small configuration for this service to work properly.
@@ -76,8 +114,11 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    // define the end point that delivers translation cache updates
     const tcUpdateUrl = environment.apiHost + '/getTranslationCacheUpdate';
-    this.mTs.init(tcUpdateUrl).subscribe({
+    // define the end point that alpha-ls uses for logging errors
+    const postErrLogUrl = environment.apiHost + '/postErrorLog';
+    this.mTs.init(tcUpdateUrl, postErrLogUrl).subscribe({
         next: tsStatus => {
           console.log(tsStatus);
           this.ready = true;
@@ -202,3 +243,126 @@ useGetTranslationCacheUpdate(getTranslationCacheUpdate: (lastUpdateDate: Date) =
 
 And you provide your own method that returns an observable with an ITranslationCache object for a given date.
 
+## Backend side
+
+See here after an example of implementation at back-end side... here in dotNet core 6
+
+``` csharp
+    [HttpGet("getTranslationCacheUpdate")]
+    public async Task<ActionResult> GetTranslationCacheUpdate(DateTime clientDate)
+    {
+        DsoHttpResult<AlphaDsoTranslationsCacheUpdate> hRes;
+        try
+        {
+            clientDate = clientDate.ToUniversalTime();
+            var tc = (IAlphaTranslationCache?) _sp.GetService(
+                typeof(IAlphaTranslationCache));
+            if (tc == null) throw new Exception("tc should not be null");
+            var serverDate = tc.LastUpdateDateUtc;
+            var dif = serverDate - clientDate;
+            var dso = dif.TotalSeconds <= 1.0
+                ? new AlphaDsoTranslationsCacheUpdate(null, null)
+                : new AlphaDsoTranslationsCacheUpdate(serverDate, tc.Translations);
+            hRes = new DsoHttpResult<AlphaDsoTranslationsCacheUpdate>(dso);
+        }
+        catch (Exception e)
+        {
+            await Ls.LogAsync(e);
+            hRes = new DsoHttpResult<AlphaDsoTranslationsCacheUpdate>(e);
+        }
+
+        return hRes.GetActionResult(this);
+    }
+
+```
+
+here after the DsoHttpResult object that wraps the response data
+
+```csharp
+// Decompiled with JetBrains decompiler
+// Type: pvWay.MethodResultWrapper.nc6.DsoHttpResult`1
+// Assembly: pvWay.MethodResultWrapper.nc6, Version=1.0.2.0, Culture=neutral, PublicKeyToken=null
+// MVID: 64113074-5D4E-48F5-9DEB-A342FE05D3E6
+// Assembly location: C:\Users\pierr\.nuget\packages\pvway.methodresultwrapper.nc6\1.0.2\lib\net6.0\pvWay.MethodResultWrapper.nc6.dll
+
+using System;
+
+#nullable enable
+namespace pvWay.MethodResultWrapper.nc6
+{
+  public class DsoHttpResult<T> : DsoHttpResult
+  {
+    public T Data { get; }
+
+    public DsoHttpResult(T data) => this.Data = data;
+
+    public DsoHttpResult(T data, bool hasMoreResults)
+      : base(SeverityEnum.Ok, hasMoreResults)
+    {
+      this.Data = data;
+    }
+
+    public DsoHttpResult(T data, DsoHttpResultMutationEnum mutation)
+      : base(SeverityEnum.Ok, false, mutation)
+    {
+      this.Data = data;
+    }
+
+    public DsoHttpResult(IMethodResult res)
+      : base(res)
+    {
+    }
+
+    public DsoHttpResult(Exception e)
+      : base(e)
+    {
+    }
+  }
+}
+
+```
+
+now the embedded data object
+
+``` csharp
+public class AlphaDsoTranslationsCacheUpdate
+{
+    public bool IsUpToDate { get; }
+
+    public AlphaDsoTranslationsCache? TranslationsCache { get; }
+
+    public AlphaDsoTranslationsCacheUpdate(
+        DateTime? lastUpdateDate,
+        IDictionary<string, IDictionary<string, string>>? translations)
+    {
+        if (lastUpdateDate.HasValue)
+        {
+            IsUpToDate = false;
+            TranslationsCache = new AlphaDsoTranslationsCache(lastUpdateDate.Value, translations);
+        }
+        else
+        {
+            IsUpToDate = true;
+            TranslationsCache = null;
+        }
+    }
+
+}
+```
+and finally the TranslationCache
+
+```csharp
+public class AlphaDsoTranslationsCache
+{
+    public DateTime LastUpdateDate { get; }
+    public IDictionary<string, IDictionary<string, string>>? Translations { get; }
+
+    public AlphaDsoTranslationsCache(
+        DateTime lastUpdateDate,
+        IDictionary<string, IDictionary<string, string>>? translations)
+    {
+        LastUpdateDate = lastUpdateDate;
+        Translations = translations;
+    }
+}
+```

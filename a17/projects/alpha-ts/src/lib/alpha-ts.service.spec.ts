@@ -33,7 +33,7 @@ describe('AlphaTsService', () => {
   });
 
   it('init should bypass api load', () => {
-    service.init(true).subscribe({
+    service.init().subscribe({
       next: status => expect(status)
         .toEqual('translations were populated from localStorage')
     });

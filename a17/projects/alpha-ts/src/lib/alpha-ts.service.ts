@@ -49,11 +49,15 @@ export class AlphaTsService {
    *
    * @param {string} [getTranslationCacheUpdateUrl] - The URL to update the translation cache.
    * If not provided the service will use the default translations.
+   * @param {string} [postErrorUrl] - The URL for logging errors to the WebApi
    * @returns {Observable<any>} - an observable that emits a status message on completion
    */
-  init(getTranslationCacheUpdateUrl?: string): Observable<string> {
+  init(
+    getTranslationCacheUpdateUrl?: string,
+    postErrorUrl?: string): Observable<string> {
 
     this.mApi.init(getTranslationCacheUpdateUrl);
+    this.mLs.init(postErrorUrl);
 
     return new Observable(
       (observer: Observer<any>) => {
