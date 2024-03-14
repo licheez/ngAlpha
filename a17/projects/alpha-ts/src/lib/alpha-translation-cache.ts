@@ -236,7 +236,7 @@ export class AlphaTranslationCache implements IAlphaTranslationCache {
         const rowValues = row[1];
         const values = Object.entries(rowValues);
 
-        var rowItems: IAlphaTranslationItem[] = [];
+        const rowItems: IAlphaTranslationItem[] = [];
         values.forEach(
           (value: [string, any]) => {
             const rowItem: IAlphaTranslationItem = {

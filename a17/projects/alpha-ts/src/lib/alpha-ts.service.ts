@@ -1,10 +1,8 @@
 import {Injectable} from '@angular/core';
 import {IAlphaTranslationCache} from "./ialpha-translation-cache";
 import {AlphaTranslationCache} from "./alpha-translation-cache";
-import {AlphaLsService} from "@pvway/alpha-ls";
 import {AlphaTsApiService} from "./alpha-ts-api.service";
 import {Observable, Observer} from "rxjs";
-import {AlphaLbsService} from "@pvway/alpha-lbs";
 import {IAlphaTranslationRow} from "./ialpha-translation-row";
 import {IAlphaTranslationItem} from "./ialpha-translation-item";
 
@@ -16,17 +14,11 @@ export class AlphaTsService {
   private mContext = 'AlphaTsService';
   private mTranslationCache: IAlphaTranslationCache;
   private mLanguageCode = 'en';
+  private mPostErrorLog: ((context: string, method: string, error: string) => any) | undefined;
 
   constructor(
-    private mApi: AlphaTsApiService,
-    private mLs: AlphaLsService,
-    lbs: AlphaLbsService) {
+    private mApi: AlphaTsApiService) {
     this.mTranslationCache = AlphaTranslationCache.default;
-
-    // listen to any update of the language code
-    lbs.subscribe((languageCode: string) =>
-        this.changeLanguageCode(languageCode),
-      "LANGUAGE_CODE_UPDATED");
   }
 
   /**
@@ -45,19 +37,33 @@ export class AlphaTsService {
   }
 
   /**
-   * Initializes the translation service by loading the translation cache.
-   *
-   * @param {string} [getTranslationCacheUpdateUrl] - The URL to update the translation cache.
-   * If not provided the service will use the default translations.
-   * @param {string} [postErrorUrl] - The URL for logging errors to the WebApi
-   * @returns {Observable<any>} - an observable that emits a status message on completion
+   * Initializes the application.
+   * @param {string} [getTranslationCacheUpdateUrl]
+   * - The URL for updating the translation cache.
+   * @param {(context: string, method: string, error: string) => any} [postErrorLog]
+   * - A function for posting error logs.
+   * @param {{ subscribe: (callback: (payload: string) => void, channel?: string) => any, channel: string | undefined }} [watchLanguageCodeOptions]
+   * - An object containing a subscribe function and a channel. The channel param is optional defaulting to 'LANGUAGE_CODE_UPDATE'
+   * string.
+   * @return {Observable<string>} An Observable that emits a string value.
    */
   init(
     getTranslationCacheUpdateUrl?: string,
-    postErrorUrl?: string): Observable<string> {
+    postErrorLog?: (context: string, method: string, error: string) => any,
+    watchLanguageCodeOptions?: {
+      subscribe: (callback: (payload: string) => void, channel?: string) => any,
+      channel: string | undefined
+    }): Observable<string> {
 
-    this.mApi.init(getTranslationCacheUpdateUrl);
-    this.mLs.init(postErrorUrl);
+    this.mApi.init(getTranslationCacheUpdateUrl, postErrorLog);
+
+    this.mPostErrorLog = postErrorLog;
+
+    if (watchLanguageCodeOptions) {
+      watchLanguageCodeOptions.subscribe((languageCode: string) =>
+          this.changeLanguageCode(languageCode),
+        watchLanguageCodeOptions.channel ?? 'LANGUAGE_CODE_UPDATED');
+    }
 
     return new Observable(
       (observer: Observer<any>) => {
@@ -85,8 +91,10 @@ export class AlphaTsService {
                 observer.complete();
               },
             error: e => {
-              this.mLs.postErrorLog(
-                this.mContext, 'init', JSON.stringify(e));
+              if (this.mPostErrorLog) {
+                this.mPostErrorLog(
+                  this.mContext, 'init', JSON.stringify(e));
+              }
               observer.error(e);
             }
           });
@@ -119,8 +127,10 @@ export class AlphaTsService {
       return row.translationItems[0].translation;
     }
     const err = `key '${key}' not found`;
-    this.mLs.postErrorLog(
-      this.mContext,'getTr', `error: ${err}`);
+    if (this.mPostErrorLog) {
+      this.mPostErrorLog(
+        this.mContext, 'getTr', `error: ${err}`);
+    }
     return err;
   }
 
