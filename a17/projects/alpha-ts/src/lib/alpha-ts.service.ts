@@ -42,28 +42,15 @@ export class AlphaTsService {
    * - The URL for updating the translation cache.
    * @param {(context: string, method: string, error: string) => any} [postErrorLog]
    * - A function for posting error logs.
-   * @param {{ subscribe: (callback: (payload: string) => void, channel?: string) => any, channel: string | undefined }} [watchLanguageCodeOptions]
-   * - An object containing a subscribe function and a channel. The channel param is optional defaulting to 'LANGUAGE_CODE_UPDATE'
-   * string.
    * @return {Observable<string>} An Observable that emits a string value.
    */
   init(
     getTranslationCacheUpdateUrl?: string,
-    postErrorLog?: (context: string, method: string, error: string) => any,
-    watchLanguageCodeOptions?: {
-      subscribe: (callback: (payload: string) => void, channel?: string) => any,
-      channel: string | undefined
-    }): Observable<string> {
+    postErrorLog?: (context: string, method: string, error: string) => any): Observable<string> {
 
     this.mApi.init(getTranslationCacheUpdateUrl, postErrorLog);
 
     this.mPostErrorLog = postErrorLog;
-
-    if (watchLanguageCodeOptions) {
-      watchLanguageCodeOptions.subscribe((languageCode: string) =>
-          this.changeLanguageCode(languageCode),
-        watchLanguageCodeOptions.channel ?? 'LANGUAGE_CODE_UPDATED');
-    }
 
     return new Observable(
       (observer: Observer<any>) => {
@@ -104,10 +91,11 @@ export class AlphaTsService {
   /**
    * Retrieves the translation for a given key.
    * @param {string} key - The key to look for in the translations cache.
+   * @param languageCode - optional languageCode overriding the service languageCode.
    * @returns {string} - The translation corresponding to the key if found,
    * otherwise an error message.
    */
-  getTr(key: string): string {
+  getTr(key: string, languageCode?: string): string {
     const row = this.mTranslationCache.translations
       .find(
         (row: IAlphaTranslationRow) => row.key === key);
@@ -115,7 +103,7 @@ export class AlphaTsService {
     if (row) {
       // the key was found in the cache
       // get the language code from the principal
-      const lc = this.mLanguageCode;
+      const lc = languageCode??this.mLanguageCode;
       // get the translation if any
       const tr = row.translationItems.find(
         (item: IAlphaTranslationItem) => item.languageCode === lc);

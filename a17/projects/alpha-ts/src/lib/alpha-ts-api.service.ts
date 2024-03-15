@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {catchError, map, Observable, Subscriber, throwError} from "rxjs";
 import {IAlphaTranslationCache} from "./ialpha-translation-cache";
 import {AlphaTranslationCache} from "./alpha-translation-cache";
@@ -15,7 +15,8 @@ export class AlphaTsApiService {
   private mPostErrorLog: ((context: string, method: string, error: string) => any) | undefined;
 
   constructor(
-    private mHttp: HttpClient) { }
+    private mHttp: HttpClient) {
+  }
 
   init(
     getTranslationCacheUpdateUrl: string | undefined,
@@ -25,11 +26,12 @@ export class AlphaTsApiService {
   }
 
   useGetTranslationCacheUpdate(getTranslationCacheUpdate: (lastUpdateDate: Date) =>
-      Observable<IAlphaTranslationCache | null>) {
+    Observable<IAlphaTranslationCache | null>) {
     this._getTranslationCacheUpdate = getTranslationCacheUpdate;
   }
+
   getTranslationCacheUpdate(lastUpdateDate: Date):
-      Observable<IAlphaTranslationCache | null> {
+    Observable<IAlphaTranslationCache | null> {
     return this._getTranslationCacheUpdate(lastUpdateDate);
   }
 
@@ -52,7 +54,8 @@ export class AlphaTsApiService {
           data: {
             isUpToDate: boolean,
             translationsCache: any
-          }}) => {
+          }
+        }) => {
           if (hRes.data.isUpToDate) {
             return null;
           }
@@ -60,10 +63,10 @@ export class AlphaTsApiService {
           return AlphaTranslationCache.factorFromDso(dsoTc);
         }),
         catchError((error: HttpErrorResponse) => {
-          if (this.mPostErrorLog){
+          if (this.mPostErrorLog) {
             this.mPostErrorLog(this.mContext, url, JSON.stringify(error));
           }
-          return throwError(()=>error);
+          return throwError(() => error);
         }));
   }
 

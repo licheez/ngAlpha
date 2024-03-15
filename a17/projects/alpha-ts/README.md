@@ -2,7 +2,7 @@
 
 This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.0.
 
-The idea behind this service is to provide a translation service for front end apps. 
+The idea behind this service is to provide translations at front end side.  
 
 Actually, the scope is a little bit bigger as it is often coupled with the [ExcelTranslationProvider](https://www.nuget.org/packages/ExcelTranslationProvider.nc6) (dotNet) component that stores translations as (embedded) Excel sheets.
 
@@ -14,87 +14,57 @@ Actually, the exact structure of the data returned by the Web Api is the followi
 
 ```json
 {
-    "alpha.buttons.add": {
-      "en": "Add",
-      "fr": "Ajouter",
-      "nl": "Toevoegen"
-    },
-    "alpha.buttons.cancel": {
-      "en": "Cancel",
-      "fr": "Annuler",
-      "nl": "Annuleren"
-    },
-    "alpha.buttons.delete": {
-      "en": "Delete",
-      "fr": "Supprimer",
-      "nl": "Verwijderen"
+  "data": {
+    "isUpToDate": false,
+    "translationsCache": {
+      "alpha.buttons.add": {
+        "en": "Add",
+        "fr": "Ajouter",
+        "nl": "Toevoegen"
+      },
+      "alpha.buttons.cancel": {
+        "en": "Cancel",
+        "fr": "Annuler",
+        "nl": "Annuleren"
+      },
+      "alpha.buttons.delete": {
+        "en": "Delete",
+        "fr": "Supprimer",
+        "nl": "Verwijderen"
+      }
     }
+  }
 }
+
 ```
 
-As you can see, this is actually a dictionary&lt;key: string, dictionary&lt;isoLanguageCode: string, translation: string&gt;&gt;
+As you can see, this is actually a dictionary&lt;key: string, dictionary&lt;isoLanguageCode: string, translation: string&gt;&gt; wrapped into a data object.
 
 At client side the browser stores the translations into its localStorage as a wrapper that contains
 * the date of lastUpdate
 * the dictionary of translations.
 
-When starting the app the client calls the server passing the last update date (the one he finds in his local storage).
+When starting the app the client calls the server passing the last update date (the one he finds in the local storage of the browser).
 
-PS. The first time the client connects to this server end point, its localStorage is empty, as such the client sends a request passing the very old Unix epoch date.
+PS. The first time the client connects to this server end point, its localStorage is logically empty, as such the client sends a request passing the Unix epoch date.
 
 The server compares the date provided by the client with the one at server side.
 
-If the translations needs to be refreshed (i.e. the server translation date is fresher than the client one), then the server sends back a new version of the dictionary.
+If the translations need to be refreshed (i.e. the server translation date is fresher than the client one), then the server sends back a new version of the dictionary wrapped into the data object with the isUpToDate flag set to false.
 
 The client stores the new dictionary in its localStorage.
 
-However, when the client translations are up to date, the server only return 'isUpToDate' set to true. The client does not need to refresh its localStorage as its translations are still valid.
-
-## Dependencies
-
-### AlphaLoggingService (a.k.a. alpha-ls)
-
-AlphaLsService (when initialized) is used for logging any error and also to report any missing translation so that those translations gaps can be fixed by the dev team.
-
-If your application uses alpha-ls it might be already initialized. 
-
-Otherwise, you can also initialize it using the init method. (see initialization section here after.)
-
-### AlphaLocalBusService (a.k.a. alpha-lbs)
-
-AlphaLbsService is used to listen the local bus channel 'LANGUAGE_CODE_UPDATE';
-
-When, in your application, the user language changes, you should publish the new languageCode (iso) to the LocalBus.
-
-If you do so, the TranslationService will intercept this change and update its private mLanguageCode variable.
-
-See the service constructor here after.
-
-```typescript
-...
-  private mLanguageCode = 'en';
-
-constructor(
-  private mApi: AlphaTsApiService,
-  private mLs: AlphaLsService,
-  lbs: AlphaLbsService) {
-  this.mTranslationCache = AlphaTranslationCache.default;
-
-  // listen to any update of the language code
-  lbs.subscribe((languageCode: string) =>
-      this.changeLanguageCode(languageCode),
-    "LANGUAGE_CODE_UPDATED");
-}
-...
-```
+However, when the client translations are up-to-date, the server only returns 'isUpToDate' set to true and the translationsCache object is not present. The client does not need to refresh its localStorage as its translations are still valid.
 
 ## Initialization
 
 As usual there is a small configuration for this service to work properly.
 
-You'll need to pass the url of your server end point.
+You'll need to pass the url of your server end point that will serve the translation cache update.
 
 The following code initialize the translation service when the app starts.
+
+You can also pass a delegate that can post error logs. For this optional parameter you can pass your own delegate or use the [alpha-ls](https://www.npmjs.com/package/@pvway/alpha-ls?activeTab=readme) component 
 
 ```typescript
 
@@ -110,15 +80,20 @@ export class AppComponent implements OnInit {
   ready = false;
 
   constructor(
+    private mLs: AlphaLsService,
     private mTs: AlphaTsService) {
   }
 
   ngOnInit() {
-    // define the end point that delivers translation cache updates
-    const tcUpdateUrl = environment.apiHost + '/getTranslationCacheUpdate';
     // define the end point that alpha-ls uses for logging errors
     const postErrLogUrl = environment.apiHost + '/postErrorLog';
-    this.mTs.init(tcUpdateUrl, postErrLogUrl).subscribe({
+    this.mLs.init(postErrLogUrl);
+    
+    // define the end point that delivers translation cache updates
+    const tcUpdateUrl = environment.apiHost + '/getTranslationCacheUpdate';
+    this.mTs.init(
+      tcUpdateUrl, 
+      this.mLs.postErrorLog).subscribe({
         next: tsStatus => {
           console.log(tsStatus);
           this.ready = true;
@@ -132,7 +107,7 @@ export class AppComponent implements OnInit {
 
 and the template 
 ```html
-<div *ngIf="ready">
+<div @If="ready">
   <app-header></app-header>
   <router-outlet></router-outlet>
 </div>
@@ -157,18 +132,29 @@ With this service all translations will be managed by the code... that makes you
 export class TsDemoComponent {
 
   titleLit: string;
+  titleInFrenchLit: string;
 
   constructor(ts: AlphaTsService) {
+    
+    // following call will get the translation
+    // in the default service language 
+    // (see setLanguageCode(...) method
     this.titleLit = ts.getTr('demoTs.title');
+    // and this one will override the default service
+    // language requesting the french translation for
+    // the same key ('demoTs.title')
+    this.titleInFrenchLit = ts.getTr('demoTs.title', 'fr');
   }
+  
 ```
 
-I use the suffix Lit for the literals so that they are clearly identified in the template.
+I use the suffix Lit for the _literals_ so that they are clearly identified in the template.
 
 and the template looks like this.
 
 ```html
 <h1>{{titleLit}}</h1>
+<h2>{{titleInFrenchLit}}</h2>
 ```
 
 With this principle in place your template should never contain any translations.

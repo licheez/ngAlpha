@@ -4,7 +4,6 @@ import {AlphaTsApiService} from './alpha-ts-api.service';
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
 import {Observable, Subscriber, throwError} from "rxjs";
 import {IAlphaTranslationCache} from "./ialpha-translation-cache";
-import {HttpEventType} from "@angular/common/http";
 
 describe('AlphaTsApiService', () => {
   let service: AlphaTsApiService;
@@ -111,7 +110,8 @@ describe('AlphaTsApiService', () => {
       const pDate = encodeURI(lastUpdateDate.toISOString());
       const svcUrl = 'https://localhost';
       const url = svcUrl + '?clientDate=' + pDate;
-      service.init(svcUrl);
+      const postErrLog = ()=> { }
+      service.init(svcUrl, postErrLog);
       service.getTranslationCacheUpdate(lastUpdateDate)
         .subscribe({
           error: e =>

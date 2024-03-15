@@ -5,12 +5,10 @@ import {HttpClientTestingModule, HttpTestingController} from "@angular/common/ht
 import {AlphaTsApiService} from "./alpha-ts-api.service";
 import {of, throwError} from "rxjs";
 import {AlphaTranslationCache} from "./alpha-translation-cache";
-import {AlphaLbsService} from "@pvway/alpha-lbs";
 
 describe('AlphaTsService', () => {
   let service: AlphaTsService;
   let apiSvc: AlphaTsApiService;
-  let lbsSvc: AlphaLbsService;
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
@@ -21,7 +19,6 @@ describe('AlphaTsService', () => {
     service = TestBed.inject(AlphaTsService);
     httpMock = TestBed.inject(HttpTestingController);
     apiSvc = TestBed.inject(AlphaTsApiService);
-    lbsSvc = TestBed.inject(AlphaLbsService);
   });
 
   afterEach(() => {
@@ -39,38 +36,53 @@ describe('AlphaTsService', () => {
     });
   });
 
-  it ("should override the api call", () => {
+  it("should override the api call", () => {
     service.useGetTranslationCacheUpdate(
-      ()=>of(null));
+      () => of(null));
     expect(true).toBeTruthy();
   })
 
-
-  it ('init should call api and get default data', () => {
+  it('init should call api and get default data', () => {
     const tc = AlphaTranslationCache.default;
-
-    // let's fake the call to the api by returning the
-    // default translation cache
-    apiSvc.useGetTranslationCacheUpdate(
-      () => of(tc));
-
-    service.changeLanguageCode('fr');
-    service.init().subscribe({
-      next: status => {
-        expect(status).toEqual('translations loaded');
-        const tr = service.getTr('alpha.buttons.add');
-        expect(tr).toEqual('Ajouter');
+    const dso: {
+      data: {
+        isUpToDate: boolean,
+        translationsCache: any
       }
-    });
+    } = {
+      data: {
+        isUpToDate: false,
+        translationsCache: tc
+      }
+    };
+
+    const url = 'https://localhost/getTcu';
+    service.changeLanguageCode('fr');
+    service.init(url)
+      .subscribe({
+        next: status => {
+          expect(status).toEqual('translations loaded');
+          const tr = service.getTr('alpha.buttons.add');
+          expect(tr).toEqual('Ajouter');
+        }
+      });
+    const req = httpMock
+      .match(() => true)[0];
+    expect(req.request.method).toEqual('GET');
+    req.flush(dso);
   });
 
-  it ('init should fail when calling the api', () => {
+  it('init should fail when calling the api', () => {
     // let's fake the call to the api by returning the
     // default translation cache
     apiSvc.useGetTranslationCacheUpdate(
-      () => throwError(() => 'error'));
+      () =>
+        throwError(() => 'error'));
+    const url = 'https://localhost/getTcu';
 
-    service.init().subscribe({
+    const postErrorLog = () => {};
+
+    service.init(url, postErrorLog).subscribe({
       error: e => {
         expect(e).toEqual('error');
       }
@@ -92,18 +104,13 @@ describe('AlphaTsService', () => {
   })
 
   it('should not find the key', () => {
+    const postErrorLog = () => {};
+    service.init(undefined, postErrorLog);
     const key = 'noKey';
     service.changeLanguageCode('zh');
     const translation = service.getTr(key);
     const err = `key '${key}' not found`;
     expect(translation).toEqual(err);
-  });
-
-  it('should listen to language changes', () => {
-    lbsSvc.publish('fr','LANGUAGE_CODE_UPDATED');
-    const key = 'alpha.buttons.add';
-    const translation = service.getTr(key);
-    expect(translation).toEqual('Ajouter');
   });
 
 });
