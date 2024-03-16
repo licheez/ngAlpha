@@ -105,7 +105,6 @@ export class AlphaOasService {
             }
           },
           error: (e: any) => {
-            console.error(e);
             subscriber.error(e);
           }
         });
