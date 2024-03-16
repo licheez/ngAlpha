@@ -1,9 +1,7 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
-import {AlphaLsService} from "@pvway/alpha-ls";
-import {AlphaLbsService} from "@pvway/alpha-lbs";
 import {AlphaPrincipal} from "./alpha-principal";
-import {catchError, map, mergeMap, Observable, Observer, Subscriber, throwError} from "rxjs";
+import {catchError, map, mergeMap, Observable, Subscriber, throwError} from "rxjs";
 import {AlphaSessionData} from "./alpha-session-data";
 import {AlphaRefreshData} from "./alpha-refresh-data";
 import {AlphaAuthStatusEnum} from "./alpha-auth-status-enum";
@@ -21,14 +19,21 @@ export class AlphaOasService {
   private mRefreshUrl: string | undefined;
   private mGetMeUrl: string | undefined;
 
+  private mNotifyStateChange:
+    (principal: AlphaPrincipal, channel: string) => any =
+    () => {
+    };
+  private mPostErrorLog:
+    (context: string, method: string, error: string) => any =
+    () => {
+    };
+
   get principal(): AlphaPrincipal {
     return this.mPrincipal;
   }
 
   constructor(
-    private mHttp: HttpClient,
-    private mLbs: AlphaLbsService,
-    private mLs: AlphaLsService) {
+    private mHttp: HttpClient) {
     this.mPrincipal = new AlphaPrincipal();
   }
 
@@ -38,44 +43,80 @@ export class AlphaOasService {
    * @param {string} [signInUrl] - The URL for signing in.
    * @param {string} [refreshUrl] - The URL for refreshing authentication.
    * @param {string} [getMeUrl] - The URL for retrieving user information.
+   * @param postErrorLog - A delegate method that can post errors towards the server
+   * @param notifyStateChange - A delegate method responsible for broadcasting principal state changes
    * @return {Observable<any>} - An Observable that emits the result of the initialization process.
    */
   init(getMeUrl?: string,
        refreshUrl?: string,
-       signInUrl?: string): Observable<any> {
+       signInUrl?: string,
+       postErrorLog?:
+         (context: string, method: string, error: string) => any,
+       notifyStateChange?:
+         (principal: AlphaPrincipal, channel: string) => any): Observable<any> {
 
     this.mSignInUrl = signInUrl;
     this.mRefreshUrl = refreshUrl;
     this.mGetMeUrl = getMeUrl;
+    // postErrorLog defaults to nop
+    this.mPostErrorLog = postErrorLog || (() => {});
+    // notifyStateChange defaults to nop
+    this.mNotifyStateChange = notifyStateChange || (() => {});
 
+    // let's first see if there is still a session data
+    const sd = AlphaSessionData.retrieve();
+    if (sd != null) {
+      return this.initFromSd();
+    }
+
+    // then check if there is a refresh data available
+    const rd = AlphaRefreshData.retrieve();
+    if (rd != null) {
+      return this.initFromRd();
+    }
+
+    // no sd and no rd found let's start as anonymous
+    return this.initAsAnonymous();
+  }
+
+  private initFromSd(): Observable<string> {
+    console.log('Sd found... calling getMe');
     return new Observable(
-      (observer: Observer<any>) => {
-        const sd = AlphaSessionData.retrieve();
-        if (sd != null) {
-          console.log('Sd found... calling getMe');
-          this.getMe().subscribe({
-            next: () => observer.next('principal reloaded'),
-            error: e => observer.error(e)
-          });
-        } else {
-          const rd = AlphaRefreshData.retrieve();
-          if (rd != null) {
-            console.log('rd active... calling refresh');
-            this.mPrincipal.setStatus(AlphaAuthStatusEnum.Refreshing);
-            this.refresh().subscribe({
-              next: () => {
-                observer.next('identity refreshed')
-              },
-              error: (e: any) => {
-                console.error(e);
-                observer.error(e);
-              }
-            });
-          } else {
-            this.mPrincipal.setStatus(AlphaAuthStatusEnum.Anonymous);
-            observer.next('anonymous');
+      (subscriber: Subscriber<string>) => {
+        this.getMe().subscribe({
+          next: () => subscriber.next('principal reloaded'),
+          error: e => subscriber.error(e)
+        });
+      });
+  }
+
+  private initFromRd(): Observable<string> {
+    return new Observable(
+      (subscriber: Subscriber<string>) => {
+        console.log('rd active... calling refresh');
+        this.mPrincipal.setStatus(AlphaAuthStatusEnum.Refreshing);
+        this.refresh().subscribe({
+          next: refreshed => {
+            if (refreshed) {
+              subscriber.next('identity refreshed');
+            } else {
+              this.mPrincipal.setStatus(AlphaAuthStatusEnum.Anonymous);
+              subscriber.next('refreshed failed');
+            }
+          },
+          error: (e: any) => {
+            console.error(e);
+            subscriber.error(e);
           }
-        }
+        });
+      });
+  }
+
+  private initAsAnonymous(): Observable<string> {
+    return new Observable(
+      (subscriber: Subscriber<string>) => {
+        this.mPrincipal.setStatus(AlphaAuthStatusEnum.Anonymous);
+        subscriber.next('anonymous');
       });
   }
 
@@ -97,8 +138,12 @@ export class AlphaOasService {
     this._authorize = authorize;
   }
 
-  private _signIn: (userName: string, password: string, rememberMe: boolean) =>
-    Observable<IAlphaAuthEnvelop> = (username: string, password: string) => {
+  private _signIn: (
+    userName: string,
+    password: string,
+    rememberMe: boolean) =>
+    Observable<IAlphaAuthEnvelop> =
+    (username: string, password: string) => {
 
     const body = 'grant_type=password' +
       '&username=' + encodeURIComponent(username) +
@@ -109,12 +154,21 @@ export class AlphaOasService {
 
     const url = this.mSignInUrl!;
     return this.mHttp
-      .post<any>(url, body, { headers: headers })
-      .pipe(map(dso => AlphaAuthEnvelopFactory.factorFromDso(dso)));
+      .post<any>(url, body, {headers: headers})
+      .pipe(
+        map(dso =>
+          AlphaAuthEnvelopFactory.factorFromDso(dso)),
+        catchError(error => {
+          this.mPostErrorLog(this.mContext,
+            '_signIn', JSON.stringify(error));
+          return throwError(() => error);
+        }));
   }
 
   /**
-   * on successful login call storeIdentity
+   * On successful login call storeIdentity.
+   * Remark: there is no need to call getMe from signIn as getMe
+   * is actually returning the same data as signIn
    * @param username
    * @param password
    * @param rememberMe
@@ -137,8 +191,8 @@ export class AlphaOasService {
               if (e.status === 400 || e.status === 401) {
                 subscriber.next(false);
               } else {
-                this.mLs.postErrorLog(
-                  'OAuthService', 'login', JSON.stringify(e));
+                this.mPostErrorLog(
+                  this.mContext, 'login', JSON.stringify(e))
                 subscriber.error(e);
               }
             }
@@ -161,8 +215,10 @@ export class AlphaOasService {
         .set('content-type', 'application/x-www-form-urlencoded');
 
       const url = this.mRefreshUrl!;
-      return this.mHttp.post<any>(url, body, { headers: headers })
-        .pipe(map(dso => AlphaAuthEnvelopFactory.factorFromDso(dso)));
+      return this.mHttp.post<any>(url, body, {headers: headers})
+        .pipe(
+          map(dso =>
+            AlphaAuthEnvelopFactory.factorFromDso(dso)));
     }
 
   /**
@@ -172,7 +228,10 @@ export class AlphaOasService {
   private refresh(): Observable<boolean> {
     const rd = AlphaRefreshData.retrieve();
     if (rd == null) {
-      throw new Error('rd should not be null');
+      this.mPostErrorLog(this.mContext,
+        'refresh', 'rd should not be null');
+      return throwError(
+        () => 'rd should not be null');
     }
 
     return new Observable<boolean>(
@@ -185,11 +244,11 @@ export class AlphaOasService {
             },
             error: (e: HttpErrorResponse) => {
               this.signOut();
-              if (e.status === 401) {
+              if (e.status == 401) {
                 subscriber.next(false);
               } else {
-                this.mLs.postErrorLog('OAuthService', 'refresh',
-                  JSON.stringify(e));
+                this.mPostErrorLog(this.mContext,
+                  'refresh', JSON.stringify(e));
                 subscriber.error(e);
               }
             }
@@ -200,7 +259,7 @@ export class AlphaOasService {
   /**
    * called from the init() method when the session data is present
    */
-  getMe(): Observable<IAlphaUser> {
+  private getMe(): Observable<IAlphaUser> {
     const url = this.mGetMeUrl!;
     const call = this.mHttp.get<any>(url)
       .pipe(
@@ -211,7 +270,8 @@ export class AlphaOasService {
             return user;
           }),
         catchError((error: HttpErrorResponse) => {
-          this.mLs.postErrorLog(this.mContext, url, JSON.stringify(error));
+          this.mPostErrorLog(this.mContext, url,
+            JSON.stringify(error));
           return throwError(() => error);
         }));
 
@@ -223,13 +283,13 @@ export class AlphaOasService {
     lastName: string,
     languageCode: string) {
     if (!this.mPrincipal.user) {
-      throw new Error("user should not be null");
+      return;
     }
     this.mPrincipal.user.username = firstName + " " + lastName;
     this.mPrincipal.user.languageCode = languageCode;
 
-    this.mLbs.publish(this.mPrincipal,
-      AlphaPrincipal.PRINCIPAL_UPDATED);
+    this.mNotifyStateChange(
+      this.mPrincipal, AlphaPrincipal.PRINCIPAL_UPDATED)
   }
 
   signOut(): void {
@@ -237,7 +297,7 @@ export class AlphaOasService {
     AlphaRefreshData.clear();
     this.mPrincipal.clearUser();
     this.mPrincipal.setStatus(AlphaAuthStatusEnum.Anonymous);
-    this.mLbs.publish(
+    this.mNotifyStateChange(
       this.mPrincipal, AlphaPrincipal.PRINCIPAL_UPDATED);
   }
 
@@ -253,7 +313,12 @@ export class AlphaOasService {
       return this.refresh()
         .pipe(
           mergeMap(() => httpRequest),
-          catchError(error => throwError(()=>error)));
+          catchError(error => {
+              this.mPostErrorLog(this.mContext,
+                '_authorize', JSON.stringify(error));
+              return throwError(() => error)
+            }
+          ));
     } else {
       return httpRequest;
     }
@@ -272,7 +337,7 @@ export class AlphaOasService {
    * (2) stores the refresh token in the local storage
    * (3) populates the principal using the user info
    */
-  storeIdentity(
+  private storeIdentity(
     authEnvelop: IAlphaAuthEnvelop,
     rememberMe: boolean): void {
 
@@ -286,7 +351,8 @@ export class AlphaOasService {
     console.log('sd populated');
 
     if (rememberMe) {
-      const rd = new AlphaRefreshData(authEnvelop.refreshToken);
+      const rd = new AlphaRefreshData(
+        authEnvelop.refreshToken);
       rd.store();
       console.log('rd populated');
     }
@@ -298,8 +364,8 @@ export class AlphaOasService {
     this.mPrincipal.setUser(user);
     console.log('principal user is set');
     this.mPrincipal.setStatus(AlphaAuthStatusEnum.Authenticated);
-    this.mLbs.publish(this.mPrincipal,
-      AlphaPrincipal.PRINCIPAL_UPDATED);
+    this.mNotifyStateChange(
+      this.mPrincipal, AlphaPrincipal.PRINCIPAL_UPDATED);
   }
 
 }

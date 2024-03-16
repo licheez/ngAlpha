@@ -3,12 +3,12 @@ import {TestBed} from '@angular/core/testing';
 import {AlphaOasService} from './alpha-oas.service';
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
 import {AlphaAuthStatusEnum} from "./alpha-auth-status-enum";
-import {of, throwError} from "rxjs";
+import {Observable, of, throwError} from "rxjs";
 import {IAlphaAuthEnvelop} from "./alpha-auth-envelop";
 import {AlphaRefreshData} from "./alpha-refresh-data";
 import {AlphaSessionData} from "./alpha-session-data";
-import {error} from "ng-packagr/lib/utils/log";
 import {HttpErrorResponse} from "@angular/common/http";
+import {AlphaPrincipal} from "./alpha-principal";
 
 describe('AlphaOasService', () => {
 
@@ -16,6 +16,12 @@ describe('AlphaOasService', () => {
   let localStore: { [key: string]: string } = {};
   let service: AlphaOasService;
   let httpMock: HttpTestingController;
+  const pel:
+    (context: string, method: string, error: string) => any
+    = () => {};
+  const nsc:
+    (principal: AlphaPrincipal, channel: string) => Observable<any> =
+    () => of({});
 
   beforeEach(() => {
 
@@ -53,7 +59,6 @@ describe('AlphaOasService', () => {
     })();
     Object.defineProperty(window, 'localStorage', {value: localStorageMock});
 
-
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule]
     });
@@ -66,7 +71,6 @@ describe('AlphaOasService', () => {
     localStore = {};
     httpMock.verify();
   });
-
 
   it('should be created', () => {
     expect(service).toBeTruthy();
@@ -82,7 +86,7 @@ describe('AlphaOasService', () => {
     });
   });
 
-  it('init should refresh', ()=> {
+  it('init should refresh', () => {
     const oEnv: IAlphaAuthEnvelop = {
       accessToken: 'accessToken',
       expiresIn: 1000,
@@ -97,7 +101,9 @@ describe('AlphaOasService', () => {
     service.useRefresh(() => of(oEnv));
     const rd = new AlphaRefreshData('rt0');
     rd.store();
-    service.init().subscribe({
+    service.init(
+      undefined, undefined, undefined,
+      pel, nsc).subscribe({
       next: status => {
         expect(status).toEqual('identity refreshed');
         const sd = AlphaSessionData.retrieve();
@@ -111,11 +117,13 @@ describe('AlphaOasService', () => {
 
   });
 
-  it ('init should fail while refreshing', () => {
+  it('init should fail while refreshing', () => {
     const rd = new AlphaRefreshData('rt0');
     rd.store();
     service.useRefresh(() => throwError(() => 'error'));
-    service.init().subscribe({
+    service.init(
+      undefined, undefined, undefined,
+      pel, nsc).subscribe({
       error: error => {
         expect(service.principal.status).toEqual(AlphaAuthStatusEnum.Anonymous);
         expect(error).toEqual('error');
@@ -123,7 +131,27 @@ describe('AlphaOasService', () => {
     });
   });
 
-  it ('init should reauthenticate using getMe', () => {
+  it('init should fail with 401 while refreshing', () => {
+    const rd = new AlphaRefreshData('rt0');
+    rd.store();
+    const refreshUrl = 'https://localhost/token';
+    service.init(
+      undefined, refreshUrl, undefined,
+      pel, nsc).subscribe({
+      error: error => {
+        expect(service.principal.status)
+          .toEqual(AlphaAuthStatusEnum.Anonymous);
+        expect(error).toEqual('error');
+      }
+    });
+    const refreshReq = httpMock.expectOne(refreshUrl);
+    refreshReq.flush({},{
+      status: 401,
+      statusText: 'not authorized'
+    });
+  });
+
+  it('init should reauthenticate using getMe', () => {
     const getMeUrl = 'https://localhost/getMe';
     const now = new Date().getTime();
     const sd = new AlphaSessionData(
@@ -131,9 +159,11 @@ describe('AlphaOasService', () => {
       now, now + 200000);
     sd.store();
     expect(sd.isExpiredOrExpiring).toBeFalsy();
-    service.init(getMeUrl).subscribe({
+    service.init(
+      getMeUrl, undefined, undefined,
+      pel, nsc).subscribe({
       next: status => {
-       expect(status).toEqual('principal reloaded');
+        expect(status).toEqual('principal reloaded');
       }
     });
 
@@ -149,7 +179,7 @@ describe('AlphaOasService', () => {
     getMeRequest.flush(userDso);
   });
 
-  it ('init should fail while re-authenticating', () => {
+  it('init should fail while re-authenticating', () => {
     const getMeUrl = 'https://localhost/getMe';
     const now = new Date().getTime();
     const sd = new AlphaSessionData(
@@ -157,12 +187,6 @@ describe('AlphaOasService', () => {
       now, now + 200000);
     sd.store();
     expect(sd.isExpiredOrExpiring).toBeFalsy();
-    const userDso = {
-      userId: 'userId',
-      username: 'username',
-      languageCode: 'fr',
-      userProperties: {}
-    };
     service.init(getMeUrl).subscribe({
       error: e => {
         expect(e).toEqual('error');
@@ -178,16 +202,17 @@ describe('AlphaOasService', () => {
         {
           error: 'error',
           status: 500,
-          statusText: 'Server error'});
+          statusText: 'Server error'
+        });
 
     getMeRequest.flush(errorResponse);
   });
 
-  it ('init should find an expired sd while calling authorize', () => {
+  it('init should find an expired sd while calling authorize', () => {
 
     // need both getMe and refresh urls
     const getMeUrl = 'https://localhost/getMe';
-    const refreshUrl  = 'https://localhost/token';
+    const refreshUrl = 'https://localhost/token';
 
     // need an expiring sd
     const now = new Date().getTime();
@@ -201,7 +226,9 @@ describe('AlphaOasService', () => {
     const rd = new AlphaRefreshData('rt1');
     rd.store();
 
-    service.init(getMeUrl, refreshUrl).subscribe({
+    service.init(
+      getMeUrl, refreshUrl, undefined,
+      pel, nsc).subscribe({
       next: status => {
         expect(status).toBeTruthy();
       }
@@ -221,10 +248,259 @@ describe('AlphaOasService', () => {
       expires_in: 1440,
       user: userDso
     };
+    refreshReq.flush(refreshDso);
+
+    const getMeReq = httpMock.expectOne(getMeUrl);
+    expect(getMeReq.request.method).toEqual('GET');
+    getMeReq.flush(userDso);
 
     expect(true).toBeTruthy();
   });
 
+  it('useSignIn should override the builtin signIn method', () => {
 
+    const oEnv: IAlphaAuthEnvelop = {
+      accessToken: 'at',
+      refreshToken: 'rt',
+      expiresIn: 1000,
+      user: {
+        userId: 'userId',
+        username: 'username',
+        languageCode: 'fr',
+        properties: new Map<string, any>()
+      }
+    };
 
+    const signIn: (username: string, password: string, rememberMd: boolean)
+      => Observable<IAlphaAuthEnvelop> = () => of(oEnv);
+
+    service.useSignIn(signIn);
+    service.signIn(
+      'userName',
+      'password',
+      true).subscribe({
+      next: ok => {
+        expect(ok).toBeTruthy();
+      }
+    });
+  });
+
+  it('useAuthorize should override the builtin authorize method', () => {
+    const passThrough: (request: Observable<any>) => Observable<any> =
+      request => of(request);
+
+    service.useAuthorize(passThrough);
+    const originalCall = of('expected result');
+    const authorizedCall = service.authorize(originalCall);
+
+    authorizedCall.subscribe({
+      next: (request: Observable<string>) => {
+        expect(request).toEqual(originalCall);
+        request.subscribe({
+          next: (result: string) => expect(result)
+            .toEqual('expected result')
+        });
+      }
+    });
+  });
+
+  it('authorize should call refresh', () => {
+
+    const oEnv: IAlphaAuthEnvelop = {
+      accessToken: 'at',
+      refreshToken: 'rt',
+      expiresIn: 1000,
+      user: {
+        userId: 'userId',
+        username: 'username',
+        languageCode: 'zh',
+        properties: new Map<string, any>()
+      }
+    }
+    const mockRefresh: (token: string) => Observable<IAlphaAuthEnvelop> =
+      () => of(oEnv);
+
+    const rd = new AlphaRefreshData('someToken');
+    rd.store();
+
+    service.useRefresh(mockRefresh);
+
+    const originalCall = of('expected result');
+    const authorizedCall = service.authorize(originalCall);
+
+    authorizedCall.subscribe({
+      next: (request: Observable<string>) => {
+        expect(request).toEqual(originalCall);
+        request.subscribe({
+          next: (result: string) => expect(result)
+            .toEqual('expected result')
+        });
+      }
+    });
+  });
+
+  it('authorize should fail while refreshing because rd is null',
+    () => {
+
+    const oEnv: IAlphaAuthEnvelop = {
+      accessToken: 'at',
+      refreshToken: 'rt',
+      expiresIn: 1000,
+      user: {
+        userId: 'userId',
+        username: 'username',
+        languageCode: 'zh',
+        properties: new Map<string, any>()
+      }
+    }
+    const mockRefresh: (token: string) => Observable<IAlphaAuthEnvelop> =
+      () => of(oEnv);
+
+    service.useRefresh(mockRefresh);
+
+    const originalCall = of('expected result');
+    const authorizedCall = service.authorize(originalCall);
+
+    authorizedCall.subscribe({
+      next: (request: Observable<string>) => {
+        expect(request).toEqual(originalCall);
+        request.subscribe({
+          error: e => expect(e).toEqual('rd should not be null')
+        });
+      }
+    });
+  });
+
+  it('signIn should succeed', () => {
+    const signInUrl = 'https://localhost/token';
+    service.init(undefined, undefined, signInUrl);
+
+    const oEnvDso = {
+      access_token: 'at',
+      refresh_token: 'rt',
+      expires_in: 1440,
+      user: {
+        userId: 'userId',
+        username: 'username',
+        languageCode: 'nl',
+        userProperties: {}
+      }
+    };
+
+    service.signIn(
+      'username',
+      'password',
+      true).subscribe({
+      next: signedIn => expect(signedIn).toBeTruthy()
+    });
+
+    const signInReq = httpMock.expectOne(signInUrl);
+    expect(signInReq.request.method).toEqual('POST');
+
+    signInReq.flush(oEnvDso);
+  });
+
+  it('signIn should fail with 400', () => {
+    const signInUrl = 'https://localhost/token';
+    service.init(undefined, undefined, signInUrl);
+
+    service.signIn(
+      'username',
+      'password',
+      true).subscribe({
+      next: signedIn => expect(signedIn).toBeFalsy()
+    });
+
+    const signInReq = httpMock.expectOne(signInUrl);
+    expect(signInReq.request.method).toEqual('POST');
+
+    signInReq.flush({}, {
+      status: 400,
+      statusText: 'invalid request'
+    });
+  });
+
+  it('signIn should fail with 401', () => {
+    const signInUrl = 'https://localhost/token';
+    service.init(undefined, undefined, signInUrl);
+
+    service.signIn(
+      'username',
+      'password',
+      true).subscribe({
+      next: signedIn => expect(signedIn).toBeFalsy()
+    });
+
+    const signInReq = httpMock.expectOne(signInUrl);
+    expect(signInReq.request.method).toEqual('POST');
+
+    signInReq.flush({}, {
+      status: 401,
+      statusText: 'invalid request'
+    });
+  });
+
+  it('signIn should fail with 500', () => {
+    const signInUrl = 'https://localhost/token';
+    service.init(undefined, undefined, signInUrl);
+
+    service.signIn(
+      'username',
+      'password',
+      true).subscribe({
+      error: e => expect(e).not.toEqual('')
+    });
+
+    const signInReq = httpMock.expectOne(signInUrl);
+    expect(signInReq.request.method).toEqual('POST');
+
+    signInReq.flush({}, {
+      status: 500,
+      statusText: 'server error'
+    });
+  });
+
+  it('editUserInfo should edit user info', () => {
+
+    const signInUrl = 'https://localhost/token';
+    service.init(undefined, undefined, signInUrl);
+
+    const oEnvDso = {
+      access_token: 'at',
+      refresh_token: 'rt',
+      expires_in: 1440,
+      user: {
+        userId: 'userId',
+        username: 'username',
+        languageCode: 'nl',
+        userProperties: {}
+      }
+    };
+
+    service.signIn(
+      'username',
+      'password',
+      true).subscribe({
+      next: signedIn => {
+        expect(signedIn).toBeTruthy();
+        service.editUserInfo(
+          'firstName',
+          'lastName',
+          'zh');
+        const user = service.principal.user!;
+        expect(user.username).toEqual('firstName lastName');
+        expect(user.languageCode).toEqual('zh');
+      }
+    });
+
+    const signInReq = httpMock.expectOne(signInUrl);
+    expect(signInReq.request.method).toEqual('POST');
+
+    signInReq.flush(oEnvDso);
+  });
+
+  it('editUserInfo should return when user is not set', () => {
+    service.editUserInfo('fn', 'ln', 'zh');
+    expect(true).toBeTruthy();
+  })
 });
