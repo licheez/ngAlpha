@@ -2,10 +2,13 @@ import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
+import {HTTP_INTERCEPTORS} from "@angular/common/http";
+import {AlphaOasInterceptor} from "../../projects/alpha-oas/src/lib/alpha-oas-interceptor";
 
 export const appConfig: ApplicationConfig = {
 
   providers: [
-    provideRouter(routes)
+    provideRouter(routes),
+    { provide: HTTP_INTERCEPTORS, useClass: AlphaOasInterceptor, multi: true }
   ]
 };
