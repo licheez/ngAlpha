@@ -1,6 +1,6 @@
 {
-  "name": "alpha-oas",
-  "version": "0.0.1",
+  "name": "@pvway/alpha-oas",
+  "version": "17.0.0",
   "peerDependencies": {
     "@angular/common": "^17.2.0",
     "@angular/core": "^17.2.0",
@@ -21,5 +21,28 @@
     "setupFilesAfterEnv": [
       "./src/setup.jest.ts"
     ]
-  }
+  },
+  "description": "This package was build using Angular 17.2.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "ng test AlphaOas"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/licheez/ngAlpha.git"
+  },
+  "keywords": [
+    "Open-OAuth",
+    "authentication",
+    "authorization",
+    "client-credentials-flow",
+    "refresh-flow",
+    "identity-server"
+  ],
+  "author": "Pierre Van Wallendael",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/licheez/ngAlpha/issues"
+  },
+  "homepage": "https://github.com/licheez/ngAlpha#readme"
 }
