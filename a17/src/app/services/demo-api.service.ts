@@ -3,7 +3,7 @@ import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {catchError, Observable, throwError} from "rxjs";
 import {environment} from "../../environments/environment";
 import {AlphaLsService} from "@pvway/alpha-ls";
-import {AlphaOasService} from "../../../projects/alpha-oas/src/lib/alpha-oas.service";
+import {AlphaOasService} from "@pvway/alpha-oas";
 
 @Injectable({
   providedIn: 'root'

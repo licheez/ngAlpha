@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AlphaTsService} from "../../../../projects/alpha-ts/src/lib/alpha-ts.service";
 import {AlphaLbsService} from "@pvway/alpha-lbs";
+import {AlphaTsService} from "@pvway/alpha-ts";
 
 @Component({
   selector: 'app-ts-demo',

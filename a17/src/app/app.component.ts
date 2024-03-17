@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
-import {AlphaTsService} from "../../projects/alpha-ts/src/lib/alpha-ts.service";
 import {environment} from "../environments/environment";
-import {AlphaOasService} from "../../projects/alpha-oas/src/lib/alpha-oas.service";
 import {AlphaLsService} from "@pvway/alpha-ls";
 import {AlphaLbsService} from "@pvway/alpha-lbs";
-import {AlphaPrincipal} from "../../projects/alpha-oas/src/lib/alpha-principal";
+import {AlphaOasService, AlphaPrincipal} from "@pvway/alpha-oas";
+import {AlphaTsService} from "@pvway/alpha-ts";
 
 @Component({
   selector: 'app-root',
