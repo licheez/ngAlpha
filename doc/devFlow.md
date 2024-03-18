@@ -165,6 +165,8 @@ Add the following lines
 
 and run **npm install**
 
+use the option --legacy-peer-deps if you got peer conflicts
+
 ### Edit _tsconfig.spec.json_ file
 
 replace

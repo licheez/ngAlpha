@@ -1,0 +1,39 @@
+{
+  "name": "@pvway/alpha-oas",
+  "version": "15.0.0",
+  "peerDependencies": {
+    "@angular/common": "^15.2.0",
+    "@angular/core": "^15.2.0",
+    "uuid": "^9.0.1"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/uuid": "^9.0.8"
+  },
+  "sideEffects": false,
+  "description": "This package was build using Angular 15.2.10",
+  "main": "index.js",
+  "scripts": {
+    "test": "ng test AlphaOas"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/licheez/ngAlpha.git"
+  },
+  "keywords": [
+    "Open-OAuth",
+    "authentication",
+    "authorization",
+    "client-credentials-flow",
+    "refresh-flow",
+    "identity-server"
+  ],
+  "author": "Pierre Van Wallendael",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/licheez/ngAlpha/issues"
+  },
+  "homepage": "https://github.com/licheez/ngAlpha#readme"
+}
