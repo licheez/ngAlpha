@@ -1,16 +1,14 @@
 {
   "name": "@pvway/alpha-oas",
-  "version": "15.0.0",
+  "version": "15.0.2",
   "peerDependencies": {
     "@angular/common": "^15.2.0",
     "@angular/core": "^15.2.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "@types/uuid": "^9.0.8"
   },
   "dependencies": {
     "tslib": "^2.3.0"
-  },
-  "devDependencies": {
-    "@types/uuid": "^9.0.8"
   },
   "sideEffects": false,
   "description": "This package was build using Angular 15.2.10",

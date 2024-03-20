@@ -6,9 +6,10 @@ It exposes
 * two main services
   * AlphaAosService
   * AlphaAosInterceptor
-* two important classes
+* important classes
   * AlphaPrincipal
   * AlphaUser
+  * SessionData
 * and one enum
   * AlphaAuthStatusEnum
 
@@ -232,6 +233,12 @@ As you can see the authorize method is called.
 This method will wrap the logic for making sure the http request is authorized using a valid Authorization bearer.
 
 It will also take care of automatically and transparently renewing any expired token using the OpenOAuth refresh flow.
+
+## SessionData
+
+This is a small object that is persisted into the sessionStorage.
+
+You can use this object for storing an access token you would get from another IDP (such as when using SSO with a federated OAuth system).
 
 ## Server side considerations
 

@@ -3,4 +3,4 @@
  */
 
 export * from './lib/alpha-com.service';
-export * from './lib/alpha-com.component';
+

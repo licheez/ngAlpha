@@ -1,10 +1,11 @@
 {
   "name": "@pvway/alpha-oas",
-  "version": "17.0.0",
+  "version": "17.0.2",
   "peerDependencies": {
     "@angular/common": "^17.2.0",
     "@angular/core": "^17.2.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "@types/uuid": "^9.0.8"
   },
   "dependencies": {
     "tslib": "^2.3.0"
@@ -12,7 +13,6 @@
   "sideEffects": false,
   "devDependencies": {
     "@types/jest": "^29.5.12",
-    "@types/uuid": "^9.0.8",
     "jest": "^29.7.0",
     "jest-preset-angular": "^14.0.3"
   },
