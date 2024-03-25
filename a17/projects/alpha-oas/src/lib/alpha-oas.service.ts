@@ -258,7 +258,7 @@ export class AlphaOasService {
   /**
    * called from the init() method when the session data is present
    */
-  private getMe(): Observable<IAlphaUser> {
+  getMe(): Observable<IAlphaUser> {
     const url = this.mGetMeUrl!;
     const call = this.mHttp.get<any>(url)
       .pipe(
@@ -336,7 +336,7 @@ export class AlphaOasService {
    * (2) stores the refresh token in the local storage
    * (3) populates the principal using the user info
    */
-  private storeIdentity(
+  storeIdentity(
     authEnvelop: IAlphaAuthEnvelop,
     rememberMe: boolean): void {
 
