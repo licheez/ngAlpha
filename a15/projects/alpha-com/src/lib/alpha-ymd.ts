@@ -1,5 +1,3 @@
-import * as dayjs from "dayjs";
-
 export class AlphaYmd {
 
   constructor(private mDate: Date) { }
@@ -15,65 +13,88 @@ export class AlphaYmd {
     return new Date(ymd)
   }
 
-  /**
-   * Converts the date stored in the object to a string representation
-   * in the format 'YYYY-MM-DD'.
-   *
-   * @return {string} The string representation of the date.
-   */
   stringify(): string {
     return AlphaYmd.format(
-      this.mDate, 'YYYY-MM-DD');
+      this.mDate, 'YMD', 'Dash');
   }
+  /**
+   * Takes a Date object and returns a formatted string representation of the date.
+   *
+   * @param {Date} date - The date to be converted to string.
+   * @return {string} - The formatted string representation of the date.
+   */
   static stringify(date: Date): string {
-    return this.format(date, 'YYYY-MM-DD');
+    return this.format(date, 'YMD', 'Dash');
   }
 
   /**
-   * Formats the date using the specified format.
+   * Formats the date in the specified format and separator.
    *
-   * @param {string} [format] - The format to use for formatting the date.
-   * If not provided, a default format will be used.
-   * Default is 'DD/MM/YYYY'.
-   * @return {string} The formatted date string.
+   * @param {string} format - The format of the date. It can be 'YMD', 'DMY', or 'MDY'.
+   * @param {string} sep - The separator to use. It can be 'Slash' or 'Dash'.
+   * @returns {string} The formatted date.
    */
-  format(format?: string): string {
-    return AlphaYmd.format(this.mDate, format);
+  format(format?: 'YMD' | 'DMY' | 'MDY',
+         sep?: 'Slash' | 'Dash'): string {
+    return AlphaYmd.format(this.mDate, format, sep);
   }
 
   /**
-   * Formats a date using a specified format.
-   * If no format is provided, the default format is 'DD/MM/YYYY'.
+   * Formats a date into a string based on the given format and separator.
    *
-   * @param {Date} date - The date to format.
-   * @param {string} [format] - The format to use. Default is 'DD/MM/YYYY'.
-   * @return {string} The formatted date as a string.
+   * @param {Date} date - The date object to be formatted.
+   * @param {string} [format='DMY'] - The format of the date string. Possible values are 'YMD', 'DMY', and 'MDY'.
+   * @param {string} [sep='Slash'] - The separator to be used in the date string. Possible values are 'Slash' and 'Dash'.
+   * @returns {string} The formatted date string.
    */
-  static format(date: Date, format?: string): string {
+  static format(date: Date,
+                format?: 'YMD' | 'DMY' | 'MDY',
+                sep?: 'Slash' | 'Dash'): string {
     if (!format) {
-      format = 'DD/MM/YYYY';
+      format = 'DMY';
     }
-    const m = dayjs(date);
-    return m.format(format);
+    if (!sep) {
+      sep = 'Slash';
+    }
+
+    const d = date.getDate();
+    const dd = d < 10 ? `0${d}`: `${d}`;
+    const m = date.getMonth() + 1;
+    const mm = m < 10 ? `0${m}`: `${m}`;
+    const yyyy =  date.getFullYear();
+    const s = sep === 'Slash' ? '/' : '-';
+
+    switch (format) {
+      case 'YMD':
+        return `${yyyy}${s}${mm}${s}${dd}`;
+      case 'DMY':
+        return `${dd}${s}${mm}${s}${yyyy}`;
+      case 'MDY':
+        return `${mm}${s}${dd}${s}${yyyy}`;
+    }
   }
 
   /**
-   * Formats the range of dates.
+   * Formats the range of two dates into a string.
    *
    * @param {Date} startDate - The start date of the range.
    * @param {Date} endDate - The end date of the range.
-   * @param {string} [format] - The format of the dates. (Optional)
-   * @param {string} [separator] - The separator between the dates. (Optional)
-   * @return {string} The formatted range of dates.
+   * @param {string} [rangeSep] - The separator to use between the formatted dates. Default is '-'.
+   * @param {('YMD' | 'DMY' | 'MDY')} [format] - The format to use for the date. Default is 'YMD'.
+   * @param {('Slash' | 'Dash')} [sep] - The separator to use within the formatted date. Default is 'Slash'.
+   *
+   * @returns {string} - The formatted range string.
    */
   static formatRange(startDate: Date, endDate: Date,
-                     format?: string, separator?: string): string {
-    if (!separator) {
-      separator = '-';
+                     rangeSep?: string,
+                     format?: 'YMD' | 'DMY' | 'MDY',
+                     sep?: 'Slash' | 'Dash'): string {
+    const sDate = AlphaYmd.format(startDate, format, sep);
+    const eDate = AlphaYmd.format(endDate, format, sep);
+    if (!rangeSep) {
+      rangeSep = '-';
     }
-    const sDate = AlphaYmd.format(startDate, format);
-    const eDate = AlphaYmd.format(endDate, format);
-    return `${sDate}${separator}${eDate}`;
+    return `${sDate}${rangeSep}${eDate}`;
   }
 
   /**

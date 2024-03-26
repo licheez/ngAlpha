@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import {AlphaYmd} from "./alpha-ymd";
 
 describe('AlphaYmd Class', () => {
@@ -20,26 +19,41 @@ describe('AlphaYmd Class', () => {
   });
 
   it('checks static stringify function', () => {
+    const date = new Date('2023/03/26 14:00:10');
     const result = AlphaYmd.stringify(date);
-    expect(result).toBe(dayjs(date).format('YYYY-MM-DD'));
+    expect(result).toEqual('2023-03-26');
   });
 
   it('checks instance format function', () => {
+    const date = new Date('2023/03/26 14:00:10');
     const alphaYmd = new AlphaYmd(date);
     const result = alphaYmd.format();
-    expect(result).toBe(dayjs(date).format('DD/MM/YYYY'));
+    expect(result).toEqual('26/03/2023');
   });
 
   it('checks static format function', () => {
-    const result = AlphaYmd.format(date);
-    expect(result).toBe(dayjs(date).format('DD/MM/YYYY'));
+    const date = new Date('2023/03/26 14:00:10');
+    // default sep is slash
+    let result = AlphaYmd.format(date, 'YMD');
+    expect(result).toEqual('2023/03/26');
+
+    result = AlphaYmd.format(date, 'YMD', 'Slash');
+    expect(result).toEqual('2023/03/26');
+
+    result = AlphaYmd.format(date, 'YMD', 'Dash');
+    expect(result).toEqual('2023-03-26');
+
+    result = AlphaYmd.format(date, 'DMY', 'Dash');
+    expect(result).toEqual('26-03-2023');
   });
 
   it('checks formatRange static function', () => {
-    const result = AlphaYmd.formatRange(date, new Date());
-    const sDate = dayjs(date).format('DD/MM/YYYY');
-    const eDate = dayjs(new Date()).format('DD/MM/YYYY');
-    expect(result).toBe(`${sDate}-${eDate}`);
+    const dt1 = new Date('2023/03/26 14:00:10');
+    const dt2 = new Date('2023/03/27 14:00:10');
+
+    const result = AlphaYmd.formatRange(
+      dt1, dt2,  ' - ');
+    expect(result).toEqual('26/03/2023 - 27/03/2023');
   });
 
   it('checks toYmd static function', () => {
