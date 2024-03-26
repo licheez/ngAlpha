@@ -1,9 +1,10 @@
 {
-  "name": "alpha-com",
-  "version": "0.0.1",
+  "name": "@pvway/alpha-common",
+  "version": "17.0.0",
   "peerDependencies": {
     "@angular/common": "^17.2.0",
-    "@angular/core": "^17.2.0"
+    "@angular/core": "^17.2.0",
+    "dayjs": "^1.11.10"
   },
   "dependencies": {
     "tslib": "^2.3.0"
@@ -19,5 +20,27 @@
     "setupFilesAfterEnv": [
       "./src/setup.jest.ts"
     ]
-  }
+  },
+  "description": "This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.0.",
+  "main": "index.js",
+  "scripts": {
+    "test": "ng test AlphaCom"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/licheez/ngAlpha.git#develop"
+  },
+  "keywords": [
+    "utils",
+    "date-format",
+    "ymd",
+    "blob",
+    "data-url"
+  ],
+  "author": "Pierre Van Wallendael",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/licheez/ngAlpha/issues"
+  },
+  "homepage": "https://github.com/licheez/ngAlpha/tree/develop#readme"
 }
