@@ -3,6 +3,9 @@
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
+      "AlphaApi": [
+        "./dist/alpha-api"
+      ],
       "AlphaCom": [
         "./dist/alpha-com"
       ],
@@ -12,8 +15,14 @@
       "AlphaLs": [
         "./dist/alpha-ls"
       ],
+      "AlphaNs": [
+        "./dist/alpha-ns"
+      ],
       "AlphaOas": [
         "./dist/alpha-oas"
+      ],
+      "AlphaPrime": [
+        "./dist/alpha-prime"
       ],
       "AlphaTs": [
         "./dist/alpha-ts"

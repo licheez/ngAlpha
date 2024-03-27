@@ -45,15 +45,24 @@ describe('AlphaYmd Class', () => {
 
     result = AlphaYmd.format(date, 'DMY', 'Dash');
     expect(result).toEqual('26-03-2023');
+
+    result = AlphaYmd.format(date, 'MDY', 'Dash');
+    expect(result).toEqual('03-26-2023');
+
+    result = AlphaYmd.format(date, 'DM', 'Dash');
+    expect(result).toEqual('26-03');
+
   });
 
   it('checks formatRange static function', () => {
     const dt1 = new Date('2023/03/26 14:00:10');
     const dt2 = new Date('2023/03/27 14:00:10');
 
-    const result = AlphaYmd.formatRange(
-      dt1, dt2,  ' - ');
+    let result = AlphaYmd.formatRange(dt1, dt2,  ' - ');
     expect(result).toEqual('26/03/2023 - 27/03/2023');
+
+    result = AlphaYmd.formatRange(dt1, dt2);
+    expect(result).toEqual('26/03/2023-27/03/2023');
   });
 
   it('checks toYmd static function', () => {

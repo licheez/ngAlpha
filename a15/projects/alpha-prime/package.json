@@ -1,0 +1,34 @@
+{
+  "name": "@pvway/alpha-prime",
+  "version": "15.0.1",
+  "peerDependencies": {
+    "@angular/common": "^15.2.0",
+    "@angular/core": "^15.2.0",
+    "primeflex": "^3.3.1",
+    "primeng": "15.4.1"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false,
+  "description": "This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.0.",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "ng test AlphaPrime"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/licheez/ngAlpha.git#develop"
+  },
+  "keywords": [
+    "PrimeNg",
+    "Modal-wrapper"
+  ],
+  "author": "Pierre Van Wallendael",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/licheez/ngAlpha/issues"
+  },
+  "homepage": "https://github.com/licheez/ngAlpha/tree/develop#readme"
+}
