@@ -3,4 +3,5 @@
  */
 
 export * from './lib/alpha-ns.service';
-export * from './lib/alpha-ns.component';
+export * from './lib/alpha-ns-utils'
+export * from './lib/alpha-page';
