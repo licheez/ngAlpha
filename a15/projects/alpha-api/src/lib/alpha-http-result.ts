@@ -7,6 +7,19 @@ export class AlphaHttpResult {
   mutation: AlphaMutationEnum;
   notifications: AlphaHttpResultNotification[];
   hasMoreResults: boolean;
+  get failure(): boolean {
+    return this.status === AlphaSeverityEnum.Error
+      || this.status === AlphaSeverityEnum.Fatal;
+  }
+  get success(): boolean {
+    return !this.failure;
+  }
+
+  get message(): string {
+    return this.notifications
+      .map(n => n.message)
+      .join(", ");
+  }
 
   protected constructor(
     status: AlphaSeverityEnum,
@@ -24,7 +37,7 @@ export class AlphaHttpResult {
     mutationCode: string,
     notifications: any[],
     hasMoreResults: boolean
-    }): AlphaHttpResult {
+  }): AlphaHttpResult {
     return new AlphaHttpResult(
       AlphaEnumSeverity.getValue(dso.statusCode),
       AlphaEnumMutation.getValue(dso.mutationCode),

@@ -1,6 +1,6 @@
 import {AlphaHttpListResult, AlphaHttpObjectResult, AlphaHttpResult} from "./alpha-http-result";
-import {name} from "ci-info";
 import {AlphaSeverityEnum} from "./alpha-severity-enum";
+import {expect} from "@jest/globals";
 
 describe('AlphaResult', () => {
   it('should factor an AlphaHttpResult', () => {
@@ -14,8 +14,12 @@ describe('AlphaResult', () => {
       hasMoreResults: false
     });
     expect(r).toBeInstanceOf(AlphaHttpResult);
+    expect(r.success).toBeTruthy();
+    expect(r.failure).toBeFalsy();
+    expect(r.message).toEqual('someWarning');
 
     expect(true).toBeTruthy();
+
   });
 
   it('should factor an AlphaHttpObjectResult', () => {
@@ -90,6 +94,7 @@ describe('AlphaResult', () => {
     expect(r.notifications[0].message).toEqual('warningOne');
     expect(r.data).toBeDefined();
     expect(r.data.length).toEqual(2);
+    expect(r.message).toEqual('warningOne, warningTwo');
 
   });
 
