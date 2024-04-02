@@ -1,6 +1,6 @@
 # AlphaCom (a.k.a. alpha-common)
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.0.
+This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.0.
 
 # Description
 
@@ -272,11 +272,14 @@ Converts the date stored in the object to a string representation in the format 
 
 ### format
 
-Formats the date using the specified format. If no format is provided, the default format is 'DD/MM/YYYY'.
+Formats the date using the specified format.
 
 **Parameters:**
 
-`format` (string, Optional): The format to use for formatting the date. If not provided, 'DD/MM/YYYY' is used as the default.
+`format` (string, Optional): The format to use for formatting the date.
+There are 4 supported formats : YMD, DMY, MDY and DM
+
+`sep` (string, Optional): The separator to use. It can be 'Slash' or 'Dash'.
 
 **Returns:**
 
@@ -291,9 +294,14 @@ Formats the range of dates.
 **Parameters:**
 
 `startDate`  (Date): The start date of the range.
+
 `endDate`    (Date): The end date of the range.
-`format`     (string, Optional): The format of the dates.
-`separator`  (string, Optional): The separator between the dates. Default is '-'.
+
+`ragneSep`  (string, Optional): The separator between the dates. Default is '-'.
+
+`format` (string, Optional): The format to use for formatting the date. There are 4 supported formats : YMD, DMY, MDY and DM
+
+`sep` (string, Optional): The separator to use. It can be 'Slash' or 'Dash'.
 
 **Returns:**
 
@@ -322,7 +330,9 @@ Checks if a given date is within a range of minimum and maximum dates.
 **Parameters:**
 
 `date`    (Date): The date to check.
+
 `minDate` (Date): The minimum date of the range.
+
 `maxDate` (Date): The maximum date of the range.
 
 **Returns:**
@@ -338,6 +348,7 @@ Checks if two dates have the same year, month, and day.
 **Parameters:**
 
 `dt0` (Date): The first date.
+
 `dt1` (Date): The second date.
 
 **Returns:**
@@ -353,6 +364,7 @@ Compares two dates and returns the comparison result.
 **Parameters:**
 
 `dt0` (Date): The first date to compare.
+
 `dt1` (Date): The second date to compare.
 
 **Returns:**
