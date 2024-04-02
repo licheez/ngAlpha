@@ -1,28 +1,3 @@
-# AlphaApi
-
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.0.
-
-## Description / Concept
-
-The idea behind this component is to standardize Web API responses by using a common wrapper.
-
-Of course this only works when you are also using (the same) wrapper at server side.
-
-The wrapper carries down the following information from the server.
-
-* a status (AlphaSeverityEnum) that specifies how good the server processed the request.
-* the mutation (AlphaMutationEnum) that specifies what (CRUD) action was taken by the server
-* a list of notifications where you'll find any warning or error
-* a flag (hasMoreResult) that tells the client that a paged list contains more elements
-* the server response that can take two forms
-  * an object
-  * a list of objects
-
-## Implementation
-
-The wrapper is implemented as a base class and two generic subclasses.
-
-```typescript
 import {AlphaEnumSeverity, AlphaSeverityEnum} from "./alpha-severity-enum";
 import {AlphaEnumMutation, AlphaMutationEnum} from "./alpha-mutation-enum";
 import {AlphaHttpResultNotification} from "./alpha-http-result-notification";
@@ -122,6 +97,3 @@ export class AlphaHttpListResult<T> extends AlphaHttpResult {
       data);
   }
 }
-
-```
-

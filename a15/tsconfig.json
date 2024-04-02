@@ -3,6 +3,9 @@
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
+      "AlphaApi": [
+        "dist/alpha-api"
+      ],
       "AlphaCom": [
         "dist/alpha-com"
       ],
