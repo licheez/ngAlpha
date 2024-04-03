@@ -1,14 +1,10 @@
 # AlphaLbs
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.3.
+This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.0.
 
 ## Description
 
 This package is a tiny local message bus service that enables components and services to communicate via publish/subscribe
-
-## Running unit tests
-
-Run `ng test AlphaLbs` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
 ## Usage
 
@@ -42,17 +38,17 @@ We can now have another component that listens to that given channel and console
 ```typescript
   sub = -1;
 
-  constructor(private  mLbs: AlphaLbsService) {  }
+constructor(private  mLbs: AlphaLbsService) {  }
 
-  ngOnInit(): void {
-    this.sub = this.mLbs.subscribe(
-      (clock:  {hours: number, minutes: number, seconds: number}) =>
-        console.log(clock),
-      AppComponent.CLOCK_CHANNEL);
-  }
+ngOnInit(): void {
+  this.sub = this.mLbs.subscribe(
+    (clock:  {hours: number, minutes: number, seconds: number}) =>
+      console.log(clock),
+    AppComponent.CLOCK_CHANNEL);
+}
 
-  ngOnDestroy(): void {
-    this.mLbs.unsubscribe(this.sub);
-  }
+ngOnDestroy(): void {
+  this.mLbs.unsubscribe(this.sub);
+}
 
 ```
