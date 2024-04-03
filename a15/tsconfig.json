@@ -16,6 +16,9 @@
       "AlphaLs": [
         "dist/alpha-ls"
       ],
+      "AlphaNs": [
+        "dist/alpha-ns"
+      ],
       "AlphaOas": [
         "dist/alpha-oas"
       ],

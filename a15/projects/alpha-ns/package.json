@@ -1,29 +1,18 @@
 {
   "name": "@pvway/alpha-ns",
-  "version": "17.0.0",
+  "version": "15.0.0",
   "peerDependencies": {
-    "@angular/common": "^17.2.0",
-    "@angular/core": "^17.2.0"
+    "@angular/common": "^15.2.0",
+    "@angular/core": "^15.2.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
   },
   "sideEffects": false,
-  "devDependencies": {
-    "@types/jest": "^29.5.12",
-    "jest": "^29.7.0",
-    "jest-preset-angular": "^14.0.3"
-  },
-  "jest": {
-    "preset": "jest-preset-angular",
-    "setupFilesAfterEnv": [
-      "./src/setup.jest.ts"
-    ]
-  },
-  "description": "This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.0.",
+  "description": "This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.0.",
   "main": "index.js",
   "scripts": {
-    "test": "ng test AlphaNs"
+    "test": "ng test alpha-ns"
   },
   "repository": {
     "type": "git",

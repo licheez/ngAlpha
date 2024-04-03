@@ -1,6 +1,6 @@
 # AlphaNs (a.k.a. AlphaNavigationService)
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.0.
+This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.0.
 
 
 - [AlphaNs (a.k.a. AlphaNavigationService)](#AlphaNs)
@@ -253,7 +253,7 @@ Navigating to a page is as easy as the following code.
     this.mNs.navigate(AppSitemap.accountOutlet);
   }
 ```
-As you will notice a component navigating to another page does not have to mention any hardcoded route string... This makes your application much easier to maintain. 
+As you will notice a component navigating to another page does not have to mention any hardcoded route string... This makes your application much easier to maintain.
 
 ### Opening a specified URL in a new tab:
 ```typescript

@@ -1,6 +1,6 @@
 {
   "name": "@pvway/alpha-prime",
-  "version": "15.0.1",
+  "version": "15.0.2",
   "peerDependencies": {
     "@angular/common": "^15.2.0",
     "@angular/core": "^15.2.0",
@@ -23,7 +23,8 @@
   },
   "keywords": [
     "PrimeNg",
-    "Modal-wrapper"
+    "Modal-wrapper",
+    "dialog-box"
   ],
   "author": "Pierre Van Wallendael",
   "license": "MIT",
