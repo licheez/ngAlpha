@@ -1,6 +1,7 @@
 import { Injectable, Type } from '@angular/core';
 import { DialogService, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { Observable, Subscriber } from 'rxjs';
+import {AlphaPrimeService} from "./alpha-prime.service";
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,12 @@ export class AlphaPrimeModalService {
   private _ds!: DialogService;
   private _postNavigationLog: (path: string, title: string) => any = () => {};
 
+  constructor(ps: AlphaPrimeService) {
+    this._modalStyleClass = ps.modalStyleClass;
+    this._ds = ps.ds;
+    this._postNavigationLog = ps.postNavigationLog;
+  }
+
   /**
    * Initializes the dialog service.
    *
@@ -18,6 +25,7 @@ export class AlphaPrimeModalService {
    * @param {(path: string, title: string) => any} postNavigationLog - The function used for posting navigation logs, with parameters path: string and title: string.
    * @param {string} [modalStyleClass] - Optional. The CSS class to be applied to the modals created by the DialogService.
    * @return {void}
+   * @deprecated this method is left active for backward compatibility. It became redundant now that the AlphaPrimeService is injected.
    */
   init(
     ds: DialogService,

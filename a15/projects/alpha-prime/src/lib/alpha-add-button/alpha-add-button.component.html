@@ -1,0 +1,9 @@
+<button pButton
+        class="p-button-info"
+        [ngClass]="sm ? 'p-button-sm' : ''"
+        type="button"
+        [disabled]="disabled"
+        pTooltip="{{caption}}"
+        icon="fa fa-plus-circle"
+        (click)="onClicked()">
+</button>
