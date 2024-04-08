@@ -3,5 +3,5 @@
  */
 
 export * from './lib/alpha-prime.module';
-export * from './lib/alpha-prime-debug-tag/alpha-prime-debug-tag.component';
-export * from './lib/alpha-prime-modal.service';
+export * from './lib/components/alpha-prime-debug-tag/alpha-prime-debug-tag.component';
+export * from './lib/services/alpha-prime-modal.service';

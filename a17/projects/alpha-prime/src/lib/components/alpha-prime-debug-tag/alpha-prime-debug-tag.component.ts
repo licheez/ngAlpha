@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {AlphaPrimeService} from "../alpha-prime.service";
+import {AlphaPrimeService} from "../../services/alpha-prime.service";
 import {NgIf} from "@angular/common";
 import {TooltipModule} from "primeng/tooltip";
 

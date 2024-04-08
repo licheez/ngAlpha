@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AlphaPrimeDebugTagComponent } from './alpha-prime-debug-tag.component';
-import {AlphaPrimeService} from "../alpha-prime.service";
+import {AlphaPrimeService} from "../../services/alpha-prime.service";
 
 describe('AlphaPrimeDebugTagComponent', () => {
   let component: AlphaPrimeDebugTagComponent;
