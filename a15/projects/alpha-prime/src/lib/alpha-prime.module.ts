@@ -19,13 +19,13 @@ import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 
 // ALPHA
-import { AlphaAddButtonComponent } from './alpha-add-button/alpha-add-button.component';
-import { AlphaDebugTagComponent } from './alpha-debug-tag/alpha-debug-tag.component';
+import { AlphaPrimeAddButtonComponent } from './alpha-prime-add-button/alpha-prime-add-button.component';
+import { AlphaPrimeDebugTagComponent } from './alpha-prime-debug-tag/alpha-prime-debug-tag.component';
 
 @NgModule({
   declarations: [
-    AlphaAddButtonComponent,
-    AlphaDebugTagComponent
+    AlphaPrimeAddButtonComponent,
+    AlphaPrimeDebugTagComponent
   ],
   imports: [
     CommonModule,
@@ -39,8 +39,8 @@ import { AlphaDebugTagComponent } from './alpha-debug-tag/alpha-debug-tag.compon
     ButtonModule,
     TooltipModule,
     // ALPHA
-    AlphaAddButtonComponent,
-    AlphaDebugTagComponent
+    AlphaPrimeAddButtonComponent,
+    AlphaPrimeDebugTagComponent
   ]
 })
 export class AlphaPrimeModule { }

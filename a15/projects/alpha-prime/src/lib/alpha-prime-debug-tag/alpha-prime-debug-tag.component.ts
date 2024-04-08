@@ -2,11 +2,11 @@ import {Component, Input, OnInit} from '@angular/core';
 import {AlphaPrimeService} from "../alpha-prime.service";
 
 @Component({
-  selector: 'alpha-debug-tag',
-  templateUrl: './alpha-debug-tag.component.html',
-  styleUrls: ['./alpha-debug-tag.component.css']
+  selector: 'alpha-prime-debug-tag',
+  templateUrl: './alpha-prime-debug-tag.component.html',
+  styleUrls: ['./alpha-prime-debug-tag.component.css']
 })
-export class AlphaDebugTagComponent implements OnInit{
+export class AlphaPrimeDebugTagComponent implements OnInit{
 
   visible = false;
   @Input() tag = '';

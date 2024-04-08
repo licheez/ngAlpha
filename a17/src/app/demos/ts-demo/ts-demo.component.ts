@@ -1,11 +1,14 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AlphaLbsService} from "@pvway/alpha-lbs";
 import {AlphaTsService} from "@pvway/alpha-ts";
+import {AlphaPrimeDebugTagComponent} from "@pvway/alpha-prime";
 
 @Component({
   selector: 'app-ts-demo',
   standalone: true,
-  imports: [],
+  imports: [
+    AlphaPrimeDebugTagComponent
+  ],
   templateUrl: './ts-demo.component.html',
   styleUrl: './ts-demo.component.scss'
 })

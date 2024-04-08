@@ -26,7 +26,8 @@
     "@pvway/alpha-lbs": "^17.0.0",
     "@pvway/alpha-ls": "^17.0.0",
     "@pvway/alpha-ts": "^17.1.0",
-    "@pvway/alpha-oas": "^17.0.0"
+    "@pvway/alpha-oas": "^17.0.0",
+    "@pvway/alpha-prime": "^17.0.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.2.3",

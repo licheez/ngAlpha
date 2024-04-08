@@ -2,11 +2,11 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import {AlphaPrimeService} from "../alpha-prime.service";
 
 @Component({
-  selector: 'alpha-add-button',
-  templateUrl: './alpha-add-button.component.html',
-  styleUrls: ['./alpha-add-button.component.css']
+  selector: 'alpha-prime-add-button',
+  templateUrl: './alpha-prime-add-button.component.html',
+  styleUrls: ['./alpha-prime-add-button.component.css']
 })
-export class AlphaAddButtonComponent {
+export class AlphaPrimeAddButtonComponent {
 
   @Input() disabled = false;
   @Input() caption = this.mPs.getTr('alpha.buttons.add');
