@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AlphaPrimeDatePickerComponent } from './alpha-prime-date-picker.component';
-import exp from "node:constants";
 import spyOn = jest.spyOn;
 
 describe('AlphaPrimeDatePickerComponent', () => {

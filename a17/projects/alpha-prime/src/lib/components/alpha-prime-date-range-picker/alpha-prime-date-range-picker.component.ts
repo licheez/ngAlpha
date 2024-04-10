@@ -6,7 +6,7 @@ import {RippleModule} from "primeng/ripple";
 import {InputTextModule} from "primeng/inputtext";
 
 @Component({
-  selector: 'lib-alpha-prime-date-range-picker',
+  selector: 'alpha-prime-date-range-picker',
   standalone: true,
   imports: [
     NgIf,
