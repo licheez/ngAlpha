@@ -1,0 +1,64 @@
+<div *ngIf="!readonly"
+     class="p-inputgroup" >
+
+  <p-calendar
+    [style]="{'width':'100%'}"
+    [inputStyle]="inputStyle"
+    class="p-calendar"
+    selectionMode="range"
+    [disabled]="disabled"
+    [dateFormat]="dateFormat"
+    [firstDayOfWeek]="1"
+    [minDate]="minDate"
+    [maxDate]="maxDate"
+    [readonlyInput]="true"
+    [numberOfMonths]="displayMonths"
+    [placeholder]="placeHolder"
+    appendTo="body"
+    [(ngModel)]="dateRange"
+    (ngModelChange)="onSelection($event)"
+    #cal >
+  </p-calendar>
+
+  <button type="button"
+          pButton
+          pRipple
+          tabindex="-1"
+          [disabled]="disabled"
+          (click)="onClear()"
+          *ngIf="startDate"
+          class="p-button-secondary"
+          [ngClass]="sm ? 'p-button-sm' : ''"
+          icon="pi">
+    <i class="fa fa-times"></i>
+  </button>
+
+  <button type="button"
+          pButton
+          pRipple
+          tabindex="-1"
+          [disabled]="disabled"
+          class="p-button-success"
+          [ngClass]="sm ? 'p-button-sm' : ''"
+          *ngIf="endDate && cal.overlayVisible"
+          (click)="cal.toggle()"
+          icon="pi">
+    <i class="fa fa-check"></i>
+  </button>
+
+  <button type="button"
+          pButton
+          pRipple
+          class="p-button-info"
+          [ngClass]="sm ? 'p-button-sm' : ''"
+          (click)="cal.toggle()"
+          icon="pi">
+    <i class="fa fa-calendar"></i>
+  </button>
+
+</div>
+
+<input *ngIf="readonly"
+       pInputText
+       [readonly]="true"
+       [value]="readonlyCaption">
