@@ -140,6 +140,7 @@ export class AlphaPrimeAutoCompleteComponent {
   clear(emit: boolean): void {
     if (this.feedTimer) {
       clearTimeout(this.feedTimer);
+      this.feedTimer = undefined;
     }
     if (this.feed) {
       this.feed.unsubscribe();
