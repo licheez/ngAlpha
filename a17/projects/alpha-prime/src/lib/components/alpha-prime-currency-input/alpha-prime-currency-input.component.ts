@@ -10,7 +10,7 @@ import {ButtonModule} from "primeng/button";
 import {RippleModule} from "primeng/ripple";
 
 @Component({
-  selector: 'lib-alpha-prime-currency-input',
+  selector: 'alpha-prime-currency-input',
   standalone: true,
   imports: [
     NgIf,

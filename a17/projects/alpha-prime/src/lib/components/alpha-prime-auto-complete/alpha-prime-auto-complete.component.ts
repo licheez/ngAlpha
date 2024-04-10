@@ -29,7 +29,7 @@ In css
 */
 
 @Component({
-  selector: 'lib-alpha-prime-auto-complete',
+  selector: 'alpha-prime-auto-complete',
   standalone: true,
   imports: [
     // ANGULAR

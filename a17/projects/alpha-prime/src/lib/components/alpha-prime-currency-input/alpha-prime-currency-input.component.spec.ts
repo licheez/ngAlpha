@@ -61,7 +61,7 @@ describe('AlphaPrimeCurrencyInputComponent', () => {
       component.sm = true;
       expect(component.inputStyle).toEqual(component.smInputStyle);
     });
-  })
+  });
 
   describe('onTextChange', () => {
     it ('should handle undefined value', () => {

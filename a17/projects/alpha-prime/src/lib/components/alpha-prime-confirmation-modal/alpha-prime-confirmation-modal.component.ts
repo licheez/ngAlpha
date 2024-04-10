@@ -5,7 +5,7 @@ import {AlphaPrimeDebugTagComponent} from "../alpha-prime-debug-tag/alpha-prime-
 import {ButtonModule} from "primeng/button";
 
 @Component({
-  selector: 'lib-alpha-prime-confirmation-modal',
+  selector: 'alpha-prime-confirmation-modal',
   standalone: true,
   imports: [
     AlphaPrimeDebugTagComponent,

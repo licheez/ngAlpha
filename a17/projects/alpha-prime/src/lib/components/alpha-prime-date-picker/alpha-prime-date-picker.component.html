@@ -1,0 +1,55 @@
+<div *ngIf="!readonly"
+     class="p-inputgroup" >
+
+  <p-calendar
+    [style]="{'width':'100%' }"
+    [inputStyle]="inputStyle"
+    class="p-calendar"
+    [placeholder]="ph"
+    [name]="name"
+    appendTo="body"
+    [showOnFocus]="false"
+    [showTime]="showTime"
+    [showSeconds]="showSeconds"
+    [firstDayOfWeek]="1"
+    [(ngModel)]="date"
+    [minDate]="minDate"
+    [maxDate]="maxDate"
+    [disabled]="disabled"
+    [readonlyInput]="false"
+    (ngModelChange)="onDateChanged($event)"
+    [dateFormat]="dateFormat"
+    #cal  >
+  </p-calendar>
+
+  <button type="button"
+          pButton
+          pRipple
+          tabindex="-1"
+          [disabled]="disabled"
+          (click)="onClear()"
+          *ngIf="date && showClear"
+          class="p-button-secondary"
+          [ngClass]="sm ? 'p-button-sm' : ''"
+          icon="pi">
+    <i class="fa fa-times"></i>
+  </button>
+
+  <button type="button"
+          pButton
+          pRipple
+          tabindex="-1"
+          class="p-button-info"
+          [ngClass]="sm ? 'p-button-sm' : ''"
+          [disabled]="disabled"
+          (click)="cal.toggle()"
+          icon="pi">
+    <i class="fa fa-calendar"></i>
+  </button>
+
+</div>
+
+<input *ngIf="readonly"
+       pInputText
+       [readonly]="true"
+       [value]="readonlyCaption">
