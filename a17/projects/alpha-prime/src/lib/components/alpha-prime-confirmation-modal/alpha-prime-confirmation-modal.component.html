@@ -1,1 +1,18 @@
-<p>alpha-prime-confirmation-modal works!</p>
+<alpha-prime-debug-tag tag="alpha-prime-debug-tag"></alpha-prime-debug-tag>
+
+<div class="my-6">
+  <h2>{{message}}</h2>
+</div>
+
+<div class="p-m-3 text-right ">
+  <button pButton
+          class="p-button-secondary mr-4"
+          type="button"
+          [label]="yes"
+          (click)="onYes()"></button>
+  <button pButton
+          class="p-button-secondary"
+          type="submit"
+          [label]="no"
+          (click)="onNo()"></button>
+</div>
