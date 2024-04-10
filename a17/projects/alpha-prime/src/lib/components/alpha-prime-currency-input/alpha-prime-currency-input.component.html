@@ -1,0 +1,32 @@
+<div *ngIf="!readonly" class="p-inputgroup" >
+    <span class="p-inputgroup-addon">
+        €
+    </span>
+  <input type="text"
+         pInputText
+         [pKeyFilter]="realNumber"
+         [placeholder]="placeHolder"
+         [disabled]="disabled"
+         [ngClass]="{'ng-invalid' : invalid}"
+         [ngModel]="sVal"
+         (ngModelChange)="onTextChange($event)"
+         (blur)="onBlur()"
+  >
+
+  <button type="button"
+          pButton pRipple
+          tabindex="-1"
+          [disabled]="disabled"
+          (click)="onClear()"
+          *ngIf="sVal && showClear"
+          class="p-button-secondary"
+          icon="pi">
+    <i class="fa fa-times"></i>
+  </button>
+
+</div>
+
+<input *ngIf="readonly"
+       pInputText
+       [readonly]="true"
+       [value]="readonlyCaption">
