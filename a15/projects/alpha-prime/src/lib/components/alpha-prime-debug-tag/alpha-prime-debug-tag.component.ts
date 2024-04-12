@@ -1,10 +1,17 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {AlphaPrimeService} from "../alpha-prime.service";
+import {NgIf} from "@angular/common";
+import {TooltipModule} from "primeng/tooltip";
+import {AlphaPrimeService} from "../../services/alpha-prime.service";
 
 @Component({
   selector: 'alpha-prime-debug-tag',
+  standalone: true,
   templateUrl: './alpha-prime-debug-tag.component.html',
-  styleUrls: ['./alpha-prime-debug-tag.component.css']
+  styleUrls: ['./alpha-prime-debug-tag.component.css'],
+  imports: [
+    NgIf,
+    TooltipModule
+  ]
 })
 export class AlphaPrimeDebugTagComponent implements OnInit{
 

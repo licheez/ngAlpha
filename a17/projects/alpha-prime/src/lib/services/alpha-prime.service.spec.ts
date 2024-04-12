@@ -53,4 +53,19 @@ describe('AlphaPrimeService', () => {
     expect(tr).toEqual("'key':'translation'");
   });
 
+  describe('generateRandomName', () => {
+    it('should generate a name with a default length', () => {
+      const r = service.generateRandomName();
+      expect(r.length).toEqual(50);
+      const r2 = service.generateRandomName();
+      expect(r).not.toEqual(r2);
+    });
+    it('should generate a name with a given length', () => {
+      const r = service.generateRandomName(30);
+      expect(r.length).toEqual(30);
+      const r2 = service.generateRandomName(30);
+      expect(r).not.toEqual(r2);
+    });
+  });
+
 });

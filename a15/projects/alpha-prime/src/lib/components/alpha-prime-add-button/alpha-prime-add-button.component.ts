@@ -1,9 +1,18 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import {AlphaPrimeService} from "../alpha-prime.service";
+import {ButtonModule} from "primeng/button";
+import {NgClass} from "@angular/common";
+import {TooltipModule} from "primeng/tooltip";
+import {AlphaPrimeService} from "../../services/alpha-prime.service";
 
 @Component({
   selector: 'alpha-prime-add-button',
+  standalone: true,
   templateUrl: './alpha-prime-add-button.component.html',
+  imports: [
+    ButtonModule,
+    NgClass,
+    TooltipModule
+  ],
   styleUrls: ['./alpha-prime-add-button.component.css']
 })
 export class AlphaPrimeAddButtonComponent {

@@ -22,7 +22,7 @@ import {AlphaPrimeService} from "../../services/alpha-prime.service";
     RippleModule
   ],
   templateUrl: './alpha-prime-currency-input.component.html',
-  styleUrl: './alpha-prime-currency-input.component.css'
+  styleUrls: ['./alpha-prime-currency-input.component.css']
 })
 export class AlphaPrimeCurrencyInputComponent {
 

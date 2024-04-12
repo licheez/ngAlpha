@@ -18,7 +18,7 @@ import {AlphaPrimeService} from "../../services/alpha-prime.service";
     InputTextModule
   ],
   templateUrl: './alpha-prime-date-picker.component.html',
-  styleUrl: './alpha-prime-date-picker.component.css'
+  styleUrls: ['./alpha-prime-date-picker.component.css']
 })
 export class AlphaPrimeDatePickerComponent implements OnDestroy {
 
