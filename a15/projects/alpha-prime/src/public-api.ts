@@ -12,6 +12,10 @@ export * from './lib/components/alpha-prime-date-picker/alpha-prime-date-picker.
 export * from './lib/components/alpha-prime-date-range-picker/alpha-prime-date-range-picker.component';
 export * from './lib/components/alpha-prime-debug-tag/alpha-prime-debug-tag.component';
 export * from './lib/components/alpha-prime-delete-button/alpha-prime-delete-button.component';
+export * from './lib/components/alpha-prime-edit-button/alpha-prime-edit-button.component';
+export * from './lib/components/alpha-prime-file-upload/alpha-prime-file-upload';
+export * from './lib/components/alpha-prime-file-upload/alpha-prime-file-upload.component';
+export * from './lib/components/alpha-prime-progress-bar/alpha-prime-progress-bar.component';
 
 export * from './lib/pipes/alpha-prime-boldify.pipe';
 
