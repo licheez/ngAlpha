@@ -9,7 +9,7 @@ import {NgClass, NgIf} from "@angular/common";
 import {TooltipModule} from "primeng/tooltip";
 
 @Component({
-  selector: 'lib-alpha-prime-delete-button',
+  selector: 'alpha-prime-delete-button',
   standalone: true,
   imports: [
     ButtonModule,

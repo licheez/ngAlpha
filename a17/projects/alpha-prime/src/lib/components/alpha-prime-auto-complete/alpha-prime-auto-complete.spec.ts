@@ -1,4 +1,4 @@
-import {AlphaAutoComplete, IAlphaPrimeAutoCompleteEntry} from "./alpha-prime-auto-complete";
+import {AlphaPrimeAutoComplete, IAlphaPrimeAutoCompleteEntry} from "./alpha-prime-auto-complete";
 import {Observable, of} from "rxjs";
 
 describe('AlphaPrimeAutoComplete', () => {
@@ -25,7 +25,7 @@ describe('AlphaPrimeAutoComplete', () => {
         }
       };
 
-    AlphaAutoComplete.mapFeeder('p', feeder, mapper)
+    AlphaPrimeAutoComplete.mapFeeder('p', feeder, mapper)
       .subscribe({
         next: entries => {
           expect(entries.length).toEqual(2);

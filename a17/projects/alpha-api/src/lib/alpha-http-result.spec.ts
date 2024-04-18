@@ -4,7 +4,7 @@ import {expect} from "@jest/globals";
 
 describe('AlphaResult', () => {
   it('should factor an AlphaHttpResult', () => {
-    const r = AlphaHttpResult.factorFromDso({
+    const dso = {
       statusCode: 'O',
       mutationCode: 'N',
       notifications: [{
@@ -12,7 +12,9 @@ describe('AlphaResult', () => {
         message: 'someWarning'
       }],
       hasMoreResults: false
-    });
+    };
+    expect(AlphaHttpObjectResult.isBaseResult(dso)).toBeTruthy();
+    const r = AlphaHttpResult.factorFromDso(dso);
     expect(r).toBeInstanceOf(AlphaHttpResult);
     expect(r.success).toBeTruthy();
     expect(r.failure).toBeFalsy();
@@ -36,7 +38,7 @@ describe('AlphaResult', () => {
       }
     }
 
-    const r = AlphaHttpObjectResult.factorFromDso({
+    const dso = {
       statusCode: 'O',
       mutationCode: 'N',
       notifications: [{
@@ -45,7 +47,11 @@ describe('AlphaResult', () => {
       }],
       hasMoreResults: false,
       data: dataDso
-    }, factor);
+    };
+
+    expect(AlphaHttpObjectResult.isObjectResult(dso)).toBeTruthy();
+
+    const r = AlphaHttpObjectResult.factorFromDso(dso, factor);
 
     expect(r).toBeInstanceOf(AlphaHttpObjectResult);
     expect(r.status).toEqual(AlphaSeverityEnum.Ok);
@@ -72,7 +78,7 @@ describe('AlphaResult', () => {
       }
     }
 
-    const r = AlphaHttpListResult.factorFromDso({
+    const dso = {
       statusCode: 'W',
       mutationCode: 'N',
       notifications: [{
@@ -84,7 +90,11 @@ describe('AlphaResult', () => {
       }],
       hasMoreResults: true,
       data: dataDso
-    }, factor);
+    };
+
+    expect(AlphaHttpObjectResult.isListResult(dso)).toBeTruthy();
+
+    const r = AlphaHttpListResult.factorFromDso(dso, factor);
 
     expect(r).toBeInstanceOf(AlphaHttpListResult);
     expect(r.status).toEqual(AlphaSeverityEnum.Warning);
@@ -96,6 +106,82 @@ describe('AlphaResult', () => {
     expect(r.data.length).toEqual(2);
     expect(r.message).toEqual('warningOne, warningTwo');
 
+  });
+
+  describe('instance check', () => {
+    it('should recognize a baseResult vs an any vs a string', () => {
+
+      const dso = {
+        statusCode: 'O',
+        mutationCode: 'N',
+        notifications: [{
+          severityCode: 'W',
+          message: 'someWarning'
+        }],
+        hasMoreResults: false
+      };
+      expect(AlphaHttpResult.isBaseResult(dso)).toBeTruthy();
+
+      expect(AlphaHttpResult.isObjectResult({})).toBeFalsy();
+
+      expect(AlphaHttpResult.isBaseResult('a string')).toBeFalsy();
+    });
+
+    it ('should recognize an objectResult', () => {
+      const dsoList = {
+        statusCode: 'O',
+        mutationCode: 'N',
+        notifications: [{
+          severityCode: 'W',
+          message: 'someWarning'
+        }],
+        hasMoreResults: false,
+        data: []
+      };
+      const dsoObject = {
+        statusCode: 'O',
+        mutationCode: 'N',
+        notifications: [{
+          severityCode: 'W',
+          message: 'someWarning'
+        }],
+        hasMoreResults: false,
+        data: 'someInfo'
+      };
+
+      expect(AlphaHttpResult.isObjectResult('a string')).toBeFalsy();
+      expect(AlphaHttpResult.isObjectResult({})).toBeFalsy();
+      expect(AlphaHttpResult.isObjectResult(dsoObject)).toBeTruthy();
+      expect(AlphaHttpResult.isObjectResult(dsoList)).toBeFalsy();
+    });
+  });
+
+  it ('should recognize a listResult', () => {
+    const dsoList = {
+      statusCode: 'O',
+      mutationCode: 'N',
+      notifications: [{
+        severityCode: 'W',
+        message: 'someWarning'
+      }],
+      hasMoreResults: false,
+      data: []
+    };
+    const dsoObject = {
+      statusCode: 'O',
+      mutationCode: 'N',
+      notifications: [{
+        severityCode: 'W',
+        message: 'someWarning'
+      }],
+      hasMoreResults: false,
+      data: 'someInfo'
+    };
+
+    expect(AlphaHttpResult.isListResult('a string')).toBeFalsy();
+    expect(AlphaHttpResult.isListResult({})).toBeFalsy();
+    expect(AlphaHttpResult.isListResult(dsoObject)).toBeFalsy();
+    expect(AlphaHttpResult.isListResult(dsoList)).toBeTruthy();
   });
 
 });

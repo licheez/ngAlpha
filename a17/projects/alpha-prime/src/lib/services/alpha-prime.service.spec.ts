@@ -2,6 +2,8 @@ import { TestBed } from '@angular/core/testing';
 
 import { AlphaPrimeService } from './alpha-prime.service';
 import {DialogService} from "primeng/dynamicdialog";
+import {jest} from "@jest/globals";
+import {of} from "rxjs";
 
 describe('AlphaPrimeService', () => {
   let service: AlphaPrimeService;
@@ -27,17 +29,25 @@ describe('AlphaPrimeService', () => {
     const fakeTitle = 'fake-title';
     const fakeKey = 'fake-key';
     const fakeCode = 'fake-code';
-    const modalStyleClass = 'custom-modal-style';
     const postNavigationLog =
       jest.fn().mockReturnValue('Post Navigation Log');
     const getTranslation =
-      jest.fn().mockReturnValue(`'${fakeKey}' : '${fakeCode}'`);
+      jest.fn(() => `'${fakeKey}' : '${fakeCode}'`);
     const isProduction = true;
+    const upload =
+      jest.fn(() => of(''));
+    const deleteUpload =
+      jest.fn((id: string)=>of({}));
+    const modalStyleClass = 'custom-modal-style';
 
     service.init(
       mockDialogService,
-      postNavigationLog, getTranslation,
-      isProduction, modalStyleClass);
+      postNavigationLog,
+      getTranslation,
+      isProduction,
+      upload,
+      deleteUpload,
+      modalStyleClass);
 
     expect(service.ds).toEqual(mockDialogService);
     expect(service.postNavigationLog(fakePath, fakeTitle))
@@ -45,6 +55,8 @@ describe('AlphaPrimeService', () => {
     expect(service.getTr(fakeKey, fakeCode))
       .toBe(`'${fakeKey}' : '${fakeCode}'`);
     expect(service.isProduction).toBe(isProduction);
+    expect(service.upload).toBe(upload);
+    expect(service.deleteUpload).toBe(deleteUpload);
     expect(service.modalStyleClass).toBe(modalStyleClass);
   });
 

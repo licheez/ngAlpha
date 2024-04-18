@@ -6,7 +6,7 @@ export interface IAlphaPrimeAutoCompleteEntry {
   data?: any;
 }
 
-export class AlphaAutoComplete {
+export class AlphaPrimeAutoComplete {
 
   /**
    * Helper that eases the translation of a service feeder
