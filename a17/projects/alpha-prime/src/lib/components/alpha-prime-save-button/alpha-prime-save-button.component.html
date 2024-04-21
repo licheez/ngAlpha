@@ -1,0 +1,19 @@
+<span
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()">
+  <button pButton
+          class="p-button-success"
+          [ngClass]="sm ? 'p-button-sm' : ''"
+          type="button"
+          [disabled]="disabled"
+          pTooltip="{{caption}}"
+          icon="pi"
+          (click)="onClicked()">
+      <span *ngIf="!busy">
+        <i class="fa fa-save"></i>
+      </span>
+      <span *ngIf="busy">
+        <i class="pi pi-spin pi-spinner"></i>
+      </span>
+  </button>
+</span>

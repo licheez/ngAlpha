@@ -1,13 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AlphaPrimeNumberInputComponent } from './alpha-prime-number-input.component';
-import {DebugElement} from "@angular/core";
-import {By} from "@angular/platform-browser";
 
 describe('AlphaPrimeNumberInputComponent', () => {
   let component: AlphaPrimeNumberInputComponent;
   let fixture: ComponentFixture<AlphaPrimeNumberInputComponent>;
-  let inputElement: DebugElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -18,7 +15,6 @@ describe('AlphaPrimeNumberInputComponent', () => {
     fixture = TestBed.createComponent(AlphaPrimeNumberInputComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    inputElement = fixture.debugElement.query(By.css("input[type='text']"));
   });
 
   it('should create', () => {

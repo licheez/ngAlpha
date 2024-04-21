@@ -45,6 +45,8 @@ describe('AlphaPrimeService', () => {
     const unSubscribe =
       jest.fn(() => {
       });
+    const publish =
+      jest.fn(() => 0);
     const modalStyleClass = 'custom-modal-style';
 
     // check that all default methods are running
@@ -52,6 +54,8 @@ describe('AlphaPrimeService', () => {
       .subscribe({
         next: ok => expect(ok).toBeFalsy()
       });
+    const p = service.lbs.publish('payload');
+    expect(p).toEqual(0);
     service.uas.upload({}, () => {})
       .subscribe({
         next: res => expect(res).toEqual('')
@@ -79,6 +83,7 @@ describe('AlphaPrimeService', () => {
         deleteUpload
       },
       {
+        publish,
         subscribe,
         unSubscribe
       },
@@ -93,11 +98,10 @@ describe('AlphaPrimeService', () => {
     expect(service.oas.signIn).toBe(signIn);
     expect(service.uas.upload).toBe(upload);
     expect(service.uas.deleteUpload).toBe(deleteUpload);
+    expect(service.lbs.publish).toBe(publish);
     expect(service.lbs.subscribe).toBe(subscribe);
     expect(service.lbs.unSubscribe).toBe(unSubscribe);
     expect(service.modalStyleClass).toBe(modalStyleClass);
-
-
   });
 
   it('should getTr', () => {

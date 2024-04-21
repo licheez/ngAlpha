@@ -19,8 +19,10 @@ export * from './lib/components/alpha-prime-filter-box/alpha-prime-filter-box.co
 export * from './lib/components/alpha-prime-grow-box/alpha-prime-grow-box.component';
 export * from './lib/components/alpha-prime-label/alpha-prime-label.component';
 export * from './lib/components/alpha-prime-number-input/alpha-prime-number-input.component';
+export * from './lib/components/alpha-prime-ok-button/alpha-prime-ok-button.component';
 export * from './lib/components/alpha-prime-password-input/alpha-prime-password-input.component';
 export * from './lib/components/alpha-prime-progress-bar/alpha-prime-progress-bar.component';
+export * from './lib/components/alpha-prime-save-button/alpha-prime-save-button.component';
 
 export * from './lib/pipes/alpha-prime-boldify.pipe';
 

@@ -39,12 +39,13 @@ export class AlphaPrimeService {
 
   /** LocalBusService*/
   lbs: {
+    publish: (payload: any, channel?: string) => number,
     subscribe: (callback: (payload: any) => any, channel: string) => number,
     unSubscribe: (subId: number) => any
   } = {
+    publish: () => 0,
     subscribe: () => -1,
-    unSubscribe: () => {
-    }
+    unSubscribe: () => {}
   };
 
   /**
@@ -79,10 +80,10 @@ export class AlphaPrimeService {
       deleteUpload: (uploadId: string) => Observable<any>,
     },
     lbs?: {
+      publish: (payload: any, channel?: any) => number,
       subscribe: (callback: (payload: any) => any, channel: string) => number,
       unSubscribe: (subId: number) => any
-    }
-    ,
+    },
     modalStyleClass?: string): void {
     this.ds = ds;
     this.postNavigationLog = postNavigationLog;
