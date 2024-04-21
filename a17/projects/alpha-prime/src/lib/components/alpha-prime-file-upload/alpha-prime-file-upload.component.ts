@@ -7,7 +7,6 @@ import {FormsModule} from "@angular/forms";
 import {ButtonModule} from "primeng/button";
 import {RippleModule} from "primeng/ripple";
 import {AlphaPrimeProgressBarComponent} from "../alpha-prime-progress-bar/alpha-prime-progress-bar.component";
-import {Observable} from "rxjs";
 
 class FormModel {
   fileName = '';
@@ -78,18 +77,6 @@ export class AlphaPrimeFileUploadComponent implements AfterViewInit {
   @Input() readonlyCaption = '';
   @Input() sm = false;
 
-  // private _resetObs: Observable<any> | undefined;
-  // @Input()
-  // set resetObs (resetObs: Observable<any> | undefined){
-  //   this._resetObs = resetObs;
-  //   if (this._resetObs === undefined) {
-  //     return;
-  //   }
-  //   this._resetObs.subscribe({
-  //     next: () => this.resetForm()
-  //   });
-  // }
-
   @ViewChild('fileInput', {static: false}) fileInput!: ElementRef<HTMLInputElement>;
   @Output() fileUploaded = new EventEmitter<IAlphaPrimeFileUpload>();
   @Output() fileDeleted = new EventEmitter<string>();
@@ -117,7 +104,7 @@ export class AlphaPrimeFileUploadComponent implements AfterViewInit {
 
   private delete(uploadId: string): void {
     this.busy = true;
-    this.mPs.deleteUpload(uploadId)
+    this.mPs.uas.deleteUpload(uploadId)
       .subscribe({
         next: () => {
           this.fileDeleted.emit(uploadId);
@@ -135,7 +122,7 @@ export class AlphaPrimeFileUploadComponent implements AfterViewInit {
     this.busy = true;
     this.uploading = true;
     this.progress = 0;
-    this.mPs.upload(
+    this.mPs.uas.upload(
       this.fm.fileData,
       progress => {
         this.progress = progress;

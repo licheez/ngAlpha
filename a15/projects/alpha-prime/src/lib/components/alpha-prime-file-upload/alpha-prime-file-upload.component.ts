@@ -81,7 +81,7 @@ export class AlphaPrimeFileUploadComponent implements AfterViewInit {
   @Output() fileUploaded = new EventEmitter<IAlphaPrimeFileUpload>();
   @Output() fileDeleted = new EventEmitter<string>();
   /**
-   * the AfterViewInit will emit a delegate to the resetForm method
+   * AfterViewInit will emit a delegate to the resetForm method
    * so that the parent component can invoke this method from
    * inside its own code */
   @Output() ready = new EventEmitter<()=>any>();
@@ -104,7 +104,7 @@ export class AlphaPrimeFileUploadComponent implements AfterViewInit {
 
   private delete(uploadId: string): void {
     this.busy = true;
-    this.mPs.deleteUpload(uploadId)
+    this.mPs.uas.deleteUpload(uploadId)
       .subscribe({
         next: () => {
           this.fileDeleted.emit(uploadId);
@@ -122,7 +122,7 @@ export class AlphaPrimeFileUploadComponent implements AfterViewInit {
     this.busy = true;
     this.uploading = true;
     this.progress = 0;
-    this.mPs.upload(
+    this.mPs.uas.upload(
       this.fm.fileData,
       progress => {
         this.progress = progress;

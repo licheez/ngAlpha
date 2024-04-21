@@ -181,7 +181,9 @@ describe('AlphaPrimeFileUploadComponent', () => {
         jest.fn(() => of({}));
 
       alphaPrimeService = {
-        deleteUpload: delUpload,
+        uas: {
+          deleteUpload: delUpload
+        },
         getTr: jest.fn(() => 'someTranslation'),
         generateRandomName: jest.fn(() => 'someName')
       } as unknown as AlphaPrimeService;
@@ -197,7 +199,7 @@ describe('AlphaPrimeFileUploadComponent', () => {
       };
       component.deleteOnClear = true;
       component.onClear();
-      expect(alphaPrimeService.deleteUpload).toHaveBeenCalledWith(uploadId);
+      expect(alphaPrimeService.uas.deleteUpload).toHaveBeenCalledWith(uploadId);
       expect(component.fileDeleted.emit).toHaveBeenCalledWith(uploadId);
     });
 
@@ -208,7 +210,9 @@ describe('AlphaPrimeFileUploadComponent', () => {
       );
 
       alphaPrimeService = {
-        deleteUpload: du,
+        uas: {
+          deleteUpload: du
+        },
         getTr: jest.fn(() => 'someTranslation'),
         generateRandomName: jest.fn(() => 'someName')
       } as unknown as AlphaPrimeService;
@@ -224,7 +228,7 @@ describe('AlphaPrimeFileUploadComponent', () => {
       };
       component.deleteOnClear = true;
       component.onClear();
-      expect(alphaPrimeService.deleteUpload).toHaveBeenCalledWith(uploadId);
+      expect(alphaPrimeService.uas.deleteUpload).toHaveBeenCalledWith(uploadId);
       expect(component.fu).toBeUndefined();
     });
 
@@ -249,7 +253,9 @@ describe('AlphaPrimeFileUploadComponent', () => {
         });
 
       alphaPrimeService = {
-        upload: uploadFile,
+        uas: {
+          upload: uploadFile,
+        },
         getTr: jest.fn(() => 'someTranslation'),
         generateRandomName: jest.fn(() => 'someName')
       } as unknown as AlphaPrimeService;
@@ -297,7 +303,9 @@ describe('AlphaPrimeFileUploadComponent', () => {
         });
 
       alphaPrimeService = {
-        upload: uploadFile,
+        uas: {
+          upload: uploadFile
+        },
         getTr: jest.fn(() => 'someTranslation'),
         generateRandomName: jest.fn(() => 'someName')
       } as unknown as AlphaPrimeService;

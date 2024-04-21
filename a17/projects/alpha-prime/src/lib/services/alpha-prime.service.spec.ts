@@ -37,16 +37,40 @@ describe('AlphaPrimeService', () => {
     const upload =
       jest.fn(() => of(''));
     const deleteUpload =
-      jest.fn((id: string)=>of({}));
+      jest.fn(()=>of({}));
+    const subscribe =
+      jest.fn(() => -1);
+    const unSubscribe =
+      jest.fn(() => {});
     const modalStyleClass = 'custom-modal-style';
+
+    // check that all default methods are running
+    service.uas.upload({}, () => {})
+      .subscribe({
+        next: res => expect(res).toEqual('')
+      });
+    service.uas.deleteUpload('')
+      .subscribe({
+        next: () => expect(true).toBeTruthy()
+      });
+    const subId = service.lbs.subscribe(()=>{}, 'x');
+    expect(subId).toEqual(-1);
+    service.lbs.unSubscribe(subId);
+    expect(true).toBeTruthy();
 
     service.init(
       mockDialogService,
       postNavigationLog,
       getTranslation,
       isProduction,
-      upload,
-      deleteUpload,
+      {
+        upload,
+        deleteUpload
+      },
+      {
+        subscribe,
+        unSubscribe
+      },
       modalStyleClass);
 
     expect(service.ds).toEqual(mockDialogService);
@@ -55,9 +79,13 @@ describe('AlphaPrimeService', () => {
     expect(service.getTr(fakeKey, fakeCode))
       .toBe(`'${fakeKey}' : '${fakeCode}'`);
     expect(service.isProduction).toBe(isProduction);
-    expect(service.upload).toBe(upload);
-    expect(service.deleteUpload).toBe(deleteUpload);
+    expect(service.uas.upload).toBe(upload);
+    expect(service.uas.deleteUpload).toBe(deleteUpload);
+    expect(service.lbs.subscribe).toBe(subscribe);
+    expect(service.lbs.unSubscribe).toBe(unSubscribe);
     expect(service.modalStyleClass).toBe(modalStyleClass);
+
+
   });
 
   it ('should getTr', () => {
