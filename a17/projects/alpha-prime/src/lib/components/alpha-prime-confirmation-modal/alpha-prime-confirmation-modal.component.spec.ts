@@ -2,13 +2,11 @@ import { TestBed } from '@angular/core/testing';
 import { AlphaPrimeConfirmationModalComponent } from './alpha-prime-confirmation-modal.component';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import {AlphaPrimeService} from "../../services/alpha-prime.service";
-import spyOn = jest.spyOn;
 
 describe('AlphaPrimeConfirmationModalComponent', () => {
   let component: AlphaPrimeConfirmationModalComponent;
   let mockDialogService: DynamicDialogRef;
   let mockDialogConfig: DynamicDialogConfig;
-  let mockPrimeService: AlphaPrimeService;
 
   beforeEach(() => {
     jest.useFakeTimers();
@@ -19,14 +17,13 @@ describe('AlphaPrimeConfirmationModalComponent', () => {
         { provide: DynamicDialogRef, useValue: {} },
         { provide: DynamicDialogConfig, useValue: { data: { setInstance: (_: any) => {} } } },
         { provide: AlphaPrimeService, useValue: {
-          getTr: (key: string) => `tr_${key}` } },
-      ],
+          getTr: (key: string) => `tr_${key}` } }
+      ]
     });
 
     component = TestBed.inject(AlphaPrimeConfirmationModalComponent);
     mockDialogService = TestBed.inject(DynamicDialogRef);
     mockDialogConfig = TestBed.inject(DynamicDialogConfig);
-    mockPrimeService = TestBed.inject(AlphaPrimeService);
   });
 
   afterEach(()=> {
@@ -38,7 +35,7 @@ describe('AlphaPrimeConfirmationModalComponent', () => {
   });
 
   it('On initialization it should set the instance', () => {
-    spyOn(mockDialogConfig.data, 'setInstance');
+    jest.spyOn(mockDialogConfig.data, 'setInstance');
     component.ngOnInit();
     expect(mockDialogConfig.data.setInstance)
       .toHaveBeenCalledWith(component);

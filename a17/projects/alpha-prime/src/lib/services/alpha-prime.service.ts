@@ -9,12 +9,22 @@ export class AlphaPrimeService {
 
   modalStyleClass: string | undefined;
   ds!: DialogService;
+
   postNavigationLog: (path: string, title: string) => any =
     () => {
     };
+
   getTr: (key: string, languageCode?: string) => string =
     (key, languageCode) => `'${key}':'${languageCode}'`;
+
   isProduction!: boolean;
+
+  /** OAuthService */
+  oas: {
+    signIn: (username: string, password: string, rememberMe: boolean) => Observable<boolean>
+  } = {
+    signIn: () => of(false)
+  };
 
   /** UploadApiService */
   uas: {
@@ -44,6 +54,7 @@ export class AlphaPrimeService {
    * @param {(path: string, title: string) => any} postNavigationLog - The function used for logging navigation.
    * @param {(key: string, languageCode?: string) => string} getTranslation - The function used for retrieving translations.
    * @param {boolean} isProduction - A flag indicating if the application is running in production mode.
+   * @param oas - OAuthService containing signIn method
    * @param {object} uas - UploadApiService containing upload and deleteUpload methods.
    *   @param {(data: any, notifyProgress: (progress: number) => any) => Observable<string>} uas.upload - The method used for uploading data with progress notification.
    *   @param {(uploadId: string) => Observable<any>} uas.deleteUpload - The method used for deleting an upload by its ID.
@@ -58,6 +69,9 @@ export class AlphaPrimeService {
     postNavigationLog: (path: string, title: string) => any,
     getTranslation: (key: string, languageCode?: string) => string,
     isProduction: boolean,
+    oas?: {
+      signIn: (username: string, password: string, rememberMe: boolean) => Observable<boolean>
+    },
     uas?: {
       upload: (
         data: any,
@@ -74,6 +88,9 @@ export class AlphaPrimeService {
     this.postNavigationLog = postNavigationLog;
     this.getTr = getTranslation;
     this.isProduction = isProduction;
+    if (oas) {
+      this.oas = oas;
+    }
     if (uas) {
       this.uas = uas;
     }

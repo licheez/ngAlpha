@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { AlphaPrimeService } from './alpha-prime.service';
+import {AlphaPrimeService} from './alpha-prime.service';
 import {DialogService} from "primeng/dynamicdialog";
 import {jest} from "@jest/globals";
 import {of} from "rxjs";
@@ -13,7 +13,7 @@ describe('AlphaPrimeService', () => {
     TestBed.configureTestingModule({
       providers: [
         AlphaPrimeService,
-        { provide: DialogService, useValue: { open: jest.fn() } }
+        {provide: DialogService, useValue: {open: jest.fn()}}
       ]
     });
     service = TestBed.inject(AlphaPrimeService);
@@ -34,17 +34,24 @@ describe('AlphaPrimeService', () => {
     const getTranslation =
       jest.fn(() => `'${fakeKey}' : '${fakeCode}'`);
     const isProduction = true;
+    const signIn =
+      jest.fn(() => of(false));
     const upload =
       jest.fn(() => of(''));
     const deleteUpload =
-      jest.fn(()=>of({}));
+      jest.fn(() => of({}));
     const subscribe =
       jest.fn(() => -1);
     const unSubscribe =
-      jest.fn(() => {});
+      jest.fn(() => {
+      });
     const modalStyleClass = 'custom-modal-style';
 
     // check that all default methods are running
+    service.oas.signIn('me', 'myPwd', true)
+      .subscribe({
+        next: ok => expect(ok).toBeFalsy()
+      });
     service.uas.upload({}, () => {})
       .subscribe({
         next: res => expect(res).toEqual('')
@@ -53,7 +60,8 @@ describe('AlphaPrimeService', () => {
       .subscribe({
         next: () => expect(true).toBeTruthy()
       });
-    const subId = service.lbs.subscribe(()=>{}, 'x');
+    const subId = service.lbs.subscribe(() => {
+    }, 'x');
     expect(subId).toEqual(-1);
     service.lbs.unSubscribe(subId);
     expect(true).toBeTruthy();
@@ -63,6 +71,9 @@ describe('AlphaPrimeService', () => {
       postNavigationLog,
       getTranslation,
       isProduction,
+      {
+        signIn
+      },
       {
         upload,
         deleteUpload
@@ -79,6 +90,7 @@ describe('AlphaPrimeService', () => {
     expect(service.getTr(fakeKey, fakeCode))
       .toBe(`'${fakeKey}' : '${fakeCode}'`);
     expect(service.isProduction).toBe(isProduction);
+    expect(service.oas.signIn).toBe(signIn);
     expect(service.uas.upload).toBe(upload);
     expect(service.uas.deleteUpload).toBe(deleteUpload);
     expect(service.lbs.subscribe).toBe(subscribe);
@@ -88,8 +100,8 @@ describe('AlphaPrimeService', () => {
 
   });
 
-  it ('should getTr', () => {
-    const tr = service.getTr('key','translation');
+  it('should getTr', () => {
+    const tr = service.getTr('key', 'translation');
     expect(tr).toEqual("'key':'translation'");
   });
 
