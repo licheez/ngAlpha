@@ -5,6 +5,7 @@ import {jest} from "@jest/globals";
 import {AlphaPrimeService} from "../../services/alpha-prime.service";
 import {Observable, of, Subscriber, throwError} from "rxjs";
 import {ElementRef} from "@angular/core";
+import {IAlphaPrimeFileUpload} from "./alpha-prime-file-upload";
 
 describe('AlphaPrimeFileUploadComponent', () => {
   let alphaPrimeService: AlphaPrimeService;
@@ -61,28 +62,51 @@ describe('AlphaPrimeFileUploadComponent', () => {
     expect(component.readonly).toBeFalsy();
     expect(component.readonlyCaption).toEqual('');
     expect(component.sm).toBeFalsy();
-    expect(component.reset).toBeTruthy();
     expect(component.busy).toBeFalsy();
     expect(component.fm).toBeTruthy();
     expect(component.fm.invalid).toBeTruthy();
   });
 
-  it('input reset should action the resetForm method', () => {
-    const resetFormSpy = jest.spyOn(component, 'resetForm');
-    const initialFm = component.fm;
-    component.fu = {
-      uploadId: 'uploadId',
-      fileName: "someFileName",
-      fileData: 'someData'
-    };
-    component.uploading = true;
-    component.progress = 50;
-    component.reset();
-    expect(component.fm).not.toBe(initialFm);
-    expect(component.fu).toBeUndefined();
-    expect(component.uploading).toBeFalsy();
-    expect(component.progress).toEqual(0);
-    expect(resetFormSpy).toHaveBeenCalled();
+  describe('reset form functions', () => {
+
+    it('ngAfterViewInit should emit reset form function', () => {
+      const readyEmitterSpy = jest.spyOn(component.ready, 'emit');
+      component.ngAfterViewInit();
+      expect(readyEmitterSpy).toHaveBeenCalledWith(component.resetForm);
+    });
+
+    // it('resetObs input should arm the reset observer', () => {
+    //   const resetFormSpy = jest.spyOn(component, 'resetForm');
+    //   component.resetObs = of({});
+    //   expect(resetFormSpy).toHaveBeenCalled();
+    // });
+
+    //
+    // it('resetObs input should un-arm the reset observer', () => {
+    //   const resetFormSpy = jest.spyOn(component, 'resetForm');
+    //   component.resetObs = undefined;
+    //   expect(resetFormSpy).not.toHaveBeenCalled();
+    // });
+    //
+
+    it('resetForm should work', () => {
+      const resetFormSpy = jest.spyOn(component, 'resetForm');
+      const initialFm = component.fm;
+      component.fu = {
+        uploadId: 'uploadId',
+        fileName: "someFileName",
+        fileData: 'someData'
+      };
+      component.uploading = true;
+      component.progress = 50;
+      component.resetForm();
+      expect(component.fm).not.toBe(initialFm);
+      expect(component.fu).toBeUndefined();
+      expect(component.uploading).toBeFalsy();
+      expect(component.progress).toEqual(0);
+      expect(resetFormSpy).toHaveBeenCalled();
+    });
+
   });
 
   describe('onFileInputChange', () => {
@@ -243,7 +267,14 @@ describe('AlphaPrimeFileUploadComponent', () => {
       expect(component.progress).toEqual(100);
       expect(component.busy).toBeFalsy();
       expect(component.fu?.uploadId).toEqual('uploadId');
-      expect(component.fileUploaded.emit).toHaveBeenCalled();
+
+      const fu: IAlphaPrimeFileUpload = {
+        uploadId: 'uploadId',
+        fileName: '',
+        fileData: ''
+      }
+
+      expect(component.fileUploaded.emit).toHaveBeenCalledWith(fu);
 
       jest.advanceTimersByTime(2000);
       expect(component.uploading).toBeFalsy();

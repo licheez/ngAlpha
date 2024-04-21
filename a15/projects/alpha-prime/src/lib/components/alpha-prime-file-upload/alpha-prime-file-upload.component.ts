@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {IAlphaPrimeFileUpload} from "./alpha-prime-file-upload";
 import {AlphaPrimeService} from "../../services/alpha-prime.service";
 import {NgIf} from "@angular/common";
@@ -45,18 +45,12 @@ class FileUpload implements IAlphaPrimeFileUpload {
     FormsModule,
     ButtonModule,
     RippleModule,
-    AlphaPrimeProgressBarComponent,
-    AlphaPrimeProgressBarComponent,
-    ButtonModule,
-    FormsModule,
-    InputTextModule,
-    NgIf,
-    RippleModule
+    AlphaPrimeProgressBarComponent
   ],
   templateUrl: './alpha-prime-file-upload.component.html',
   styleUrls: ['./alpha-prime-file-upload.component.css']
 })
-export class AlphaPrimeFileUploadComponent {
+export class AlphaPrimeFileUploadComponent implements AfterViewInit {
 
   // /** request the FileInput with the corresponding name to clear. payload = fileInputName: string */
   // public static readonly RESET = 'AlphaPrimeFileUploadComponent.reset';
@@ -82,13 +76,15 @@ export class AlphaPrimeFileUploadComponent {
   @Input() readonly = false;
   @Input() readonlyCaption = '';
   @Input() sm = false;
-  @Input() reset: () => any = () => {
-    this.resetForm();
-  };
 
   @ViewChild('fileInput', {static: false}) fileInput!: ElementRef<HTMLInputElement>;
   @Output() fileUploaded = new EventEmitter<IAlphaPrimeFileUpload>();
   @Output() fileDeleted = new EventEmitter<string>();
+  /**
+   * the AfterViewInit will emit a delegate to the resetForm method
+   * so that the parent component can invoke this method from
+   * inside its own code */
+  @Output() ready = new EventEmitter<()=>any>();
 
   busy = false;
   fm = new FormModel();
@@ -98,6 +94,10 @@ export class AlphaPrimeFileUploadComponent {
 
   constructor(
     private mPs: AlphaPrimeService) {
+  }
+
+  ngAfterViewInit() {
+    this.ready.emit(this.resetForm);
   }
 
   fileLit = this.mPs.getTr('alpha.common.file');
@@ -148,9 +148,9 @@ export class AlphaPrimeFileUploadComponent {
 
   resetForm(): void {
     this.fm = new FormModel();
-    this.fu = undefined;
     this.uploading = false;
     this.progress = 0;
+    this.fu = undefined
   }
 
   onFileInputChanged(changeEvent: Event) {
@@ -214,7 +214,7 @@ export class AlphaPrimeFileUploadComponent {
         this.delete(this.fu.uploadId);
       }
     }
-    this.reset();
+    this.resetForm();
   }
 
   onSave() {
