@@ -16,6 +16,7 @@ export * from './lib/components/alpha-prime-edit-button/alpha-prime-edit-button.
 export * from './lib/components/alpha-prime-file-upload/alpha-prime-file-upload';
 export * from './lib/components/alpha-prime-file-upload/alpha-prime-file-upload.component';
 export * from './lib/components/alpha-prime-filter-box/alpha-prime-filter-box.component';
+export * from './lib/components/alpha-prime-grow-box/alpha-prime-grow-box.component';
 export * from './lib/components/alpha-prime-progress-bar/alpha-prime-progress-bar.component';
 
 export * from './lib/pipes/alpha-prime-boldify.pipe';

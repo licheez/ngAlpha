@@ -1,0 +1,12 @@
+<div [@thin-thick]="isCollapsed ? 'thin' : 'thick'"
+     [ngClass]="divClass"
+     [ngStyle]="divStyle"
+     (mouseenter)="onHover()"
+     (mouseleave)="onLeave()"
+     (@thin-thick.start)="onAnimStart()"
+     (@thin-thick.done)="onAnimDone()"> -->
+  <!-- single slot transclusion here -->
+  <ng-content *ngIf="!isCollapsed && !isAnimating"></ng-content>
+</div>
+
+<textarea [rows]="2" [cols]="30" pInputTextarea [autoResize]="true"></textarea>
