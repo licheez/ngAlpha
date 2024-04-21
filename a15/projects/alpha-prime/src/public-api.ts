@@ -18,6 +18,7 @@ export * from './lib/components/alpha-prime-file-upload/alpha-prime-file-upload.
 export * from './lib/components/alpha-prime-filter-box/alpha-prime-filter-box.component';
 export * from './lib/components/alpha-prime-grow-box/alpha-prime-grow-box.component';
 export * from './lib/components/alpha-prime-label/alpha-prime-label.component';
+export * from './lib/components/alpha-prime-number-input/alpha-prime-number-input.component';
 export * from './lib/components/alpha-prime-password-input/alpha-prime-password-input.component';
 export * from './lib/components/alpha-prime-progress-bar/alpha-prime-progress-bar.component';
 

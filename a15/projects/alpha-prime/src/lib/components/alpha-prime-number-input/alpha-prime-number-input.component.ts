@@ -1,38 +1,23 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-
-import {NgClass, NgIf} from "@angular/common";
-
-import {InputTextModule} from "primeng/inputtext";
-import {KeyFilterModule} from "primeng/keyfilter";
-import {FormsModule} from "@angular/forms";
-import {ButtonModule} from "primeng/button";
-import {RippleModule} from "primeng/ripple";
 import {AlphaPrimeService} from "../../services/alpha-prime.service";
 
 @Component({
-  selector: 'alpha-prime-currency-input',
+  selector: 'alpha-prime-number-input',
   standalone: true,
-  imports: [
-    NgIf,
-    InputTextModule,
-    KeyFilterModule,
-    NgClass,
-    FormsModule,
-    ButtonModule,
-    RippleModule
-  ],
-  templateUrl: './alpha-prime-currency-input.component.html',
-  styleUrl: './alpha-prime-currency-input.component.css'
+  imports: [],
+  templateUrl: './alpha-prime-number-input.component.html',
+  styleUrls: ['./alpha-prime-number-input.component.css']
 })
-export class AlphaPrimeCurrencyInputComponent {
+export class AlphaPrimeNumberInputComponent {
 
   @Input() name = this.mPs.generateRandomName();
   @Input() disabled = false;
   @Input() placeHolder = '';
+  @Input() prefix = '';
+  @Input() suffix = '';
+  @Input() decimals: number = 0;
   @Input() min = - Number.MAX_VALUE;
   @Input() max = Number.MAX_VALUE;
-  @Input() currency = 'EUR';
-  @Input() currencySymbol = '€';
   @Input() locale = 'fr-BE';
   @Input() readonly = false;
   @Input() readonlyCaption: string | undefined = '';
@@ -40,10 +25,10 @@ export class AlphaPrimeCurrencyInputComponent {
   @Input() showClear = true;
 
   //https://www.regextester.com/
-  // noinspection RegExpRedundantEscape
   realNumber: RegExp = /[0-9\,\.\-]/;
 
   sVal: string | undefined;
+  invalid = false;
   @Input()
   set value(value: number | undefined) {
     switch (value) {
@@ -66,11 +51,6 @@ export class AlphaPrimeCurrencyInputComponent {
   }
   @Output() valueChange = new EventEmitter<number>();
 
-  constructor(private mPs: AlphaPrimeService) {
-  }
-
-  invalid = false;
-
   baseInputStyle = {
     'width': '100%',
     'border-top-right-radius': '0',
@@ -89,6 +69,9 @@ export class AlphaPrimeCurrencyInputComponent {
       ? this.smInputStyle
       : this.baseInputStyle;
   }
+
+  constructor(
+    private mPs: AlphaPrimeService) { }
 
   onTextChange(sVal: string) {
     if (!sVal) {
@@ -124,10 +107,5 @@ export class AlphaPrimeCurrencyInputComponent {
     this.valueChange.emit(undefined);
   }
 
-  onBlur(): void {
-    const v = this.value;
-    if (v) {
-      this.sVal = v.toFixed(2);
-    }
-  }
+
 }
