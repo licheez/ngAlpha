@@ -32,6 +32,7 @@ export interface IAlphaPrincipal {
   isAuthenticated: boolean;
   isAnonymous: boolean;
   isAuthenticating: boolean;
+  setSessionLanguageCode(lc: string): void;
 }
 
 export interface IAlphaOAuthService {

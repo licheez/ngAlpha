@@ -18,7 +18,7 @@ export class AlphaPrincipal implements IAlphaPrincipal {
     this.mUser = user;
     this.setSessionLanguageCode(user.languageCode);
   }
-  setSessionLanguageCode(lc: string) {
+  setSessionLanguageCode(lc: string): void {
     // interceptor will use this value for inserting
     // the language-code header on each outgoing request
     sessionStorage.setItem('alphaLanguageCode', lc);
