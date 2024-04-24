@@ -1,4 +1,5 @@
 import {Injectable} from "@angular/core";
+import {IAlphaLocalBusService} from "@pvway/alpha-common";
 
 class Subscriber {
   callback: (payload: any) => void;
@@ -14,7 +15,8 @@ class Subscriber {
 @Injectable({
   providedIn: 'root'
 })
-export class AlphaLbsService {
+export class AlphaLbsService
+  implements IAlphaLocalBusService {
 
   private subscribers = new Map<number, Subscriber>();
   private lastSubscriberId = 0;
