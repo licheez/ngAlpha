@@ -1,10 +1,4 @@
-export interface IAlphaPage {
-  parentRoute: string;
-  route: string;
-  area: string;
-  logRoute: string;
-  logTitle: string;
-}
+import {IAlphaPage} from "@pvway/alpha-common";
 
 export class AlphaPage implements IAlphaPage {
   parentRoute: string;
