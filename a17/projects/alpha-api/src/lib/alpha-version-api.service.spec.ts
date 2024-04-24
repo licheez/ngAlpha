@@ -4,11 +4,14 @@ import { AlphaVersionApiService } from './alpha-version-api.service';
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
 import {IAlphaHttpObjectResultDso} from "./alpha-http-result";
 import {HttpErrorResponse} from "@angular/common/http";
+import {IAlphaLoggerService} from "@pvway/alpha-common";
 
 describe('AlphaVersionApiService', () => {
 
   const getVersionUrl = 'http://getVersion';
-  const postErrorLog = jest.fn();
+  const ls = {
+    postErrorLog: jest.fn()
+  } as any as IAlphaLoggerService;
 
   let service: AlphaVersionApiService;
   let httpMock: HttpTestingController;
@@ -31,10 +34,10 @@ describe('AlphaVersionApiService', () => {
   });
 
   it ('should init', () => {
-    service.init(getVersionUrl, postErrorLog);
+    service.init(getVersionUrl, ls);
     expect(service['mUrl']).toEqual(getVersionUrl);
     expect(service['mContext']).toEqual('AlphaVersionApiService');
-    expect(service['postErrorLog']).toEqual(postErrorLog);
+    expect(service['postErrorLog']).toEqual(ls.postErrorLog);
   });
 
   it ('should inject another getVersion method', ()=> {
@@ -52,7 +55,7 @@ describe('AlphaVersionApiService', () => {
     });
     it ('should use the builtIn method returning ' +
       'an object with success', () => {
-      service.init(getVersionUrl);
+      service.init(getVersionUrl, ls);
 
       const theVersion = 'someVersion';
       const dso: IAlphaHttpObjectResultDso = {
@@ -73,7 +76,7 @@ describe('AlphaVersionApiService', () => {
 
     it ('should use the builtIn method returning ' +
       'an primitive with success', () => {
-      service.init(getVersionUrl);
+      service.init(getVersionUrl, ls);
 
       const theVersion = 'someVersion';
 
@@ -87,12 +90,12 @@ describe('AlphaVersionApiService', () => {
     });
 
     it ('should use the builtIn failing in error', () => {
-      service.init(getVersionUrl);
+      service.init(getVersionUrl, ls);
       service.getVersion().subscribe({
         next: () => expect(true).toBeFalsy(),
         error: e => {
           expect(e).toEqual('Internal Server Error');
-          expect(postErrorLog).toHaveBeenCalled();
+          expect(ls.postErrorLog).toHaveBeenCalled();
         }
       });
       const errorResponse: HttpErrorResponse = new HttpErrorResponse(

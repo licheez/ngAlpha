@@ -75,22 +75,9 @@ describe('AlphaPrimeFileUploadComponent', () => {
       expect(readyEmitterSpy).toHaveBeenCalledWith(component.resetForm);
     });
 
-    // it('resetObs input should arm the reset observer', () => {
-    //   const resetFormSpy = jest.spyOn(component, 'resetForm');
-    //   component.resetObs = of({});
-    //   expect(resetFormSpy).toHaveBeenCalled();
-    // });
-
-    //
-    // it('resetObs input should un-arm the reset observer', () => {
-    //   const resetFormSpy = jest.spyOn(component, 'resetForm');
-    //   component.resetObs = undefined;
-    //   expect(resetFormSpy).not.toHaveBeenCalled();
-    // });
-    //
-
     it('resetForm should work', () => {
-      const resetFormSpy = jest.spyOn(component, 'resetForm');
+      const resetFormSpy =
+        jest.spyOn(component, 'resetForm');
       const initialFm = component.fm;
       component.fu = {
         uploadId: 'uploadId',
@@ -181,9 +168,7 @@ describe('AlphaPrimeFileUploadComponent', () => {
         jest.fn(() => of({}));
 
       alphaPrimeService = {
-        uas: {
-          deleteUpload: delUpload
-        },
+        deleteUpload: delUpload,
         getTr: jest.fn(() => 'someTranslation'),
         generateRandomName: jest.fn(() => 'someName')
       } as unknown as AlphaPrimeService;
@@ -199,7 +184,7 @@ describe('AlphaPrimeFileUploadComponent', () => {
       };
       component.deleteOnClear = true;
       component.onClear();
-      expect(alphaPrimeService.uas.deleteUpload).toHaveBeenCalledWith(uploadId);
+      expect(alphaPrimeService.deleteUpload).toHaveBeenCalledWith(uploadId);
       expect(component.fileDeleted.emit).toHaveBeenCalledWith(uploadId);
     });
 
@@ -210,9 +195,7 @@ describe('AlphaPrimeFileUploadComponent', () => {
       );
 
       alphaPrimeService = {
-        uas: {
-          deleteUpload: du
-        },
+        deleteUpload: du,
         getTr: jest.fn(() => 'someTranslation'),
         generateRandomName: jest.fn(() => 'someName')
       } as unknown as AlphaPrimeService;
@@ -228,7 +211,7 @@ describe('AlphaPrimeFileUploadComponent', () => {
       };
       component.deleteOnClear = true;
       component.onClear();
-      expect(alphaPrimeService.uas.deleteUpload).toHaveBeenCalledWith(uploadId);
+      expect(alphaPrimeService.deleteUpload).toHaveBeenCalledWith(uploadId);
       expect(component.fu).toBeUndefined();
     });
 
@@ -253,9 +236,7 @@ describe('AlphaPrimeFileUploadComponent', () => {
         });
 
       alphaPrimeService = {
-        uas: {
-          upload: uploadFile,
-        },
+        upload: uploadFile,
         getTr: jest.fn(() => 'someTranslation'),
         generateRandomName: jest.fn(() => 'someName')
       } as unknown as AlphaPrimeService;
@@ -303,9 +284,7 @@ describe('AlphaPrimeFileUploadComponent', () => {
         });
 
       alphaPrimeService = {
-        uas: {
-          upload: uploadFile
-        },
+        upload: uploadFile,
         getTr: jest.fn(() => 'someTranslation'),
         generateRandomName: jest.fn(() => 'someName')
       } as unknown as AlphaPrimeService;

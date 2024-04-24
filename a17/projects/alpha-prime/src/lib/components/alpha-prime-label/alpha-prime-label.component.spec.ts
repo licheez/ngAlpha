@@ -34,8 +34,8 @@ describe('AlphaPrimeLabelComponent', () => {
   });
 
   it('should subscribe to the showMessage trigger', () => {
-    alphaPrimeService.lbs!.subscribe =
-      (callback: (payload: any) => any, channel: string) => {
+    alphaPrimeService.subscribe =
+      (callback: (payload: any) => any, channel?: string) => {
         expect(channel).toEqual(AlphaPrimeLabelComponent.SHOW_MESSAGE);
         callback(true);
         return 1;

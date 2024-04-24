@@ -37,9 +37,7 @@ describe('AlphaPrimeSaveButtonComponent', () => {
   it('should handle mouseEnter', () => {
     const ps = {
       getTr: () => '',
-      lbs: {
-        publish: (payload: boolean) => expect(payload).toBeTruthy()
-      }
+      publish: (payload: boolean) => expect(payload).toBeTruthy()
     } as any as AlphaPrimeService;
     const component = new AlphaPrimeSaveButtonComponent(ps);
     component.onMouseEnter();
@@ -48,9 +46,7 @@ describe('AlphaPrimeSaveButtonComponent', () => {
   it('should handle mouseLeave', () => {
     const ps = {
       getTr: () => '',
-      lbs: {
-        publish: (payload: boolean) => expect(payload).toBeFalsy()
-      }
+      publish: (payload: boolean) => expect(payload).toBeFalsy()
     } as any as AlphaPrimeService;
     const component = new AlphaPrimeSaveButtonComponent(ps);
     component.onMouseLeave();

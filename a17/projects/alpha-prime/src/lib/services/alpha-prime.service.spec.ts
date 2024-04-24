@@ -3,11 +3,23 @@ import {TestBed} from '@angular/core/testing';
 import {AlphaPrimeService} from './alpha-prime.service';
 import {DialogService} from "primeng/dynamicdialog";
 import {jest} from "@jest/globals";
-import {of} from "rxjs";
+import {IAlphaLocalBusService, IAlphaOAuthService, IAlphaUploadApiService} from "@pvway/alpha-common";
 
 describe('AlphaPrimeService', () => {
   let service: AlphaPrimeService;
   let mockDialogService: DialogService;
+  const mockOas = {
+    signIn: jest.fn()
+  } as any as IAlphaOAuthService;
+  const mockUas = {
+    upload: jest.fn(),
+    deleteUpload: jest.fn()
+  } as any as IAlphaUploadApiService;
+  const mockLbs = {
+    publish: jest.fn(),
+    subscribe: jest.fn(),
+    unsubscribe: jest.fn()
+  } as any as IAlphaLocalBusService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -34,40 +46,29 @@ describe('AlphaPrimeService', () => {
     const getTranslation =
       jest.fn(() => `'${fakeKey}' : '${fakeCode}'`);
     const isProduction = true;
-    const signIn =
-      jest.fn(() => of(false));
-    const upload =
-      jest.fn(() => of(''));
-    const deleteUpload =
-      jest.fn(() => of({}));
-    const subscribe =
-      jest.fn(() => -1);
-    const unSubscribe =
-      jest.fn(() => {
-      });
-    const publish =
-      jest.fn(() => 0);
+
     const modalStyleClass = 'custom-modal-style';
 
     // check that all default methods are running
-    service.oas.signIn('me', 'myPwd', true)
+    service.signIn('me', 'myPwd', true)
       .subscribe({
         next: ok => expect(ok).toBeFalsy()
       });
-    const p = service.lbs.publish('payload');
+    const p = service.publish(
+      'payload', 'theChannel');
     expect(p).toEqual(0);
-    service.uas.upload({}, () => {})
+    service.upload({}, () => 0)
       .subscribe({
         next: res => expect(res).toEqual('')
       });
-    service.uas.deleteUpload('')
+    service.deleteUpload('')
       .subscribe({
         next: () => expect(true).toBeTruthy()
       });
-    const subId = service.lbs.subscribe(() => {
+    const subId = service.subscribe(() => {
     }, 'x');
     expect(subId).toEqual(-1);
-    service.lbs.unSubscribe(subId);
+    service.unsubscribe(subId);
     expect(true).toBeTruthy();
 
     service.init(
@@ -75,18 +76,9 @@ describe('AlphaPrimeService', () => {
       postNavigationLog,
       getTranslation,
       isProduction,
-      {
-        signIn
-      },
-      {
-        upload,
-        deleteUpload
-      },
-      {
-        publish,
-        subscribe,
-        unSubscribe
-      },
+      mockOas,
+      mockUas,
+      mockLbs,
       modalStyleClass);
 
     expect(service.ds).toEqual(mockDialogService);
@@ -95,12 +87,12 @@ describe('AlphaPrimeService', () => {
     expect(service.getTr(fakeKey, fakeCode))
       .toBe(`'${fakeKey}' : '${fakeCode}'`);
     expect(service.isProduction).toBe(isProduction);
-    expect(service.oas.signIn).toBe(signIn);
-    expect(service.uas.upload).toBe(upload);
-    expect(service.uas.deleteUpload).toBe(deleteUpload);
-    expect(service.lbs.publish).toBe(publish);
-    expect(service.lbs.subscribe).toBe(subscribe);
-    expect(service.lbs.unSubscribe).toBe(unSubscribe);
+    expect(service.signIn).toBe(mockOas.signIn);
+    expect(service.upload).toBe(mockUas.upload);
+    expect(service.deleteUpload).toBe(mockUas.deleteUpload);
+    expect(service.publish).toBe(mockLbs.publish);
+    expect(service.subscribe).toBe(mockLbs.subscribe);
+    expect(service.unsubscribe).toBe(mockLbs.unsubscribe);
     expect(service.modalStyleClass).toBe(modalStyleClass);
   });
 

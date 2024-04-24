@@ -1,10 +1,6 @@
-import { IAlphaUser } from './alpha-user';
-import {AlphaAuthStatusEnum} from "./alpha-auth-status-enum";
+import {IAlphaPrincipal, AlphaAuthStatusEnum, IAlphaUser} from "@pvway/alpha-common";
 
-export class AlphaPrincipal {
-
-  /** payload: Principal */
-  public static readonly PRINCIPAL_UPDATED = 'principal_updated';
+export class AlphaPrincipal implements IAlphaPrincipal {
 
   private mStatus: AlphaAuthStatusEnum;
   get status(): AlphaAuthStatusEnum {

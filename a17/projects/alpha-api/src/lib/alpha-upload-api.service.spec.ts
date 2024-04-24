@@ -5,15 +5,18 @@ import {HttpClientTestingModule, HttpTestingController} from "@angular/common/ht
 import {Observable} from "rxjs";
 import {IAlphaHttpObjectResultDso} from "./alpha-http-result";
 import {expect, it} from "@jest/globals";
-import {response} from "express";
+import {IAlphaLoggerService, IAlphaOAuthService} from "@pvway/alpha-common";
 
 describe('AlphaUploadApiService', () => {
 
   const uploadUrl = 'http://uploadUrl';
   const deleteUploadUrl = 'http://deleteUploadUrl';
-  const authorise: (httpRequest: Observable<any>) => Observable<any> =
-    (httpRequest: Observable<any>) => httpRequest;
-  const postErrorLog = jest.fn();
+  const oas = {
+    authorize: (httpRequest: Observable<any>) => httpRequest
+  } as any as IAlphaOAuthService;
+  const ls = {
+    postErrorLog: jest.fn()
+  } as any as IAlphaLoggerService;
   const chunkSize = 1000;
 
   let service: AlphaUploadApiService;
@@ -39,11 +42,11 @@ describe('AlphaUploadApiService', () => {
   it('should init', () => {
     service.init(
       uploadUrl, deleteUploadUrl,
-      authorise, postErrorLog, chunkSize);
+      oas, ls, chunkSize);
     expect(service["mUploadUrl"]).toEqual(uploadUrl);
     expect(service["mDeleteUploadUrl"]).toEqual(deleteUploadUrl);
-    expect(service["mAuthorize"]).toEqual(authorise);
-    expect(service["mPostErrorLog"]).toEqual(postErrorLog);
+    expect(service["mAuthorize"]).toEqual(oas.authorize);
+    expect(service["mPostErrorLog"]).toEqual(ls.postErrorLog);
     expect(service["mChunkSize"]).toEqual(chunkSize);
   });
 
@@ -64,7 +67,7 @@ describe('AlphaUploadApiService', () => {
 
       service.init(
         uploadUrl, deleteUploadUrl,
-        authorise, postErrorLog, 4);
+        oas, ls, 4);
       service.upload(data, notifyProgress)
         .subscribe(uploadId => {
           expect(uploadId).toEqual(objectResultDso.data);
@@ -87,7 +90,7 @@ describe('AlphaUploadApiService', () => {
 
       service.init(
         uploadUrl, deleteUploadUrl,
-        authorise, postErrorLog, 4);
+        oas, ls, 4);
       service.upload(data, notifyProgress)
         .subscribe(uploadId => {
           expect(uploadId).toEqual(stringDso);
@@ -104,7 +107,7 @@ describe('AlphaUploadApiService', () => {
     it ('should fail while uploading some data', () => {
       service.init(
         uploadUrl, deleteUploadUrl,
-        authorise, postErrorLog);
+        oas, ls);
       const data = '123456';
       const notifyProgress = (progress: number) => {
         console.log(`Progress: ${progress}%`);
@@ -127,7 +130,7 @@ describe('AlphaUploadApiService', () => {
       const uploadId = 'theUploadId';
       service.init(
         uploadUrl, deleteUploadUrl,
-        authorise, postErrorLog);
+        oas, ls);
       service.deleteUpload(uploadId)
         .subscribe(response => {
           expect(response).toBeTruthy();
@@ -144,7 +147,7 @@ describe('AlphaUploadApiService', () => {
       const uploadId = 'theUploadId';
       service.init(
         uploadUrl, deleteUploadUrl,
-        authorise, postErrorLog);
+        oas, ls);
       service.deleteUpload(uploadId)
         .subscribe({
           error: e => expect(e).toEqual('internal error')
@@ -159,8 +162,6 @@ describe('AlphaUploadApiService', () => {
         statusText: 'internal error'
       });
     });
-
-
   });
 
 });

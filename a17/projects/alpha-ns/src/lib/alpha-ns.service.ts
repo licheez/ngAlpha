@@ -2,13 +2,15 @@ import {Injectable} from '@angular/core';
 import {Location} from '@angular/common';
 import {Router, UrlTree} from "@angular/router";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
-import {AlphaPage, IAlphaPage} from "./alpha-page";
+import {AlphaPage} from "./alpha-page";
 import {AlphaNsUtils} from "./alpha-ns-utils";
+import {IAlphaLoggerService, IAlphaNavigationService, IAlphaPage} from "@pvway/alpha-common";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AlphaNsService {
+export class AlphaNsService
+  implements IAlphaNavigationService {
 
   private _router!: Router;
   private _homePage!: IAlphaPage;
@@ -22,16 +24,24 @@ export class AlphaNsService {
     private mSan: DomSanitizer) {
   }
 
+  /**
+   * Initializes the application with the provided router, homepage, logger service, and navigation notification callback.
+   *
+   * @param {Router} router - The router object to be used for navigation.
+   * @param {IAlphaPage} homePage - The homepage of the application.
+   * @param {IAlphaLoggerService} [ls] - Optional logger service for logging navigation events.
+   * @param {(page: IAlphaPage) => any} [notifyNavigation] - Optional callback function to be called when a navigation event occurs.
+   *
+   * @return {void}
+   */
   init(router: Router,
        homePage: IAlphaPage,
-       postNavLog?: (path: string, title: string) => any,
-       notifyNav?: (page: IAlphaPage) => any): void {
+       ls?: IAlphaLoggerService,
+       notifyNavigation?: (page: IAlphaPage) => any): void {
     this._router = router;
     this._homePage = homePage;
-    this._postNavLog = postNavLog ?? (() => {
-    });
-    this._notifyNav = notifyNav ?? (() => {
-    });
+    this._postNavLog = ls?.postNavigationLog ?? (() => {});
+    this._notifyNav = notifyNavigation?? (() => {});
   }
 
   /**
@@ -144,12 +154,27 @@ export class AlphaNsService {
     }
   }
 
-  openDataUrlInNewTab(dataUrl: string, sliceSize?: number): void {
+  /**
+   * Opens the given data URL in a new tab.
+   *
+   * @param {string} dataUrl - The data URL to open in a new tab.
+   * @param {number} [sliceSize] - The optional slice size for converting the data URL to a blob. Defaults to undefined.
+   * @return {void}
+   */
+  openDataUrlInNewTab(
+    dataUrl: string, sliceSize?: number): void {
     const blob = AlphaNsUtils.dataUrlToBlob(dataUrl, sliceSize);
     const blobUrl = URL.createObjectURL(blob);
     window.open(blobUrl, '_blank');
   }
 
+  /**
+   * Download data from a specified URL.
+   *
+   * @param {string} dataUrl - The URL of the data to be downloaded.
+   * @param {string} fileName - The name of the file to be saved.
+   * @return {void}
+   */
   downloadDataUrl(dataUrl: string, fileName: string): void {
     const link = document.createElement("a") as HTMLAnchorElement;
     link.download = fileName;

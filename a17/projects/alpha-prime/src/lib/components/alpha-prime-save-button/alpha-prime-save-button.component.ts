@@ -33,12 +33,12 @@ export class AlphaPrimeSaveButtonComponent {
   }
 
   onMouseEnter(): void {
-    this.mPs.lbs.publish(true,
+    this.mPs.publish(true,
       AlphaPrimeLabelComponent.SHOW_MESSAGE);
   }
 
   onMouseLeave(): void {
-    this.mPs.lbs.publish(false,
+    this.mPs.publish(false,
       AlphaPrimeLabelComponent.SHOW_MESSAGE);
   }
 

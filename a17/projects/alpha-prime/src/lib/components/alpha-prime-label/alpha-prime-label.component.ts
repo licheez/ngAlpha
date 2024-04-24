@@ -35,13 +35,13 @@ export class AlphaPrimeLabelComponent implements OnInit, OnDestroy {
   showMessageSub = -1;
 
   ngOnInit(): void {
-    this.showMessageSub = this.mPs.lbs.subscribe(
+    this.showMessageSub = this.mPs.subscribe(
       (show: boolean) => this.showMessage = show,
       AlphaPrimeLabelComponent.SHOW_MESSAGE);
   }
 
   ngOnDestroy(): void {
-    this.mPs.lbs.unSubscribe(this.showMessageSub);
+    this.mPs.unsubscribe(this.showMessageSub);
   }
 
 }

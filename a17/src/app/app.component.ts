@@ -5,6 +5,7 @@ import {AlphaLsService} from "@pvway/alpha-ls";
 import {AlphaLbsService} from "@pvway/alpha-lbs";
 import {AlphaOasService, AlphaPrincipal} from "@pvway/alpha-oas";
 import {AlphaTsService} from "@pvway/alpha-ts";
+import {AlphaUtils} from "@pvway/alpha-common";
 
 @Component({
   selector: 'app-root',
@@ -44,6 +45,8 @@ export class AppComponent implements OnInit {
           this.pendingInitCount--;
         }
       });
+
+    AlphaUtils.eon('');
 
     // INITIALIZING TRANSLATION SERVICE
     // --------------------------------

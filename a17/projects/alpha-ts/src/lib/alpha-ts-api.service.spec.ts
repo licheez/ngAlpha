@@ -3,7 +3,8 @@ import {TestBed} from '@angular/core/testing';
 import {AlphaTsApiService} from './alpha-ts-api.service';
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
 import {Observable, Subscriber, throwError} from "rxjs";
-import {IAlphaTranslationCache} from "./ialpha-translation-cache";
+import {IAlphaTranslationCache} from "@pvway/alpha-common";
+
 
 describe('AlphaTsApiService', () => {
   let service: AlphaTsApiService;

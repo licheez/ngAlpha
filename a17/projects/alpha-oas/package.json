@@ -1,9 +1,10 @@
 {
   "name": "@pvway/alpha-oas",
-  "version": "17.0.5",
+  "version": "17.0.8",
   "peerDependencies": {
     "@angular/common": "^17.2.0",
     "@angular/core": "^17.2.0",
+    "@pvway/alpha-common": "^17.0.7",
     "uuid": "^9.0.1",
     "@types/uuid": "^9.0.8"
   },

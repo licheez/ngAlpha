@@ -1,6 +1,6 @@
 import { AlphaPrincipal } from './alpha-principal';
-import {AlphaAuthStatusEnum} from "./alpha-auth-status-enum";
-import {IAlphaUser} from "./alpha-user";
+import {AlphaAuthStatusEnum, IAlphaUser} from "@pvway/alpha-common";
+
 
 describe('AlphaPrincipal', () => {
 

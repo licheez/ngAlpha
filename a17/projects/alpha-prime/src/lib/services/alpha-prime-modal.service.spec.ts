@@ -2,13 +2,16 @@ import { TestBed } from '@angular/core/testing';
 
 import { AlphaPrimeModalService } from './alpha-prime-modal.service';
 import {DialogService} from "primeng/dynamicdialog";
+import {IAlphaLoggerService} from "@pvway/alpha-common";
 
 describe('AlphaPrimeModalService', () => {
   let service: AlphaPrimeModalService;
+  const ls = {
+    postNavigationLog: jest.fn()
+  } as unknown as IAlphaLoggerService;
   const dialogServiceMock = {
     open: jest.fn()
   } as unknown as DialogService;
-  const postNavigationLogMock = jest.fn();
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
@@ -20,17 +23,17 @@ describe('AlphaPrimeModalService', () => {
   });
 
   it ('should init', () => {
-    service.init(dialogServiceMock, postNavigationLogMock, 'someClass');
-    expect(service['_ds']).toEqual(dialogServiceMock);
-    expect(service['_postNavigationLog']).toEqual(postNavigationLogMock);
-    expect(service['_modalStyleClass']).toEqual('someClass');
+    service.init(dialogServiceMock, ls, 'someClass');
+    expect(service['mPs'].ds).toEqual(dialogServiceMock);
+    expect(service['mPs'].postNavigationLog).toEqual(ls.postNavigationLog);
+    expect(service['mPs'].modalStyleClass).toEqual('someClass');
   });
 
   it ('should init without styleClass', () => {
-    service.init(dialogServiceMock, postNavigationLogMock);
-    expect(service['_ds']).toEqual(dialogServiceMock);
-    expect(service['_postNavigationLog']).toEqual(postNavigationLogMock);
-    expect(service['_modalStyleClass']).toBeUndefined();
+    service.init(dialogServiceMock, ls);
+    expect(service['mPs'].ds).toEqual(dialogServiceMock);
+    expect(service['mPs'].postNavigationLog).toEqual(ls.postNavigationLog);
+    expect(service['mPs'].modalStyleClass).toBeUndefined();
   });
 
   it('openModal should fail when not initialized', () => {
@@ -59,7 +62,7 @@ describe('AlphaPrimeModalService', () => {
 
     const component: any = {};
     service.init(
-      dialogServiceMock, postNavigationLogMock, 'globalClass');
+      dialogServiceMock, ls, 'globalClass');
     service
       .openModal<any>(component, 'anchor', 'modal')
       .subscribe({

@@ -4,14 +4,18 @@ import {AlphaPrincipal} from "./alpha-principal";
 import {catchError, map, mergeMap, Observable, Subscriber, throwError} from "rxjs";
 import {AlphaSessionData} from "./alpha-session-data";
 import {AlphaRefreshData} from "./alpha-refresh-data";
-import {AlphaAuthStatusEnum} from "./alpha-auth-status-enum";
-import {AlphaAuthEnvelopFactory, IAlphaAuthEnvelop} from "./alpha-auth-envelop";
-import {AlphaUserFactory, IAlphaUser} from "./alpha-user";
+import {AlphaAuthEnvelopFactory} from "./alpha-auth-envelop";
+import {AlphaUserFactory} from "./alpha-user";
+import {
+  AlphaAuthStatusEnum, IAlphaAuthEnvelop, IAlphaLoggerService,
+  IAlphaOAuthService, IAlphaPrincipal, IAlphaUser
+} from "@pvway/alpha-common";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AlphaOasService {
+export class AlphaOasService
+  implements IAlphaOAuthService {
 
   private readonly mContext = 'OAuthService';
   private readonly mPrincipal: AlphaPrincipal;
@@ -19,8 +23,8 @@ export class AlphaOasService {
   private mRefreshUrl: string | undefined;
   private mGetMeUrl: string | undefined;
 
-  private mNotifyStateChange:
-    (principal: AlphaPrincipal, channel: string) => any =
+  private mOnPrincipalUpdated:
+    (principal: AlphaPrincipal) => any =
     () => {
     };
   private mPostErrorLog:
@@ -28,7 +32,7 @@ export class AlphaOasService {
     () => {
     };
 
-  get principal(): AlphaPrincipal {
+  get principal(): IAlphaPrincipal {
     return this.mPrincipal;
   }
 
@@ -40,28 +44,30 @@ export class AlphaOasService {
   /**
    * Initializes the authentication process by retrieving session data, refresh data, or setting authentication to anonymous mode.
    *
-   * @param {string} [signInUrl] - The URL for signing in.
-   * @param {string} [refreshUrl] - The URL for refreshing authentication.
    * @param {string} [getMeUrl] - The URL for retrieving user information.
-   * @param postErrorLog - A delegate method that can post errors towards the server
-   * @param notifyStateChange - A delegate method responsible for broadcasting principal state changes
+   * @param {string} [refreshUrl] - The URL for refreshing authentication.
+   * @param {string} [signInUrl] - The URL for signing in.
+   * @param {IAlphaLoggerService} [ls] - the logger
+   * @param {(principal: IAlphaPrincipal) => any} [onPrincipalUpdated] -
+   * a delegate that will be triggered whenever the principal is updated
    * @return {Observable<any>} - An Observable that emits the result of the initialization process.
    */
   init(getMeUrl?: string,
        refreshUrl?: string,
        signInUrl?: string,
-       postErrorLog?:
-         (context: string, method: string, error: string) => any,
-       notifyStateChange?:
-         (principal: AlphaPrincipal, channel: string) => any): Observable<any> {
+       ls?: IAlphaLoggerService,
+       onPrincipalUpdated?: (principal: IAlphaPrincipal) => any): Observable<string> {
 
     this.mSignInUrl = signInUrl;
     this.mRefreshUrl = refreshUrl;
     this.mGetMeUrl = getMeUrl;
     // postErrorLog defaults to nop
-    this.mPostErrorLog = postErrorLog || (() => {});
+    this.mPostErrorLog = ls === undefined ?
+      (() => {}) : ls.postErrorLog;
     // notifyStateChange defaults to nop
-    this.mNotifyStateChange = notifyStateChange || (() => {});
+    if (onPrincipalUpdated) {
+      this.mOnPrincipalUpdated = onPrincipalUpdated;
+    }
 
     // let's first see if there is still a session data
     const sd = AlphaSessionData.retrieve();
@@ -119,6 +125,8 @@ export class AlphaOasService {
       });
   }
 
+  /**
+   * Inject your own signIn method */
   useSignIn(
     signIn: (
       userName: string,
@@ -127,12 +135,14 @@ export class AlphaOasService {
     this._signIn = signIn;
   }
 
+  /**
+   * Inject your own refresh method */
   useRefresh(refresh: (
     refreshToken: string) => Observable<IAlphaAuthEnvelop>) {
     this._refresh = refresh;
   }
 
-  /** overrides the builtin authorize method */
+  /** Inject your own authorize method */
   useAuthorize(authorize: (request: Observable<any>) => Observable<any>): void {
     this._authorize = authorize;
   }
@@ -280,15 +290,14 @@ export class AlphaOasService {
   editUserInfo(
     firstName: string,
     lastName: string,
-    languageCode: string) {
+    languageCode: string):void {
     if (!this.mPrincipal.user) {
       return;
     }
     this.mPrincipal.user.username = firstName + " " + lastName;
     this.mPrincipal.user.languageCode = languageCode;
 
-    this.mNotifyStateChange(
-      this.mPrincipal, AlphaPrincipal.PRINCIPAL_UPDATED)
+    this.mOnPrincipalUpdated(this.mPrincipal)
   }
 
   signOut(): void {
@@ -296,8 +305,7 @@ export class AlphaOasService {
     AlphaRefreshData.clear();
     this.mPrincipal.clearUser();
     this.mPrincipal.setStatus(AlphaAuthStatusEnum.Anonymous);
-    this.mNotifyStateChange(
-      this.mPrincipal, AlphaPrincipal.PRINCIPAL_UPDATED);
+    this.mOnPrincipalUpdated(this.mPrincipal);
   }
 
   /**
@@ -363,8 +371,7 @@ export class AlphaOasService {
     this.mPrincipal.setUser(user);
     console.log('principal user is set');
     this.mPrincipal.setStatus(AlphaAuthStatusEnum.Authenticated);
-    this.mNotifyStateChange(
-      this.mPrincipal, AlphaPrincipal.PRINCIPAL_UPDATED);
+    this.mOnPrincipalUpdated(this.mPrincipal);
   }
 
 }

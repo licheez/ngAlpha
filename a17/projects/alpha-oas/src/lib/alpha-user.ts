@@ -1,12 +1,6 @@
-// INTERFACES
-export interface IAlphaUser {
-  userId: string;
-  username: string;
-  languageCode: string;
-  properties: Map<string, any>
-}
-
 // FACTORY
+import {IAlphaUser} from "@pvway/alpha-common";
+
 export class AlphaUserFactory {
   static factorFromDso(dso: any): IAlphaUser {
     const ds = new DsoSlicer(dso);

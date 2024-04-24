@@ -70,7 +70,7 @@ export class AlphaPrimeLoginFormComponent {
   onSubmit() {
     this.busy = true;
     this.errorMessage = undefined;
-    this.mPs.oas.signIn(
+    this.mPs.signIn(
       this.fm.username, this.fm.password, true)
       .subscribe({
         next: ok => {

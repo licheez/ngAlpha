@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { AlphaNsService } from './alpha-ns.service';
 import {Router, UrlCreationOptions, UrlTree} from "@angular/router";
-import {IAlphaPage} from "./alpha-page";
+import {IAlphaPage} from "@pvway/alpha-common";
 
 describe('AlphaNsService', () => {
   let service: AlphaNsService;

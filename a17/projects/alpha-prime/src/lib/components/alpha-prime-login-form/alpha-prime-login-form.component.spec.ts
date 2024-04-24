@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AlphaPrimeLoginFormComponent } from './alpha-prime-login-form.component';
 import {EventEmitter} from "@angular/core";
 import {AlphaPrimeService} from "../../services/alpha-prime.service";
-import {Observable, of, Subscriber} from "rxjs";
+import {Observable, Subscriber} from "rxjs";
 import {jest} from "@jest/globals";
 
 describe('AlphaPrimeLoginFormComponent', () => {
@@ -62,14 +62,12 @@ describe('AlphaPrimeLoginFormComponent', () => {
     it('should singIn with success', () => {
 
       const alphaPrimeService = {
-        oas: {
-          signIn: () =>
+        signIn: () =>
             new Observable<boolean>(
               (subscriber: Subscriber<boolean>) => {
                 setTimeout(() => subscriber.next(true),
                   10);
-              })
-        },
+              }),
         getTr: (key: string) => key
       } as any as AlphaPrimeService
       const component = new AlphaPrimeLoginFormComponent(
@@ -88,14 +86,12 @@ describe('AlphaPrimeLoginFormComponent', () => {
     it('sign in should handle invalid creds', () => {
 
       const alphaPrimeService = {
-        oas: {
-          signIn: () =>
+        signIn: () =>
             new Observable<boolean>(
               (subscriber: Subscriber<boolean>) => {
                 setTimeout(() => subscriber.next(false),
                   10);
-              })
-        },
+              }),
         getTr: (key: string) => key
       } as any as AlphaPrimeService
 
@@ -116,14 +112,12 @@ describe('AlphaPrimeLoginFormComponent', () => {
     it('sign in should fail', () => {
 
       const alphaPrimeService = {
-        oas: {
-          signIn: () =>
+        signIn: () =>
             new Observable<boolean>(
               (subscriber: Subscriber<boolean>) => {
                 setTimeout(() => subscriber.error('someError'),
                   10);
-              })
-        },
+              }),
         getTr: (key: string) => key
       } as any as AlphaPrimeService
 

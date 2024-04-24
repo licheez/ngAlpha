@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {DialogService} from "primeng/dynamicdialog";
 import {Observable, of} from "rxjs";
+import {IAlphaLocalBusService, IAlphaOAuthService, IAlphaUploadApiService} from "@pvway/alpha-common";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,6 @@ export class AlphaPrimeService {
 
   modalStyleClass: string | undefined;
   ds!: DialogService;
-
   postNavigationLog: (path: string, title: string) => any =
     () => {
     };
@@ -20,36 +20,34 @@ export class AlphaPrimeService {
   isProduction!: boolean;
 
   /** OAuthService */
-  oas: {
-    signIn: (username: string, password: string, rememberMe: boolean) => Observable<boolean>
-  } = {
-    signIn: () => of(false)
-  };
+  signIn: (
+    username: string,
+    password: string,
+    rememberMe: boolean) => Observable<boolean> = () => of(false);
 
   /** UploadApiService */
-  uas: {
-    upload: (
-      data: any,
-      notifyProgress: (progress: number) => any) => Observable<string>,
-    deleteUpload: (uploadId: string) => Observable<any>
-  } = {
-    upload: () => of(''),
-    deleteUpload: () => of({})
-  };
+  upload: (
+    data: any,
+    notifyProgress: (progress: number) => any) => Observable<string> =
+    () => of('');
+  deleteUpload: (
+    uploadId: string) => Observable<any> =
+    () => of({});
 
   /** LocalBusService*/
-  lbs: {
-    publish: (payload: any, channel?: string) => number,
-    subscribe: (callback: (payload: any) => any, channel: string) => number,
-    unSubscribe: (subId: number) => any
-  } = {
-    publish: () => 0,
-    subscribe: () => -1,
-    unSubscribe: () => {}
-  };
+  publish: (
+    payload: any,
+    channel: string) => number =
+    () => 0;
+  subscribe: (
+    callback: (payload: any) => any,
+    channel?: string) => number
+    = () => -1;
+  unsubscribe:(
+    id: number) => any = () => {};
 
   /**
-   * Initializes the application.
+   * Initializes the service.
    *
    * @param {DialogService} ds - The dialog service used for displaying dialogs.
    * @param {(path: string, title: string) => any} postNavigationLog - The function used for logging navigation.
@@ -70,33 +68,25 @@ export class AlphaPrimeService {
     postNavigationLog: (path: string, title: string) => any,
     getTranslation: (key: string, languageCode?: string) => string,
     isProduction: boolean,
-    oas?: {
-      signIn: (username: string, password: string, rememberMe: boolean) => Observable<boolean>
-    },
-    uas?: {
-      upload: (
-        data: any,
-        notifyProgress: (progress: number) => any) => Observable<string>,
-      deleteUpload: (uploadId: string) => Observable<any>,
-    },
-    lbs?: {
-      publish: (payload: any, channel?: any) => number,
-      subscribe: (callback: (payload: any) => any, channel: string) => number,
-      unSubscribe: (subId: number) => any
-    },
+    oas?: IAlphaOAuthService,
+    uas?: IAlphaUploadApiService,
+    lbs?: IAlphaLocalBusService,
     modalStyleClass?: string): void {
     this.ds = ds;
     this.postNavigationLog = postNavigationLog;
     this.getTr = getTranslation;
     this.isProduction = isProduction;
     if (oas) {
-      this.oas = oas;
+      this.signIn = oas.signIn;
     }
     if (uas) {
-      this.uas = uas;
+      this.upload = uas.upload;
+      this.deleteUpload = uas.deleteUpload;
     }
     if (lbs) {
-      this.lbs = lbs
+      this.publish = lbs.publish;
+      this.subscribe = lbs.subscribe;
+      this.unsubscribe = lbs.unsubscribe;
     }
     this.modalStyleClass = modalStyleClass;
   }

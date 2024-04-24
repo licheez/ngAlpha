@@ -1,9 +1,10 @@
 {
   "name": "@pvway/alpha-ts",
-  "version": "17.1.2",
+  "version": "17.1.4",
   "peerDependencies": {
     "@angular/common": "^17.2.0",
-    "@angular/core": "^17.2.0"
+    "@angular/core": "^17.2.0",
+    "@pvway/alpha-common": "^17.0.6"
   },
   "dependencies": {
     "tslib": "^2.3.0"

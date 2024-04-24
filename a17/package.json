@@ -23,8 +23,9 @@
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3",
-    "@pvway/alpha-lbs": "^17.0.0",
-    "@pvway/alpha-ls": "^17.0.0",
+    "@pvway/alpha-api": "^17.0.5",
+    "@pvway/alpha-lbs": "^17.0.2",
+    "@pvway/alpha-ls": "^17.0.1",
     "@pvway/alpha-ts": "^17.1.0",
     "@pvway/alpha-oas": "^17.0.0",
     "@pvway/alpha-prime": "^17.0.1"

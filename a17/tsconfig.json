@@ -6,6 +6,9 @@
       "AlphaApi": [
         "./dist/alpha-api"
       ],
+      "AlphaApiTypes": [
+        "./dist/alpha-api-types"
+      ],
       "AlphaCom": [
         "./dist/alpha-com"
       ],

@@ -1,6 +1,7 @@
 // Importing required libraries and modules
-import { AlphaPage, IAlphaPage } from './alpha-page';
+import { AlphaPage } from './alpha-page';
 import { describe, expect, it } from '@jest/globals';
+import {IAlphaLoggerService, IAlphaPage} from "@pvway/alpha-common";
 
 describe('AlphaPage', () => {
   let alphaPage: AlphaPage;

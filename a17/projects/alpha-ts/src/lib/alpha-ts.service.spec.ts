@@ -5,12 +5,15 @@ import {HttpClientTestingModule, HttpTestingController} from "@angular/common/ht
 import {AlphaTsApiService} from "./alpha-ts-api.service";
 import {of, throwError} from "rxjs";
 import {AlphaTranslationCache} from "./alpha-translation-cache";
+import {IAlphaLoggerService} from "@pvway/alpha-common";
 
 describe('AlphaTsService', () => {
   let service: AlphaTsService;
   let apiSvc: AlphaTsApiService;
   let httpMock: HttpTestingController;
-
+  const ls = {
+    postErrorLog: jest.fn()
+  } as any as IAlphaLoggerService;
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
@@ -80,9 +83,7 @@ describe('AlphaTsService', () => {
         throwError(() => 'error'));
     const url = 'https://localhost/getTcu';
 
-    const postErrorLog = () => {};
-
-    service.init(url, postErrorLog).subscribe({
+    service.init(url, ls).subscribe({
       error: e => {
         expect(e).toEqual('error');
       }
@@ -104,8 +105,7 @@ describe('AlphaTsService', () => {
   })
 
   it('should not find the key', () => {
-    const postErrorLog = () => {};
-    service.init(undefined, postErrorLog);
+    service.init(undefined, ls);
     const key = 'noKey';
     service.changeLanguageCode('zh');
     const translation = service.getTr(key);
