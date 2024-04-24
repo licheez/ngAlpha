@@ -15,7 +15,7 @@ import {AlphaPrimeService} from "../../services/alpha-prime.service";
     ButtonModule,
     TooltipModule
   ],
-  styleUrls: ['./alpha-prime-add-button.component.css']
+  styleUrl: './alpha-prime-add-button.component.css'
 })
 export class AlphaPrimeAddButtonComponent {
 

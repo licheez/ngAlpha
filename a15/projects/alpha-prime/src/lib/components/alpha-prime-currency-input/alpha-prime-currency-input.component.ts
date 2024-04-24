@@ -69,7 +69,6 @@ export class AlphaPrimeCurrencyInputComponent {
   constructor(private mPs: AlphaPrimeService) {
   }
 
-
   invalid = false;
 
   baseInputStyle = {

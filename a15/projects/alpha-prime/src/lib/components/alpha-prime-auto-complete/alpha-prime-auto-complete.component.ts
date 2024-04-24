@@ -4,7 +4,7 @@ import {IAlphaPrimeAutoCompleteEntry} from "./alpha-prime-auto-complete";
 import {NgClass, NgIf} from "@angular/common";
 
 import {FormsModule} from "@angular/forms";
-import {AutoCompleteModule } from "primeng/autocomplete";
+import {AutoCompleteModule} from "primeng/autocomplete";
 import {ButtonModule} from "primeng/button";
 import {RippleModule} from "primeng/ripple";
 import {InputTextModule} from "primeng/inputtext";
@@ -158,7 +158,8 @@ export class AlphaPrimeAutoCompleteComponent {
     this.clear(true);
   }
 
-  onSelected(entry: IAlphaPrimeAutoCompleteEntry): void {
+  onSelected(event: any): void {
+    const entry = event.value as IAlphaPrimeAutoCompleteEntry
     this.term = entry.caption;
     this.selected.emit(entry);
     this.valid = true;

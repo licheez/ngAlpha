@@ -10,8 +10,6 @@ import {TooltipModule} from "primeng/tooltip";
   imports: [
     ButtonModule,
     NgClass,
-    TooltipModule,
-    ButtonModule,
     TooltipModule
   ],
   templateUrl: './alpha-prime-edit-button.component.html',

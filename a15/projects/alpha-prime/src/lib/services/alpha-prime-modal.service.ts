@@ -1,31 +1,32 @@
 import { Injectable, Type } from '@angular/core';
 import { DialogService, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { Observable, Subscriber } from 'rxjs';
+import {AlphaPrimeService} from "./alpha-prime.service";
+import {IAlphaLoggerService} from "@pvway/alpha-common";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlphaPrimeModalService {
 
-  private _modalStyleClass: string | undefined;
-  private _ds!: DialogService;
-  private _postNavigationLog: (path: string, title: string) => any = () => {};
-
+  constructor(private mPs: AlphaPrimeService) {
+  }
   /**
    * Initializes the dialog service.
    *
    * @param {DialogService} ds - The DialogService object to be initialized.
-   * @param {(path: string, title: string) => any} postNavigationLog - The function used for posting navigation logs, with parameters path: string and title: string.
+   * @param {DialogService} ls - The Alpha Logger Service
    * @param {string} [modalStyleClass] - Optional. The CSS class to be applied to the modals created by the DialogService.
    * @return {void}
+   * @deprecated please use the AlphaPrimeService init method for initializing this service
    */
   init(
     ds: DialogService,
-    postNavigationLog: (path: string, title: string) => any,
+    ls: IAlphaLoggerService,
     modalStyleClass?: string): void {
-    this._ds = ds;
-    this._postNavigationLog = postNavigationLog;
-    this._modalStyleClass = modalStyleClass;
+    this.mPs.ds = ds;
+    this.mPs.postNavigationLog = ls.postNavigationLog;
+    this.mPs.modalStyleClass = modalStyleClass;
   }
 
   /**
@@ -50,7 +51,7 @@ export class AlphaPrimeModalService {
     return new Observable(
       (subscriber: Subscriber<T>) => {
 
-        if (!this._ds){
+        if (!this.mPs.ds){
           subscriber.error('AlphaPrimeModalService is not initialized');
           return;
         }
@@ -64,20 +65,20 @@ export class AlphaPrimeModalService {
         }
 
         if (!ddc.styleClass
-          && this._modalStyleClass) {
-          ddc.styleClass = this._modalStyleClass;
+          && this.mPs.modalStyleClass) {
+          ddc.styleClass = this.mPs.modalStyleClass;
         }
 
         const path =  `${anchor}//${modal}`;
         const title = `modal ${modal} from ${anchor}`;
 
         ddc.data.setInstance = (instance: T) => {
-          this._postNavigationLog(path, title);
+          this.mPs.postNavigationLog(path, title);
           subscriber.next(instance);
           subscriber.complete();
         };
 
-        this._ds.open(component, ddc);
+        this.mPs.ds.open(component, ddc);
       });
   }
 

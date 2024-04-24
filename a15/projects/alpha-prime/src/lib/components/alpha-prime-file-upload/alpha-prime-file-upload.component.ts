@@ -104,7 +104,7 @@ export class AlphaPrimeFileUploadComponent implements AfterViewInit {
 
   private delete(uploadId: string): void {
     this.busy = true;
-    this.mPs.uas.deleteUpload(uploadId)
+    this.mPs.deleteUpload(uploadId)
       .subscribe({
         next: () => {
           this.fileDeleted.emit(uploadId);
@@ -122,7 +122,7 @@ export class AlphaPrimeFileUploadComponent implements AfterViewInit {
     this.busy = true;
     this.uploading = true;
     this.progress = 0;
-    this.mPs.uas.upload(
+    this.mPs.upload(
       this.fm.fileData,
       progress => {
         this.progress = progress;
