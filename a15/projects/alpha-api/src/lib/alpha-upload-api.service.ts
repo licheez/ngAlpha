@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Observable, Subscriber, of, mergeMap, catchError, throwError} from "rxjs";
-import {AlphaHttpObjectResult, AlphaHttpResult, IAlphaHttpObjectResultDso} from "./alpha-http-result";
+import {AlphaHttpObjectResult, IAlphaHttpObjectResultDso} from "./alpha-http-result";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {IAlphaLoggerService, IAlphaOAuthService, IAlphaUploadApiService} from "@pvway/alpha-common";
 
 class UsoChunkUpload {
   dataChunk: string;
@@ -18,7 +19,8 @@ class UsoChunkUpload {
 @Injectable({
   providedIn: 'root'
 })
-export class AlphaUploadApiService {
+export class AlphaUploadApiService
+  implements IAlphaUploadApiService{
 
   private mContext = "AlphaUploadApiService";
   private mChunkSize = 3000000; // 3 Mb
@@ -31,26 +33,26 @@ export class AlphaUploadApiService {
   }
 
   /**
-   * Initializes the upload service with the specified parameters.
+   * Initializes the uploader with the given parameters.
    *
-   * @param {string} uploadUrl - The URL where the file should be uploaded to.
-   * @param {string} deleteUploadUrl - The URL where the uploaded file should be deleted from.
-   * @param {(obs: Observable<any>) => Observable<any>} authorize - The function that performs the authorization process for the upload.
-   * @param {(context: string, method: string, error: string) => any} postErrorLog - The function that posts error logs.
-   * @param {number} [chunkSize] - The optional size of each chunk to be uploaded. If not specified, a default value will be used.
-   *
-   * @return {void} - There is no return value.
+   * @param {string} uploadUrl - The URL to which the file uploads will be sent.
+   * @param {string} deleteUploadUrl - The URL to which delete requests will be sent.
+   * @param {IAlphaOAuthService} oas - The AlphaOAuthService instance for authorization.
+   * @param {IAlphaLoggerService} ls - The AlphaLoggerService instance for error logging.
+   * @param {number} [chunkSize] - Optional parameter for specifying the upload chunk size.
+   *                              If not provided, a default value will be used.
+   * @return {void}
    */
   init(
     uploadUrl: string,
     deleteUploadUrl: string,
-    authorize: (obs: Observable<any>) => Observable<any>,
-    postErrorLog: (context: string, method: string, error: string) => any,
+    oas: IAlphaOAuthService,
+    ls: IAlphaLoggerService,
     chunkSize?: number): void {
     this.mUploadUrl = uploadUrl;
     this.mDeleteUploadUrl = deleteUploadUrl;
-    this.mAuthorize = authorize;
-    this.mPostErrorLog = postErrorLog;
+    this.mAuthorize = oas.authorize;
+    this.mPostErrorLog = ls.postErrorLog;
     if (chunkSize) {
       this.mChunkSize = chunkSize;
     }
@@ -83,6 +85,13 @@ export class AlphaUploadApiService {
       });
   }
 
+  /**
+   * Deletes an upload using the specified upload ID.
+   *
+   * @param {string} uploadId - The ID of the upload to delete.
+   * @return {Observable<any>} - An observable that resolves with the response from the server when the upload is successfully deleted.
+   * If an error occurs during the delete operation, the observable will emit an HttpErrorResponse object.
+   */
   deleteUpload(
     uploadId: string): Observable<any> {
     const pId = encodeURIComponent(uploadId);

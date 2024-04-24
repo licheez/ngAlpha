@@ -2,11 +2,13 @@ import {Injectable} from '@angular/core';
 import {catchError, map, Observable, of, throwError} from "rxjs";
 import {AlphaHttpObjectResult} from "./alpha-http-result";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {IAlphaLoggerService, IAlphaVersionApiService} from "@pvway/alpha-common";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AlphaVersionApiService {
+export class AlphaVersionApiService
+  implements IAlphaVersionApiService {
 
   private readonly mContext = "AlphaVersionApiService";
   private mUrl: string | undefined;
@@ -19,19 +21,29 @@ export class AlphaVersionApiService {
     private mHttp: HttpClient) {
   }
 
+  /**
+   * Initializes the application with the provided version URL and optional error logging function.
+   *
+   * @param {string} getVersionUrl - The URL to retrieve the version information from.
+   * @param {IAlphaLoggerService} ls - The service for error logging (optional).
+   * @return {void}
+   */
   init(
     getVersionUrl: string,
-    postErrorLog?: (context: string, method: string, error: string) => any) {
+    ls: IAlphaLoggerService):void {
     this.mUrl = getVersionUrl;
-    if (postErrorLog) {
-      this.postErrorLog = postErrorLog;
-    }
+    this.postErrorLog = ls.postErrorLog;
   }
 
+  /** Inject your own getVersion method  */
   useGetVersion(getVersion: () => Observable<string>): void {
     this._getVersion = getVersion;
   }
 
+  /**
+   * Retrieves the version number from a source.
+   * @returns {Observable<string | null>} An observable that emits the version number as a string or null if not available.
+   */
   getVersion(): Observable<string | null> {
     return this._getVersion()
   }

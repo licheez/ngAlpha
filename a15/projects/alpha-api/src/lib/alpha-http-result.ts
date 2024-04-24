@@ -26,7 +26,7 @@ export class AlphaHttpResult {
   hasMoreResults: boolean;
   get failure(): boolean {
     return this.status === AlphaSeverityEnum.Error
-      || this.status === AlphaSeverityEnum.Fatal;
+        || this.status === AlphaSeverityEnum.Fatal;
   }
   get success(): boolean {
     return !this.failure;
@@ -73,7 +73,7 @@ export class AlphaHttpResult {
 
   static isObjectResult(dso: any): boolean {
     return AlphaHttpResult.isBaseResult(dso)
-      && 'data' in dso && !Array.isArray(dso.data);
+    && 'data' in dso && !Array.isArray(dso.data);
   }
 
   static isListResult(dso: any): boolean {
