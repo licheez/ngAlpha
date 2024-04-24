@@ -1,12 +1,5 @@
-import { IAlphaUser, AlphaUserFactory } from './alpha-user';
-
-// INTERFACES
-export interface IAlphaAuthEnvelop {
-  accessToken: string;
-  expiresIn: number;
-  refreshToken: string;
-  user: IAlphaUser;
-}
+import { AlphaUserFactory } from './alpha-user';
+import {IAlphaAuthEnvelop, IAlphaUser} from "@pvway/alpha-common";
 
 // FACTORY
 export class AlphaAuthEnvelopFactory {
