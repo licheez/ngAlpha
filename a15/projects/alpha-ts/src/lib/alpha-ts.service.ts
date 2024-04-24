@@ -1,15 +1,21 @@
 import {Injectable} from '@angular/core';
-import {IAlphaTranslationCache} from "./ialpha-translation-cache";
 import {AlphaTranslationCache} from "./alpha-translation-cache";
 import {AlphaTsApiService} from "./alpha-ts-api.service";
 import {Observable, Observer} from "rxjs";
-import {IAlphaTranslationRow} from "./ialpha-translation-row";
-import {IAlphaTranslationItem} from "./ialpha-translation-item";
+import {
+  IAlphaLoggerService,
+  IAlphaTranslationCache,
+  IAlphaTranslationItem,
+  IAlphaTranslationRow,
+  IAlphaTranslationService
+} from "@pvway/alpha-common";
+
 
 @Injectable({
   providedIn: 'root'
 })
-export class AlphaTsService {
+export class AlphaTsService
+  implements IAlphaTranslationService {
 
   private mContext = 'AlphaTsService';
   private mTranslationCache: IAlphaTranslationCache;
@@ -31,26 +37,30 @@ export class AlphaTsService {
     this.mLanguageCode = languageCode;
   }
 
+  /**
+   * Inject your own method
+   * for retrieving the translations cache updates
+   * */
   useGetTranslationCacheUpdate(getTranslationCacheUpdate: (lastUpdateDate: Date) =>
     Observable<IAlphaTranslationCache | null>): void {
     this.mApi.useGetTranslationCacheUpdate(getTranslationCacheUpdate);
   }
 
   /**
-   * Initializes the application.
+   * Initializes the service.
    * @param {string} [getTranslationCacheUpdateUrl]
    * - The URL for updating the translation cache.
-   * @param {(context: string, method: string, error: string) => any} [postErrorLog]
-   * - A function for posting error logs.
+   * @param {IAlphaLoggerService} [ls]
+   * - The Logger service
    * @return {Observable<string>} An Observable that emits a string value.
    */
   init(
     getTranslationCacheUpdateUrl?: string,
-    postErrorLog?: (context: string, method: string, error: string) => any): Observable<string> {
+    ls?: IAlphaLoggerService): Observable<string> {
 
-    this.mApi.init(getTranslationCacheUpdateUrl, postErrorLog);
+    this.mApi.init(getTranslationCacheUpdateUrl, ls?.postErrorLog);
 
-    this.mPostErrorLog = postErrorLog;
+    this.mPostErrorLog = ls?.postErrorLog;
 
     return new Observable(
       (observer: Observer<any>) => {

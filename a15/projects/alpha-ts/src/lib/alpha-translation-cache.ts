@@ -1,6 +1,5 @@
-import {IAlphaTranslationCache} from "./ialpha-translation-cache";
-import {IAlphaTranslationRow} from "./ialpha-translation-row";
-import {IAlphaTranslationItem} from "./ialpha-translation-item";
+import {IAlphaTranslationCache, IAlphaTranslationItem, IAlphaTranslationRow} from "@pvway/alpha-common";
+
 
 export class AlphaTranslationCache implements IAlphaTranslationCache {
   private static readonly lsItemName = 'alphaTranslationsCache';

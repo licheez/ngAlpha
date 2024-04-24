@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {catchError, map, Observable, Subscriber, throwError} from "rxjs";
-import {IAlphaTranslationCache} from "./ialpha-translation-cache";
 import {AlphaTranslationCache} from "./alpha-translation-cache";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {IAlphaTranslationCache} from "@pvway/alpha-common";
 
 @Injectable({
   providedIn: 'root'
@@ -18,15 +18,22 @@ export class AlphaTsApiService {
     private mHttp: HttpClient) {
   }
 
+  /**
+   * Initializes the method with the provided parameters.
+   *
+   * @param {string | undefined} getTranslationCacheUpdateUrl - The URL for updating the translation cache.
+   * @param {Function} [postErrorLog] - The function for posting error logs. It takes three parameters: context (string), method (string), error (string).
+   * @return {void}
+   */
   init(
     getTranslationCacheUpdateUrl: string | undefined,
-    postErrorLog?: (context: string, method: string, error: string) => any) {
+    postErrorLog?: (context: string, method: string, error: string) => any): void {
     this._getTranslationCacheUpdateUrl = getTranslationCacheUpdateUrl;
     this.mPostErrorLog = postErrorLog;
   }
 
   useGetTranslationCacheUpdate(getTranslationCacheUpdate: (lastUpdateDate: Date) =>
-    Observable<IAlphaTranslationCache | null>) {
+    Observable<IAlphaTranslationCache | null>): void {
     this._getTranslationCacheUpdate = getTranslationCacheUpdate;
   }
 
