@@ -23,6 +23,8 @@ export * from './lib/components/alpha-prime-ok-button/alpha-prime-ok-button.comp
 export * from './lib/components/alpha-prime-password-input/alpha-prime-password-input.component';
 export * from './lib/components/alpha-prime-progress-bar/alpha-prime-progress-bar.component';
 export * from './lib/components/alpha-prime-save-button/alpha-prime-save-button.component';
+export * from './lib/components/alpha-prime-select/alpha-prime-select-info';
+export * from './lib/components/alpha-prime-select/alpha-prime-select.component';
 
 export * from './lib/pipes/alpha-prime-boldify.pipe';
 
