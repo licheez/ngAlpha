@@ -1,7 +1,12 @@
 import {Injectable} from '@angular/core';
 import {DialogService} from "primeng/dynamicdialog";
 import {Observable, of} from "rxjs";
-import {IAlphaLocalBusService, IAlphaOAuthService, IAlphaUploadApiService} from "@pvway/alpha-common";
+import {
+  IAlphaLocalBusService, IAlphaLoggerService,
+  IAlphaOAuthService,
+  IAlphaTranslationService,
+  IAlphaUploadApiService
+} from "@pvway/alpha-common";
 
 @Injectable({
   providedIn: 'root'
@@ -50,32 +55,30 @@ export class AlphaPrimeService {
    * Initializes the service.
    *
    * @param {DialogService} ds - The dialog service used for displaying dialogs.
-   * @param {(path: string, title: string) => any} postNavigationLog - The function used for logging navigation.
-   * @param {(key: string, languageCode?: string) => string} getTranslation - The function used for retrieving translations.
-   * @param {boolean} isProduction - A flag indicating if the application is running in production mode.
-   * @param oas - OAuthService containing signIn method
-   * @param {object} uas - UploadApiService containing upload and deleteUpload methods.
-   *   @param {(data: any, notifyProgress: (progress: number) => any) => Observable<string>} uas.upload - The method used for uploading data with progress notification.
-   *   @param {(uploadId: string) => Observable<any>} uas.deleteUpload - The method used for deleting an upload by its ID.
-   * @param {object} lbs - LocalBusService containing subscribe and unSubscribe methods.
-   *   @param {(callback: (payload: any) => any, channel: string) => number} lbs.subscribe - The method used for subscribing to a channel and receiving callback notifications.
-   *   @param {(subId: number) => any} lbs.unSubscribe - The method used for unsubscribing from a channel using its subscription ID.
-   * @param {string} modalStyleClass - The CSS class to be applied to modal dialogs.
+   * @param {boolean} isProduction - A flag indicating if the application is running in production mode.   *
+   * @param {IAlphaTranslationService} ts - AlphaTranslationService
+   * @param {IAlphaLoggerService} ls - (optional) AlphaLoggerService
+   * @param {IAlphaOAuthService} oas - (optional) OAuthService containing signIn method
+   * @param {IAlphaUploadApiService} uas - (optional) UploadApiService containing upload and deleteUpload methods.
+   * @param {IAlphaLocalBusService} lbs - (optional) LocalBusService containing subscribe and unSubscribe methods.
+   * @param {string} modalStyleClass - (optional) The CSS class to be applied to modal dialogs.
    * @return {void}
    */
   init(
     ds: DialogService,
-    postNavigationLog: (path: string, title: string) => any,
-    getTranslation: (key: string, languageCode?: string) => string,
     isProduction: boolean,
+    ts: IAlphaTranslationService,
+    ls?: IAlphaLoggerService,
     oas?: IAlphaOAuthService,
     uas?: IAlphaUploadApiService,
     lbs?: IAlphaLocalBusService,
     modalStyleClass?: string): void {
     this.ds = ds;
-    this.postNavigationLog = postNavigationLog;
-    this.getTr = getTranslation;
     this.isProduction = isProduction;
+    this.getTr = ts.getTr;
+    if (ls) {
+      this.postNavigationLog = ls.postNavigationLog;
+    }
     if (oas) {
       this.signIn = oas.signIn;
     }

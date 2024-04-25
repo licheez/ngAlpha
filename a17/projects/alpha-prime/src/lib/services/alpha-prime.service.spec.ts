@@ -3,23 +3,34 @@ import {TestBed} from '@angular/core/testing';
 import {AlphaPrimeService} from './alpha-prime.service';
 import {DialogService} from "primeng/dynamicdialog";
 import {jest} from "@jest/globals";
-import {IAlphaLocalBusService, IAlphaOAuthService, IAlphaUploadApiService} from "@pvway/alpha-common";
+import {
+  IAlphaLocalBusService, IAlphaLoggerService,
+  IAlphaOAuthService,
+  IAlphaTranslationService,
+  IAlphaUploadApiService
+} from "@pvway/alpha-common";
 
 describe('AlphaPrimeService', () => {
   let service: AlphaPrimeService;
   let mockDialogService: DialogService;
+  const mockTs = {
+    getTr: jest.fn()
+  } as unknown as IAlphaTranslationService;
+  const mockLs = {
+    postNavigationLog: jest.fn()
+  } as unknown as IAlphaLoggerService;
   const mockOas = {
     signIn: jest.fn()
-  } as any as IAlphaOAuthService;
+  } as unknown as IAlphaOAuthService;
   const mockUas = {
     upload: jest.fn(),
     deleteUpload: jest.fn()
-  } as any as IAlphaUploadApiService;
+  } as unknown as IAlphaUploadApiService;
   const mockLbs = {
     publish: jest.fn(),
     subscribe: jest.fn(),
     unsubscribe: jest.fn()
-  } as any as IAlphaLocalBusService;
+  } as unknown as IAlphaLocalBusService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -37,56 +48,58 @@ describe('AlphaPrimeService', () => {
   });
 
   it('should initialize variables correctly', () => {
-    const fakePath = 'fake-path';
-    const fakeTitle = 'fake-title';
-    const fakeKey = 'fake-key';
-    const fakeCode = 'fake-code';
-    const postNavigationLog =
-      jest.fn().mockReturnValue('Post Navigation Log');
-    const getTranslation =
-      jest.fn(() => `'${fakeKey}' : '${fakeCode}'`);
     const isProduction = true;
 
     const modalStyleClass = 'custom-modal-style';
 
     // check that all default methods are running
+    // getTr
+    const tr = service.getTr('key', 'lc');
+    expect(tr).toEqual("'key':'lc'");
+
+    // postNavigationLog
+    // not need to test this nop method
+
+    // signIn
     service.signIn('me', 'myPwd', true)
       .subscribe({
         next: ok => expect(ok).toBeFalsy()
       });
-    const p = service.publish(
-      'payload', 'theChannel');
-    expect(p).toEqual(0);
+
+    // upload
     service.upload({}, () => 0)
       .subscribe({
         next: res => expect(res).toEqual('')
       });
+    // deleteUpload
     service.deleteUpload('')
       .subscribe({
         next: () => expect(true).toBeTruthy()
       });
+
+    // publish
+    const p = service.publish(
+      'payload', 'theChannel');
+    expect(p).toEqual(0);
+    // subscribe
     const subId = service.subscribe(() => {
     }, 'x');
     expect(subId).toEqual(-1);
+    // unsubscribe
     service.unsubscribe(subId);
     expect(true).toBeTruthy();
 
     service.init(
       mockDialogService,
-      postNavigationLog,
-      getTranslation,
       isProduction,
-      mockOas,
-      mockUas,
-      mockLbs,
+      mockTs, mockLs,
+      mockOas, mockUas, mockLbs,
       modalStyleClass);
 
     expect(service.ds).toEqual(mockDialogService);
-    expect(service.postNavigationLog(fakePath, fakeTitle))
-      .toBe('Post Navigation Log');
-    expect(service.getTr(fakeKey, fakeCode))
-      .toBe(`'${fakeKey}' : '${fakeCode}'`);
     expect(service.isProduction).toBe(isProduction);
+    expect(service.getTr).toBe(mockTs.getTr);
+    expect(service.postNavigationLog).toBe(mockLs.postNavigationLog);
     expect(service.signIn).toBe(mockOas.signIn);
     expect(service.upload).toBe(mockUas.upload);
     expect(service.deleteUpload).toBe(mockUas.deleteUpload);
