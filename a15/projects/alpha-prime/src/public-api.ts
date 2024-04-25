@@ -25,6 +25,7 @@ export * from './lib/components/alpha-prime-progress-bar/alpha-prime-progress-ba
 export * from './lib/components/alpha-prime-save-button/alpha-prime-save-button.component';
 export * from './lib/components/alpha-prime-select/alpha-prime-select-info';
 export * from './lib/components/alpha-prime-select/alpha-prime-select.component';
+export * from './lib/components/alpha-prime-submit-button/alpha-prime-submit-button.component';
 
 export * from './lib/pipes/alpha-prime-boldify.pipe';
 
