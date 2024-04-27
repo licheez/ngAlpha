@@ -12,6 +12,9 @@
       "AlphaCom": [
         "./dist/alpha-com"
       ],
+      "AlphaEms": [
+        "./dist/alpha-ems"
+      ],
       "AlphaLbs": [
         "./dist/alpha-lbs"
       ],
