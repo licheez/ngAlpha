@@ -23,9 +23,16 @@ export * from './lib/components/alpha-prime-ok-button/alpha-prime-ok-button.comp
 export * from './lib/components/alpha-prime-password-input/alpha-prime-password-input.component';
 export * from './lib/components/alpha-prime-progress-bar/alpha-prime-progress-bar.component';
 export * from './lib/components/alpha-prime-save-button/alpha-prime-save-button.component';
+export * from './lib/components/alpha-prime-scroller/alpha-prime-scroller.component';
+export * from './lib/components/alpha-prime-scroller/alpha-prime-scroller-model';
+export * from './lib/components/alpha-prime-scroller/alpha-prime-scroller-row';
 export * from './lib/components/alpha-prime-select/alpha-prime-select-info';
 export * from './lib/components/alpha-prime-select/alpha-prime-select.component';
 export * from './lib/components/alpha-prime-submit-button/alpha-prime-submit-button.component';
+export * from './lib/components/alpha-prime-switch/alpha-prime-switch.component';
+export * from './lib/components/alpha-prime-switch/alpha-prime-switch-option';
+
+export * from './lib/directives/alpha-prime-remaining-height.directive';
 
 export * from './lib/pipes/alpha-prime-boldify.pipe';
 
