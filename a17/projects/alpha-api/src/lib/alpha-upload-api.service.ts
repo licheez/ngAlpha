@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Observable, Subscriber, of, mergeMap, catchError, throwError} from "rxjs";
-import {AlphaHttpObjectResult, IAlphaHttpObjectResultDso} from "./alpha-http-result";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {IAlphaLoggerService, IAlphaOAuthService, IAlphaUploadApiService} from "@pvway/alpha-common";
+import {AlphaHttpObjectResult, IAlphaHttpObjectResultDso} from "@pvway/alpha-common";
 
 class UsoChunkUpload {
   dataChunk: string;

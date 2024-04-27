@@ -1,139 +1,68 @@
-# AlphaApi
+# AlphaUploadApiService
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.0.
+## Overview
 
-## Description / Concept
+AlphaUploadApiService is a service used for uploading data in chunks and deleting the data using their upload ID. The implementations of the `IAlphaUploadApiService` interface make the tasks of uploading and deleting data easier by taking care of the process flow. This involves breaking the data into chunks and uploading them in sequence.
 
-The idea behind this component is to standardize Web API responses by using a common wrapper.
+## Services and Constructor
 
-Of course this only works when you are also using (the same) wrapper at server side.
+- `AlphaUploadApiService` is a core service that helps to upload & delete the uploaded data. This class uses the HttpClient to make HTTP calls and post error logs.
 
-The wrapper carries down the following information from the server.
+## Initialization and Configuration
 
-* a status (AlphaSeverityEnum) that specifies how good the server processed the request.
-* the mutation (AlphaMutationEnum) that specifies what (CRUD) action was taken by the server
-* a list of notifications where you'll find any warning or error
-* a flag (hasMoreResult) that tells the client that a paged list contains more elements
-* the server response that can take two forms
-  * an object
-  * a list of objects
+- `init()` is used for initializing the service. It sets the necessary URLs for upload and delete operations. The chunk size for the upload data can also optionally be specified here.
 
-## Implementation
+## Upload Process
 
-The wrapper is implemented as a base class and two generic subclasses.
+- `upload()` is used for starting the upload process. The data to be uploaded and a callback function to notify the progress of the upload are passed as parameters.
+
+## Delete Process
+
+- `deleteUpload()` is used for deleting the uploaded data. The id of the upload entity is passed as a parameter to this function.
+
+## Error Handling and Security
+
+- The service uses the `catchError` operator from RxJs to catch any HTTP Errors that may occur. Additionally, it uses a function implemented from the `IAlphaLoggerService` to post these error logs.
+- The upload and delete HTTP requests are authorized using a function implemented from the `IAlphaOAuthService`.
+
+Please ensure that `AlphaUploadApiService` has been provided in your root module.
+
+The `AlphaUploadApiService` is here to help make the uploading and deleting process much easier and seamless for your application.
+
+## Dependencies
+
+- Angular
+- HttpClient from `@angular/common/http`
+- Observable, Subscriber, of, mergeMap, catchError, throwError from 'rxjs'
+- UsoChunkUpload, IAlphaUploadApiService from '@pvway/alpha-common'
+
+
+# AlphaVersionApiService
+
+`AlphaVersionApiService` is a service class designed to asynchronously fetch application version information from a provided URL and then provide that information as an observable to subscribing components in your application.
+
+## Initialization
+
+Before using `AlphaVersionApiService`, it must be initialized with a URL where the version information can be retrieved from, and optionally, a logger service for logging errors. Here is an example of initialization:
 
 ```typescript
-import {AlphaEnumSeverity, AlphaSeverityEnum} from "./alpha-severity-enum";
-import {AlphaEnumMutation, AlphaMutationEnum} from "./alpha-mutation-enum";
-import {AlphaHttpResultNotification} from "./alpha-http-result-notification";
-
-export class AlphaHttpResult {
-  status: AlphaSeverityEnum;
-  mutation: AlphaMutationEnum;
-  notifications: AlphaHttpResultNotification[];
-  hasMoreResults: boolean;
-  get failure(): boolean {
-    return this.status === AlphaSeverityEnum.Error
-      || this.status === AlphaSeverityEnum.Fatal;
-  }
-  get success(): boolean {
-    return !this.failure;
-  }
-
-  get message(): string {
-    return this.notifications
-      .map(n => n.message)
-      .join(", ");
-  }
-
-  protected constructor(
-    status: AlphaSeverityEnum,
-    mutation: AlphaMutationEnum,
-    notifications: AlphaHttpResultNotification[],
-    hasMoreResults: boolean) {
-    this.status = status;
-    this.mutation = mutation;
-    this.notifications = notifications;
-    this.hasMoreResults = hasMoreResults;
-  }
-
-  static factorFromDso(dso:{
-    statusCode: string,
-    mutationCode: string,
-    notifications: any[],
-    hasMoreResults: boolean
-  }): AlphaHttpResult {
-    return new AlphaHttpResult(
-      AlphaEnumSeverity.getValue(dso.statusCode),
-      AlphaEnumMutation.getValue(dso.mutationCode),
-      dso.notifications.map(
-        (n: any) => AlphaHttpResultNotification.factorFromDso(n)),
-      dso.hasMoreResults);
-  }
-
-}
-
-export class AlphaHttpObjectResult<T> extends AlphaHttpResult {
-
-  data: T;
-
-  private constructor(
-    status: AlphaSeverityEnum,
-    mutation: AlphaMutationEnum,
-    notifications: AlphaHttpResultNotification[],
-    hasMoreResults: boolean,
-    data: T) {
-    super(status, mutation, notifications, hasMoreResults);
-    this.data = data;
-  }
-
-  static override factorFromDso<T>(
-    dso: any,
-    factor?: (dsoData: any) => T): AlphaHttpObjectResult<T> {
-    const data: T = dso.data == null
-      ? null
-      : factor ? factor(dso.data) : dso.data;
-    return new AlphaHttpObjectResult<T>(
-      AlphaEnumSeverity.getValue(dso.statusCode),
-      AlphaEnumMutation.getValue(dso.mutationCode),
-      dso.notifications.map(
-        (n: any) => AlphaHttpResultNotification.factorFromDso(n)),
-      dso.hasMoreResults,
-      data);
-  }
-
-}
-
-export class AlphaHttpListResult<T> extends AlphaHttpResult {
-  data: T[];
-
-  constructor(
-    status: AlphaSeverityEnum,
-    mutation: AlphaMutationEnum,
-    notifications: AlphaHttpResultNotification[],
-    hasMoreResults: boolean,
-    data: T[]) {
-    super(status, mutation, notifications, hasMoreResults);
-    this.data = data;
-  }
-
-  static override factorFromDso<T>(
-    dso: any,
-    factor?: (dsoData: any) => T): AlphaHttpListResult<T> {
-
-    const dsoList = dso.data as any[];
-    const data: T[] = dsoList.map(
-      (dsoListItem: any) => factor
-        ? factor(dsoListItem)
-        : dsoListItem);
-    return new AlphaHttpListResult<T>(
-      AlphaEnumSeverity.getValue(dso.statusCode),
-      AlphaEnumMutation.getValue(dso.mutationCode),
-      dso.notifications.map(
-        (n: any) => AlphaHttpResultNotification.factorFromDso(n)),
-      dso.hasMoreResults,
-      data);
-  }
-}
+alphaVersionApiService.init("http://example.com/version", loggerService);
 ```
+In the example above, `"http://example.com/version"` is the URL that will be hit when `getVersion()` is called. `loggerService` is an instance of a class implementing the `IAlphaLoggerService` interface.
 
+## Fetching the Version
+
+The `getVersion()` method is used to fetch the version information. Here is an example of how to use this method:
+
+```typescript 
+alphaVersionApiService.getVersion().subscribe(version => { // Do something with the version. });
+```
+In the given example, the `getVersion()` method hits the URL provided in `init()` method and then maps the response to what is expected. If an error occurs during the HTTP request, it will be logged using the `postErrorLog()` method from the logger service provided upon initialization.
+
+## Customizing the Get Version Method
+
+In order to replace the default behavior of the `getVersion()` method, a custom method can be injected using `useGetVersion()` method.
+
+```typescript
+typescript alphaVersionApiService.useGetVersion(() => // Custom method that returns Observable . );
+```

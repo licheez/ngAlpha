@@ -2,9 +2,9 @@ import { TestBed } from '@angular/core/testing';
 
 import { AlphaVersionApiService } from './alpha-version-api.service';
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {IAlphaHttpObjectResultDso} from "./alpha-http-result";
 import {HttpErrorResponse} from "@angular/common/http";
 import {IAlphaLoggerService} from "@pvway/alpha-common";
+import {IAlphaHttpObjectResultDso} from "@pvway/alpha-common";
 
 describe('AlphaVersionApiService', () => {
 

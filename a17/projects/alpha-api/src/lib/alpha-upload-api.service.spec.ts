@@ -3,9 +3,9 @@ import {TestBed} from '@angular/core/testing';
 import {AlphaUploadApiService} from './alpha-upload-api.service';
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
 import {Observable} from "rxjs";
-import {IAlphaHttpObjectResultDso} from "./alpha-http-result";
 import {expect, it} from "@jest/globals";
 import {IAlphaLoggerService, IAlphaOAuthService} from "@pvway/alpha-common";
+import {IAlphaHttpObjectResultDso} from "@pvway/alpha-common";
 
 describe('AlphaUploadApiService', () => {
 

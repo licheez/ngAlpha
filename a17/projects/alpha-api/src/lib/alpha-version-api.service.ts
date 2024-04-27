@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {catchError, map, Observable, of, throwError} from "rxjs";
-import {AlphaHttpObjectResult} from "./alpha-http-result";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {IAlphaLoggerService, IAlphaVersionApiService} from "@pvway/alpha-common";
+import {AlphaHttpObjectResult} from "@pvway/alpha-common";
 
 @Injectable({
   providedIn: 'root'
