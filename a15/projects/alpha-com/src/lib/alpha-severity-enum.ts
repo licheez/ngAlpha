@@ -1,5 +1,3 @@
-/**
- * @deprecated this enum has been moved to alpha-common */
 export enum AlphaSeverityEnum {
   Ok,
   Debug,
@@ -9,8 +7,6 @@ export enum AlphaSeverityEnum {
   Fatal
 }
 
-/**
- * @deprecated this class has been moved to alpha-common */
 export class AlphaEnumSeverity {
   private static readonly Ok = 'O';
   private static readonly Debug = 'D';

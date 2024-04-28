@@ -1,6 +1,6 @@
 {
-  "name": "@pvway/alpha-api",
-  "version": "15.0.6",
+  "name": "@pvway/alpha-ems",
+  "version": "15.0.1",
   "peerDependencies": {
     "@angular/common": "^15.2.0",
     "@angular/core": "^15.2.0",
@@ -13,16 +13,16 @@
   "description": "This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.0.",
   "main": "index.js",
   "scripts": {
-    "test": "ng test AlphaApi"
+    "test": "ng test AlphaEms"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/licheez/ngAlpha.git#develop"
   },
   "keywords": [
-    "standard-response",
-    "response-wrapper",
-    "http-result"
+    "entity-management-service",
+    "abstract-form",
+    "abstract-crud-api"
   ],
   "author": "Pierre Van Wallendael",
   "license": "MIT",

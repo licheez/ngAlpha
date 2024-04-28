@@ -1,5 +1,4 @@
-/**
- * @deprecated this enum has been moved to alpha-common */
+
 export enum AlphaMutationEnum {
   None,
   Create,
@@ -7,8 +6,6 @@ export enum AlphaMutationEnum {
   Deactivate
 }
 
-/**
- * @deprecated this class has been moved to alpha-common */
 export class AlphaEnumMutation {
   private static readonly None = 'N';
   private static readonly Create = 'C';

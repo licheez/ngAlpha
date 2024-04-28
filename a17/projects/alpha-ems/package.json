@@ -1,10 +1,10 @@
 {
-  "name": "alpha-ems",
+  "name": "@pvway/alpha-ems",
   "version": "17.0.1",
   "peerDependencies": {
     "@angular/common": "^17.2.0",
     "@angular/core": "^17.2.0",
-    "@pvway/alpha-common": "^17.0.8"
+    "@pvway/alpha-common": "^17.0.9"
   },
   "dependencies": {
     "tslib": "^2.3.0"
@@ -20,5 +20,25 @@
     "setupFilesAfterEnv": [
       "./src/setup.jest.ts"
     ]
-  }
+  },
+  "description": "This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.0.",
+  "main": "index.js",
+  "scripts": {
+    "test": "ng test AlphaEms"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/licheez/ngAlpha.git#develop"
+  },
+  "keywords": [
+    "entity-management-service",
+    "abstract-form",
+    "abstract-crud-api"
+  ],
+  "author": "Pierre Van Wallendael",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/licheez/ngAlpha/issues"
+  },
+  "homepage": "https://github.com/licheez/ngAlpha/tree/develop#readme"
 }

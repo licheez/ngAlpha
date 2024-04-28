@@ -2,8 +2,6 @@ import {AlphaEnumSeverity, AlphaSeverityEnum} from "./alpha-severity-enum";
 import {AlphaEnumMutation, AlphaMutationEnum} from "./alpha-mutation-enum";
 import {AlphaHttpResultNotification} from "./alpha-http-result-notification";
 
-/**
- * @deprecated this interface has been moved to alpha-common */
 export interface IAlphaHttpResultDso {
   statusCode: string,
   mutationCode: string,
@@ -11,22 +9,16 @@ export interface IAlphaHttpResultDso {
   hasMoreResults: boolean
 }
 
-/**
- * @deprecated this interface has been moved to alpha-common */
 export interface IAlphaHttpObjectResultDso
   extends IAlphaHttpResultDso {
   data: any
 }
 
-/**
- * @deprecated this interface has been moved to alpha-common */
 export interface IAlphaHttpListResultDso
   extends IAlphaHttpResultDso {
   data: any[]
 }
 
-/**
- * @deprecated this class has been moved to alpha-common */
 export class AlphaHttpResult {
   status: AlphaSeverityEnum;
   mutation: AlphaMutationEnum;
@@ -91,8 +83,6 @@ export class AlphaHttpResult {
 
 }
 
-/**
- * @deprecated this class has been moved to alpha-common */
 export class AlphaHttpObjectResult<T>
   extends AlphaHttpResult {
 
@@ -126,8 +116,6 @@ export class AlphaHttpObjectResult<T>
 
 }
 
-/**
- * @deprecated this class has been moved to alpha-common */
 export class AlphaHttpListResult<T> extends AlphaHttpResult {
   data: T[];
 
