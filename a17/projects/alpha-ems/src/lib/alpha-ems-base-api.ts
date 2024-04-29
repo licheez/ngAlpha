@@ -18,7 +18,7 @@ export abstract class AlphaEmsBaseApi<TH, TB, TE> {
     protected mLbs: IAlphaLocalBusService,
     protected mHttp: HttpClient,
     protected mContext: string,
-    protected mControllerUrl: string,
+    protected mBaseUrl: string,
     private factorHead: (dso: any) => TH,
     private factorBody: (dso: any) => TB,
     private factorEi: (dso: any) => TE) {
@@ -37,7 +37,7 @@ export abstract class AlphaEmsBaseApi<TH, TB, TE> {
     if (!methodName) {
       methodName = 'list';
     }
-    const url = this.mControllerUrl + `/${methodName}`;
+    const url = this.mBaseUrl + `/${methodName}`;
     const call = this.mHttp
       .post<any>(url, body)
       .pipe(
@@ -61,7 +61,7 @@ export abstract class AlphaEmsBaseApi<TH, TB, TE> {
     if (!methodName) {
       methodName = 'body';
     }
-    const url = this.mControllerUrl + `/${methodName}`;
+    const url = this.mBaseUrl + `/${methodName}`;
     const body = new AlphaEmsUsoOptionSet(keys, options);
     const call = this.mHttp.post<any>(url, body)
       .pipe(
@@ -85,7 +85,7 @@ export abstract class AlphaEmsBaseApi<TH, TB, TE> {
     if (!methodName) {
       methodName = 'bodyFe';
     }
-    const url = this.mControllerUrl + `/${methodName}`;
+    const url = this.mBaseUrl + `/${methodName}`;
     const body = new AlphaEmsUsoOptionSet(keys, options);
     const call = this.mHttp.post<any>(url, body)
       .pipe(
@@ -117,7 +117,7 @@ export abstract class AlphaEmsBaseApi<TH, TB, TE> {
     if (!methodName) {
       methodName = 'ei';
     }
-    let url = this.mControllerUrl + `/${methodName}`;
+    let url = this.mBaseUrl + `/${methodName}`;
     const call = this.mHttp.post<any>(url, body)
       .pipe(
         map(
@@ -138,7 +138,7 @@ export abstract class AlphaEmsBaseApi<TH, TB, TE> {
     if (!methodName) {
       methodName = 'create';
     }
-    const url = this.mControllerUrl + `/${methodName}`;
+    const url = this.mBaseUrl + `/${methodName}`;
     const call = this.mHttp.post<any>(url, body)
       .pipe(
         map(
@@ -163,7 +163,7 @@ export abstract class AlphaEmsBaseApi<TH, TB, TE> {
     if (!methodName) {
       methodName = 'update';
     }
-    const url = this.mControllerUrl + `/${methodName}`;
+    const url = this.mBaseUrl + `/${methodName}`;
     const call = this.mHttp.post<any>(url, body)
       .pipe(
         map(
@@ -192,7 +192,7 @@ export abstract class AlphaEmsBaseApi<TH, TB, TE> {
     if(!methodName) {
       methodName = 'delete';
     }
-    const url = this.mControllerUrl + `/${methodName}`;
+    const url = this.mBaseUrl + `/${methodName}`;
     const body = new AlphaEmsUsoOptionSet(keys, options);
     const call = this.mHttp.post<any>(url, body)
       .pipe(
