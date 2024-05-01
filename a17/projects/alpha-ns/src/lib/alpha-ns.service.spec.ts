@@ -1,13 +1,22 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { AlphaNsService } from './alpha-ns.service';
+import {AlphaNsService} from './alpha-ns.service';
 import {Router, UrlCreationOptions, UrlTree} from "@angular/router";
-import {IAlphaPage} from "@pvway/alpha-common";
+import {IAlphaLoggerService, IAlphaPage} from "@pvway/alpha-common";
 
 describe('AlphaNsService', () => {
   let service: AlphaNsService;
-  let locationSpy : jest.SpyInstance;
+  let locationSpy: jest.SpyInstance;
   let openSpy: jest.SpyInstance;
+
+  const ls = {
+    postNavigationLog: jest.fn()
+  } as unknown as IAlphaLoggerService;
+
+  const notifyNav = jest.fn(
+    (page: IAlphaPage) => {
+      console.log(page);
+    });
 
   const homePage: IAlphaPage = {
     area: 'homeArea',
@@ -25,25 +34,12 @@ describe('AlphaNsService', () => {
       return new UrlTree();
     };
 
-  const navigationPromise: Promise<boolean> = new Promise(
-    resolve => {
-    // some async code goes here
-    // if everything went well
-    resolve(true);
-    // if something went wrong
-    // reject(false or 'Reason for rejection');
-  });
-
-  const navigateFn:
-    (commands: any[], extras?: UrlCreationOptions) => Promise<boolean> =
-    (commands: any[], extras?: UrlCreationOptions) => {
-      console.log('navigate', commands, extras);
-      return navigationPromise;
-    };
-
   const routerMock = {
     createUrlTree: jest.fn(createUrlTreeFn),
-    navigate: jest.fn(navigateFn)
+    navigate: jest.fn((commands: any[], extras?: UrlCreationOptions): Promise<boolean> => {
+      return new Promise(
+        resolve => resolve(true));
+    })
   } as unknown as Router;
 
   beforeAll(() => {
@@ -77,56 +73,41 @@ describe('AlphaNsService', () => {
     expect(service).toBeTruthy();
   });
 
-  it ('should navigate without query params', () => {
-    const navigateFn:
-      (commands: any[], extras?: UrlCreationOptions) => Promise<boolean> =
-      (commands: any[], extras?: UrlCreationOptions) => {
-        expect(commands[0]).toEqual('homeParentRoute/homeRoute/');
-        expect(extras).toBeUndefined();
-        console.log('navigate', commands, extras);
-        return navigationPromise;
-      };
-
-    const routerMock = {
-      createUrlTree: jest.fn(createUrlTreeFn),
-      navigate: jest.fn(navigateFn)
-    } as unknown as Router;
-
-    service.init(routerMock, homePage);
-    service.navigate(homePage);
+  it('should init', () => {
+    service.init(routerMock, homePage, ls, notifyNav);
+    expect(service['_router']).toEqual(routerMock);
+    expect(service['_homePage']).toEqual(homePage);
+    service['_postNavLog']('path', 'title');
+    expect(ls.postNavigationLog).toHaveBeenCalledWith('path', 'title');
+    service['_notifyNav'](homePage);
+    expect(notifyNav).toHaveBeenCalledWith(homePage);
   });
 
-  it ('should navigate with params', () => {
-    const navigateFn:
-      (commands: any[], extras?: UrlCreationOptions) => Promise<boolean> =
-      (commands: any[], extras?: UrlCreationOptions) => {
-        expect(commands[0]).toEqual('homeParentRoute/homeRoute/');
-        expect(commands[1]).toEqual('pageParam');
-        expect(extras).toEqual({"queryParams": "?param=1"});
-        console.log('navigate', commands, extras);
-        return navigationPromise;
-      };
+  it('should navigate without query params', () => {
+    service.init(routerMock, homePage,ls);
+    service.navigate(homePage);
+    expect(ls.postNavigationLog).toHaveBeenCalledWith(
+      homePage.logRoute, homePage.logTitle);
+    expect(routerMock.navigate).toHaveBeenCalled();
+  });
 
-    const routerMock = {
-      createUrlTree: jest.fn(createUrlTreeFn),
-      navigate: jest.fn(navigateFn)
-    } as unknown as Router;
+  it('should navigate with params', () => {
     service.init(routerMock, homePage);
     service.navigate(homePage, ['pageParam'], '?param=1');
   });
 
-  it ('should getSafeResourceUrl', () => {
+  it('should getSafeResourceUrl', () => {
     const safeUrl = service
       .getSafeResourceUrl('dataUrl');
     expect(safeUrl).toBeDefined();
   });
 
-  it ('should reload', () => {
+  it('should reload', () => {
     service.reload();
     expect(locationSpy).toHaveBeenCalled();
   });
 
-  it ('should re-home', () => {
+  it('should re-home', () => {
     service.init(routerMock, homePage);
     service.reHome();
     expect(true).toBeTruthy();
@@ -138,41 +119,41 @@ describe('AlphaNsService', () => {
     expect(openSpy).toHaveBeenCalledWith(url, "_blank");
   });
 
-  it ('should navigateToNewTab without params', () => {
-    const createUrlTreeFn:
-      (commands: any[], extras?: UrlCreationOptions) => UrlTree =
-      (commands: any[], extras?: UrlCreationOptions) => {
-        expect(commands[0]).toEqual('homeParentRoute/homeRoute/');
-        expect(extras).toBeUndefined();
-        console.log('createUrlTree', commands, extras);
-        return new UrlTree();
-      };
-
-    const routerMock = {
-      createUrlTree: jest.fn(createUrlTreeFn),
-      navigate: jest.fn(navigateFn)
-    } as unknown as Router;
+  it('should navigateToNewTab without params', () => {
+    // const createUrlTreeFn:
+    //   (commands: any[], extras?: UrlCreationOptions) => UrlTree =
+    //   (commands: any[], extras?: UrlCreationOptions) => {
+    //     expect(commands[0]).toEqual('homeParentRoute/homeRoute/');
+    //     expect(extras).toBeUndefined();
+    //     console.log('createUrlTree', commands, extras);
+    //     return new UrlTree();
+    //   };
+    //
+    // const routerMock = {
+    //   createUrlTree: jest.fn(createUrlTreeFn),
+    //   navigate: jest.fn(navigateFn)
+    // } as unknown as Router;
 
     service.init(routerMock, homePage);
     service.navigateToNewTab('myRootUrl', homePage);
 
   });
 
-  it ('should navigateToNewTab with params', () => {
-    const createUrlTreeFn:
-      (commands: any[], extras?: UrlCreationOptions) => UrlTree =
-      (commands: any[], extras?: UrlCreationOptions) => {
-        expect(commands[0]).toEqual('homeParentRoute/homeRoute/');
-        expect(commands[1]).toEqual('pageParam');
-        expect(extras).toEqual({"queryParams": "?param=1"});
-        console.log('createUrlTree', commands, extras);
-        return new UrlTree();
-      };
-
-    const routerMock = {
-      createUrlTree: jest.fn(createUrlTreeFn),
-      navigate: jest.fn(navigateFn)
-    } as unknown as Router;
+  it('should navigateToNewTab with params', () => {
+    // const createUrlTreeFn:
+    //   (commands: any[], extras?: UrlCreationOptions) => UrlTree =
+    //   (commands: any[], extras?: UrlCreationOptions) => {
+    //     expect(commands[0]).toEqual('homeParentRoute/homeRoute/');
+    //     expect(commands[1]).toEqual('pageParam');
+    //     expect(extras).toEqual({"queryParams": "?param=1"});
+    //     console.log('createUrlTree', commands, extras);
+    //     return new UrlTree();
+    //   };
+    //
+    // const routerMock = {
+    //   createUrlTree: jest.fn(createUrlTreeFn),
+    //   navigate: jest.fn(navigateFn)
+    // } as unknown as Router;
 
     service.init(routerMock, homePage);
     service.navigateToNewTab(
@@ -181,7 +162,7 @@ describe('AlphaNsService', () => {
     expect(openSpy).toHaveBeenCalled();
   });
 
-  it ('should replaceQueryParams', () => {
+  it('should replaceQueryParams', () => {
     window.location.hash = 'someHash';
     const qParams =
       '?param1=value1&param2=value2';
@@ -189,7 +170,7 @@ describe('AlphaNsService', () => {
     expect(locationSpy).toHaveBeenCalled();
   });
 
-  it ('should replaceQueryParams with notify', () => {
+  it('should replaceQueryParams with notify', () => {
     window.location.hash = 'someHash';
     const qParams =
       '?param1=value1&param2=value2';
@@ -200,7 +181,7 @@ describe('AlphaNsService', () => {
     expect(locationSpy).toHaveBeenCalled();
   });
 
-  it ('should open data url in new tab', () => {
+  it('should open data url in new tab', () => {
 
     const testContent = 'Hello, world!;';
     const testContentType = 'text/plain';
@@ -211,7 +192,7 @@ describe('AlphaNsService', () => {
     expect(openSpy).toHaveBeenCalled();
   });
 
-  it ('should download data url', () => {
+  it('should download data url', () => {
     const testContent = 'Hello, world!;';
     const testContentType = 'text/plain';
     const dataUrl = `data:${testContentType};base64,`

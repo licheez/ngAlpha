@@ -40,8 +40,14 @@ export class AlphaNsService
        notifyNavigation?: (page: IAlphaPage) => any): void {
     this._router = router;
     this._homePage = homePage;
-    this._postNavLog = ls?.postNavigationLog ?? (() => {});
-    this._notifyNav = notifyNavigation?? (() => {});
+    if (ls) {
+      this._postNavLog =
+        (path: string, title: string) => ls.postNavigationLog(path, title)
+    }
+    if (notifyNavigation) {
+      this._notifyNav =
+        (page: IAlphaPage) => notifyNavigation(page)
+    }
   }
 
   /**
@@ -89,10 +95,14 @@ export class AlphaNsService
 
     if (queryParams) {
       this._router.navigate(pi.commands, {queryParams})
-        .then(() => this._notifyNav(page));
+        .then(() => {
+          this._notifyNav(page);
+        });
     } else {
       this._router.navigate(pi.commands)
-        .then(() => this._notifyNav(page));
+        .then(() => {
+          this._notifyNav(page);
+        });
     }
   }
 

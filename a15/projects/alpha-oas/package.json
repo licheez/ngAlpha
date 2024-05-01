@@ -1,12 +1,12 @@
 {
   "name": "@pvway/alpha-oas",
-  "version": "15.0.7",
+  "version": "15.0.8",
   "peerDependencies": {
     "@angular/common": "^15.2.0",
     "@angular/core": "^15.2.0",
     "uuid": "^9.0.1",
     "@types/uuid": "^9.0.8",
-    "@pvway/alpha-common": "^15.0.4"
+    "@pvway/alpha-common": "^15.0.5"
   },
   "dependencies": {
     "tslib": "^2.3.0"
