@@ -32,7 +32,9 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/@fortawesome/fontawesome-free/js/all.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -380,7 +382,7 @@
           }
         }
       }
-    },
+    }
   },
   "cli": {
     "analytics": "8d1a791a-c316-4db6-97f4-331c0840818e"
