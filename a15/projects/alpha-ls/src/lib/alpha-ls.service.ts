@@ -1,7 +1,6 @@
 import {catchError, throwError} from "rxjs";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {Injectable} from "@angular/core";
-import {IAlphaLoggerService} from "@pvway/alpha-common";
 
 class UsoLog {
   context: string;
@@ -35,8 +34,7 @@ class UsoNavigationLog {
 @Injectable({
   providedIn: 'root'
 })
-export class AlphaLsService
-  implements IAlphaLoggerService {
+export class AlphaLsService {
 
   constructor(
     private mHttp: HttpClient) {
