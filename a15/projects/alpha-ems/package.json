@@ -1,10 +1,10 @@
 {
   "name": "@pvway/alpha-ems",
-  "version": "15.0.2",
+  "version": "15.1.0",
   "peerDependencies": {
     "@angular/common": "^15.2.0",
     "@angular/core": "^15.2.0",
-    "@pvway/alpha-common": "^15.0.5"
+    "@pvway/alpha-common": "^15.1.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
