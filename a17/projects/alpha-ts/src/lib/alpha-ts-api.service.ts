@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {catchError, map, Observable, Subscriber, throwError} from "rxjs";
 import {AlphaTranslationCache} from "./alpha-translation-cache";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {IAlphaTranslationCache} from "@pvway/alpha-common";
+import {IAlphaTranslationCache} from "./alpha-ts-abstractions";
 
 @Injectable({
   providedIn: 'root'

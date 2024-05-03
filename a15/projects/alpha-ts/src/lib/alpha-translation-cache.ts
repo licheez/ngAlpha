@@ -1,4 +1,4 @@
-import {IAlphaTranslationCache, IAlphaTranslationItem, IAlphaTranslationRow} from "@pvway/alpha-common";
+import {IAlphaTranslationCache, IAlphaTranslationItem, IAlphaTranslationRow} from "./alpha-ts-abstractions";
 
 
 export class AlphaTranslationCache implements IAlphaTranslationCache {
