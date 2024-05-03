@@ -2,21 +2,21 @@ import {Injectable} from '@angular/core';
 import {Location} from '@angular/common';
 import {Router, UrlTree} from "@angular/router";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
-import {AlphaPage} from "./alpha-page";
+import {IAlphaPage, AlphaPage} from "./alpha-page";
 import {AlphaNsUtils} from "./alpha-ns-utils";
-import {IAlphaLoggerService, IAlphaNavigationService, IAlphaPage} from "@pvway/alpha-common";
+
+
 
 @Injectable({
   providedIn: 'root'
 })
-export class AlphaNsService
-  implements IAlphaNavigationService {
+export class AlphaNsService {
 
   private _router!: Router;
   private _homePage!: IAlphaPage;
-  private _postNavLog: (path: string, title: string) => any = () => {
+  private _postNavigationLog: (path: string, title: string) => any = () => {
   };
-  private _notifyNav: (page: IAlphaPage) => any = () => {
+  private _notifyNavigation: (page: IAlphaPage) => any = () => {
   };
 
   constructor(
@@ -29,24 +29,21 @@ export class AlphaNsService
    *
    * @param {Router} router - The router object to be used for navigation.
    * @param {IAlphaPage} homePage - The homepage of the application.
-   * @param {IAlphaLoggerService} [ls] - Optional logger service for logging navigation events.
-   * @param {(page: IAlphaPage) => any} [notifyNavigation] - Optional callback function to be called when a navigation event occurs.
-   *
+   * @param {Function} postNavigationLog - A function that logs the navigation event.
+   * @param {Function} [notifyNavigation] - Optional callback function to be called when a navigation event occurs.
    * @return {void}
    */
   init(router: Router,
        homePage: IAlphaPage,
-       ls?: IAlphaLoggerService,
+       postNavigationLog?: (path: string, title: string) => any,
        notifyNavigation?: (page: IAlphaPage) => any): void {
     this._router = router;
     this._homePage = homePage;
-    if (ls) {
-      this._postNavLog =
-        (path: string, title: string) => ls.postNavigationLog(path, title)
+    if (postNavigationLog) {
+      this._postNavigationLog =postNavigationLog;
     }
     if (notifyNavigation) {
-      this._notifyNav =
-        (page: IAlphaPage) => notifyNavigation(page)
+      this._notifyNavigation = notifyNavigation;
     }
   }
 
@@ -91,17 +88,17 @@ export class AlphaNsService
 
     const pi = this.getPageInfo(page, pageParams);
 
-    this._postNavLog(pi.statsPath, pi.statsTitle);
+    this._postNavigationLog(pi.statsPath, pi.statsTitle);
 
     if (queryParams) {
       this._router.navigate(pi.commands, {queryParams})
         .then(() => {
-          this._notifyNav(page);
+          this._notifyNavigation(page);
         });
     } else {
       this._router.navigate(pi.commands)
         .then(() => {
-          this._notifyNav(page);
+          this._notifyNavigation(page);
         });
     }
   }
@@ -136,7 +133,7 @@ export class AlphaNsService
     // RouterModule.forRoot(routes, {useHash: true})
 
     const pi = this.getPageInfo(page, pageParams);
-    this._postNavLog(pi.statsPath, pi.statsTitle);
+    this._postNavigationLog(pi.statsPath, pi.statsTitle);
     let urlTree: UrlTree;
     if (queryParams) {
       urlTree = this._router.createUrlTree(pi.commands, {queryParams})
@@ -205,7 +202,7 @@ export class AlphaNsService
 class PageInfo {
   route: string;
   params: string[] | undefined;
-  private _statsPath: string;
+  private readonly _statsPath: string;
   get statsPath(): string {
     if (!this.params) {
       return this._statsPath;

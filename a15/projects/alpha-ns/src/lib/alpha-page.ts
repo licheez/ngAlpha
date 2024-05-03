@@ -1,4 +1,15 @@
-import {IAlphaPage} from "@pvway/alpha-common";
+export interface IAlphaPage {
+  /** the route towards the parent (usually a module) */
+  parentRoute: string;
+  /** the route towards the page within a module */
+  route: string;
+  /** area can be used for grouping pages */
+  area: string;
+  /** technical (bread crumb) route for a given page */
+  logRoute: string;
+  /** functional name for a given page */
+  logTitle: string;
+}
 
 export class AlphaPage implements IAlphaPage {
   parentRoute: string;
