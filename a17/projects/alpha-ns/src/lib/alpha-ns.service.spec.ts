@@ -2,16 +2,14 @@ import {TestBed} from '@angular/core/testing';
 
 import {AlphaNsService} from './alpha-ns.service';
 import {Router, UrlCreationOptions, UrlTree} from "@angular/router";
-import {IAlphaLoggerService, IAlphaPage} from "@pvway/alpha-common";
+import {IAlphaPage} from "./alpha-page";
 
 describe('AlphaNsService', () => {
   let service: AlphaNsService;
   let locationSpy: jest.SpyInstance;
   let openSpy: jest.SpyInstance;
 
-  const ls = {
-    postNavigationLog: jest.fn()
-  } as unknown as IAlphaLoggerService;
+  const postNavigationLog = jest.fn();
 
   const notifyNav = jest.fn(
     (page: IAlphaPage) => {
@@ -36,7 +34,7 @@ describe('AlphaNsService', () => {
 
   const routerMock = {
     createUrlTree: jest.fn(createUrlTreeFn),
-    navigate: jest.fn((commands: any[], extras?: UrlCreationOptions): Promise<boolean> => {
+    navigate: jest.fn((): Promise<boolean> => {
       return new Promise(
         resolve => resolve(true));
     })
@@ -74,19 +72,19 @@ describe('AlphaNsService', () => {
   });
 
   it('should init', () => {
-    service.init(routerMock, homePage, ls, notifyNav);
+    service.init(routerMock, homePage, postNavigationLog, notifyNav);
     expect(service['_router']).toEqual(routerMock);
     expect(service['_homePage']).toEqual(homePage);
-    service['_postNavLog']('path', 'title');
-    expect(ls.postNavigationLog).toHaveBeenCalledWith('path', 'title');
-    service['_notifyNav'](homePage);
+    service['_postNavigationLog']('path', 'title');
+    expect(postNavigationLog).toHaveBeenCalledWith('path', 'title');
+    service['_notifyNavigation'](homePage);
     expect(notifyNav).toHaveBeenCalledWith(homePage);
   });
 
   it('should navigate without query params', () => {
-    service.init(routerMock, homePage,ls);
+    service.init(routerMock, homePage, postNavigationLog);
     service.navigate(homePage);
-    expect(ls.postNavigationLog).toHaveBeenCalledWith(
+    expect(postNavigationLog).toHaveBeenCalledWith(
       homePage.logRoute, homePage.logTitle);
     expect(routerMock.navigate).toHaveBeenCalled();
   });

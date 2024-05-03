@@ -2,20 +2,12 @@ import {Injectable} from '@angular/core';
 import {AlphaTranslationCache} from "./alpha-translation-cache";
 import {AlphaTsApiService} from "./alpha-ts-api.service";
 import {Observable, Observer} from "rxjs";
-import {
-  IAlphaLoggerService,
-  IAlphaTranslationCache,
-  IAlphaTranslationItem,
-  IAlphaTranslationRow,
-  IAlphaTranslationService
-} from "@pvway/alpha-common";
-
+import {IAlphaTranslationCache, IAlphaTranslationItem, IAlphaTranslationRow} from "./alpha-ts-abstractions";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AlphaTsService
-  implements IAlphaTranslationService {
+export class AlphaTsService {
 
   private mContext = 'AlphaTsService';
   private mTranslationCache: IAlphaTranslationCache;
@@ -48,19 +40,18 @@ export class AlphaTsService
 
   /**
    * Initializes the service.
-   * @param {string} [getTranslationCacheUpdateUrl]
-   * - The URL for updating the translation cache.
-   * @param {IAlphaLoggerService} [ls]
-   * - The Logger service
+   * @param {string} [getTranslationCacheUpdateUrl] - The URL for updating the translation cache.
+   * @param {Function} [postErrorLog] - The function for posting error logs.
    * @return {Observable<string>} An Observable that emits a string value.
    */
   init(
     getTranslationCacheUpdateUrl?: string,
-    ls?: IAlphaLoggerService): Observable<string> {
+    postErrorLog?: (
+      context: string, method: string, error: string) => any): Observable<string> {
 
-    this.mApi.init(getTranslationCacheUpdateUrl, ls?.postErrorLog);
+    this.mApi.init(getTranslationCacheUpdateUrl, postErrorLog);
 
-    this.mPostErrorLog = ls?.postErrorLog;
+    this.mPostErrorLog = postErrorLog;
 
     return new Observable(
       (observer: Observer<any>) => {

@@ -3,34 +3,29 @@ import {TestBed} from '@angular/core/testing';
 import {AlphaPrimeService} from './alpha-prime.service';
 import {DialogService} from "primeng/dynamicdialog";
 import {jest} from "@jest/globals";
-import {
-  IAlphaLocalBusService, IAlphaLoggerService,
-  IAlphaOAuthService,
-  IAlphaTranslationService,
-  IAlphaUploadApiService
-} from "@pvway/alpha-common";
+import {of} from "rxjs";
 
 describe('AlphaPrimeService', () => {
   let service: AlphaPrimeService;
   let mockDialogService: DialogService;
   const mockTs = {
-    getTr: jest.fn()
-  } as unknown as IAlphaTranslationService;
+    getTr: jest.fn(() => '')
+  };
   const mockLs = {
     postNavigationLog: jest.fn()
-  } as unknown as IAlphaLoggerService;
+  };
   const mockOas = {
-    signIn: jest.fn()
-  } as unknown as IAlphaOAuthService;
+    signIn: jest.fn(() => of(true))
+  };
   const mockUas = {
-    upload: jest.fn(),
-    deleteUpload: jest.fn()
-  } as unknown as IAlphaUploadApiService;
+    upload: jest.fn(() => of('theId')),
+    deleteUpload: jest.fn(() => of({}))
+  };
   const mockLbs = {
-    publish: jest.fn(),
-    subscribe: jest.fn(),
+    publish: jest.fn(()=>1),
+    subscribe: jest.fn(()=> 1),
     unsubscribe: jest.fn()
-  } as unknown as IAlphaLocalBusService;
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({

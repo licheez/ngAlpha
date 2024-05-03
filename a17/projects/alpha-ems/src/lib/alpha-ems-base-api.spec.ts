@@ -1,13 +1,10 @@
 import {
-  IAlphaHttpListResultDso, IAlphaHttpObjectResultDso,
-  IAlphaLocalBusService,
-  IAlphaLoggerService,
-  IAlphaOAuthService
-} from "@pvway/alpha-common";
+  IAlphaHttpListResultDso, IAlphaHttpObjectResultDso } from "@pvway/alpha-common";
 import {AlphaEmsBaseApi} from "./alpha-ems-base-api";
 import {HttpClient } from "@angular/common/http";
-import {Observable, of, throwError} from "rxjs";
+import {of, throwError} from "rxjs";
 import {AlphaEmsBaseApiEvent} from "./alpha-ems-base-api-event";
+import {AlphaEmsService} from "./alpha-ems.service";
 
 interface IHead {
   id: string,
@@ -46,11 +43,10 @@ class Factory {
 }
 
 class AlphaEmsApi extends AlphaEmsBaseApi<IHead, IBody, IEi> {
-  constructor(ls: IAlphaLoggerService,
-              oas: IAlphaOAuthService,
-              lbs: IAlphaLocalBusService,
+  constructor(ems: AlphaEmsService,
               httpClient: HttpClient) {
-    super(ls, oas, lbs, httpClient,
+    super(
+      ems, httpClient,
       'AlphaEmApi', 'https://AlphaEm',
       Factory.factorHeadFromDso,
       Factory.factorBodyFromDso,
@@ -61,22 +57,12 @@ class AlphaEmsApi extends AlphaEmsBaseApi<IHead, IBody, IEi> {
 
 describe('AlphaEmsBaseApi', () => {
 
-  const ls = {
-    postErrorLog: jest.fn()
-  } as unknown as IAlphaLoggerService;
-  const oas = {
-    authorize: jest.fn(
-      (req: Observable<any>) => req)
-  } as unknown as IAlphaOAuthService;
-  const lbs = {
-    publish: jest.fn()
-  } as unknown as IAlphaLocalBusService;
-
+  const ems = new AlphaEmsService();
   let mockHttpClient = {} as unknown as HttpClient;
 
   it('should create an instance', () => {
     const emsApi = new AlphaEmsApi(
-      ls, oas, lbs, {} as unknown as HttpClient);
+      ems, {} as unknown as HttpClient);
     expect(emsApi).toBeTruthy();
   });
 
@@ -96,7 +82,7 @@ describe('AlphaEmsBaseApi', () => {
         post: jest.fn().mockImplementation(() => of(dso))
       } as unknown as HttpClient;
       const emsApi = new AlphaEmsApi(
-        ls, oas, lbs, mockHttpClient);
+        ems, mockHttpClient);
       emsApi.list(true, 0, 10)
         .subscribe({
           next: heads => expect(heads.length).toEqual(2)
@@ -109,12 +95,12 @@ describe('AlphaEmsBaseApi', () => {
           throwError(() => 'someError'))
       } as unknown as HttpClient;
       const emsApi = new AlphaEmsApi(
-        ls, oas, lbs, mockHttpClient);
+        ems, mockHttpClient);
       emsApi.list(true, 0, 10)
         .subscribe({
           error: e => {
             expect(e).toEqual('someError');
-            expect(ls.postErrorLog).toHaveBeenCalled();
+            expect(ems.postErrorLog).toHaveBeenCalled();
           }
         });
     });
@@ -136,7 +122,7 @@ describe('AlphaEmsBaseApi', () => {
         post: jest.fn().mockImplementation(() => of(dso))
       } as unknown as HttpClient;
       const emsApi = new AlphaEmsApi(
-        ls, oas, lbs, mockHttpClient);
+        ems, mockHttpClient);
       emsApi.getBody(true, ['1'])
         .subscribe({
           next: body => {
@@ -153,12 +139,12 @@ describe('AlphaEmsBaseApi', () => {
           () => throwError(() => 'someError'))
       } as unknown as HttpClient;
       const emsApi = new AlphaEmsApi(
-        ls, oas, lbs, mockHttpClient);
+        ems, mockHttpClient);
       emsApi.getBody(true, ['1'])
         .subscribe({
           error: e => {
             expect(e).toEqual('someError');
-            expect(ls.postErrorLog).toHaveBeenCalled();
+            expect(ems.postErrorLog).toHaveBeenCalled();
           }
         });
     });
@@ -185,7 +171,7 @@ describe('AlphaEmsBaseApi', () => {
         post: jest.fn().mockImplementation(() => of(dso))
       } as unknown as HttpClient;
       const emsApi = new AlphaEmsApi(
-        ls, oas, lbs, mockHttpClient);
+        ems, mockHttpClient);
       emsApi.getBodyFe(['1'])
         .subscribe({
           next: ec => {
@@ -201,12 +187,12 @@ describe('AlphaEmsBaseApi', () => {
           () => throwError(() => 'someError'))
       } as unknown as HttpClient;
       const emsApi = new AlphaEmsApi(
-        ls, oas, lbs, mockHttpClient);
+        ems, mockHttpClient);
       emsApi.getBodyFe(['1'])
         .subscribe({
           error: e => {
             expect(e).toEqual('someError');
-            expect(ls.postErrorLog).toHaveBeenCalled();
+            expect(ems.postErrorLog).toHaveBeenCalled();
           }
         });
     });
@@ -228,7 +214,7 @@ describe('AlphaEmsBaseApi', () => {
         post: jest.fn().mockImplementation(() => of(dso))
       } as unknown as HttpClient;
       const emsApi = new AlphaEmsApi(
-        ls, oas, lbs, mockHttpClient);
+        ems, mockHttpClient);
       emsApi.getEi()
         .subscribe({
           next: ei => {
@@ -243,12 +229,12 @@ describe('AlphaEmsBaseApi', () => {
           () => throwError(() => 'someError'))
       } as unknown as HttpClient;
       const emsApi = new AlphaEmsApi(
-        ls, oas, lbs, mockHttpClient);
+        ems, mockHttpClient);
       emsApi.getEi()
         .subscribe({
           error: e => {
             expect(e).toEqual('someError');
-            expect(ls.postErrorLog).toHaveBeenCalled();
+            expect(ems.postErrorLog).toHaveBeenCalled();
           }
         });
     });
@@ -269,7 +255,7 @@ describe('AlphaEmsBaseApi', () => {
         post: jest.fn().mockImplementation(() => of(dso))
       } as unknown as HttpClient;
       const emsApi = new AlphaEmsApi(
-        ls, oas, lbs, mockHttpClient);
+        ems, mockHttpClient);
       const event = new AlphaEmsBaseApiEvent(
         'create', body);
       emsApi.baseCreate({})
@@ -278,7 +264,7 @@ describe('AlphaEmsBaseApi', () => {
             expect(body.id).toEqual('1');
             expect(body.name).toEqual(('name'));
             expect(body.age).toEqual(1);
-            expect(lbs.publish).toHaveBeenCalledWith(event);
+            expect(ems.publish).toHaveBeenCalledWith(event);
           }
         });
     });
@@ -289,13 +275,13 @@ describe('AlphaEmsBaseApi', () => {
           throwError(() => 'someError'))
       } as unknown as HttpClient;
       const emsApi = new AlphaEmsApi(
-        ls, oas, lbs, mockHttpClient);
+        ems, mockHttpClient);
       emsApi.baseCreate({})
         .subscribe({
           error: e => {
             expect(e).toEqual('someError');
-            expect(ls.postErrorLog).toHaveBeenCalled();
-            expect(lbs.publish).not.toHaveBeenCalled();
+            expect(ems.postErrorLog).toHaveBeenCalled();
+            expect(ems.publish).not.toHaveBeenCalled();
           }
         });
     });
@@ -317,7 +303,7 @@ describe('AlphaEmsBaseApi', () => {
         post: jest.fn().mockImplementation(() => of(dso))
       } as unknown as HttpClient;
       const emsApi = new AlphaEmsApi(
-        ls, oas, lbs, mockHttpClient);
+        ems, mockHttpClient);
       const event = new AlphaEmsBaseApiEvent(
         'update', body);
       emsApi.baseUpdate(body)
@@ -326,7 +312,7 @@ describe('AlphaEmsBaseApi', () => {
             expect(body.id).toEqual('1');
             expect(body.name).toEqual(('name'));
             expect(body.age).toEqual(1);
-            expect(lbs.publish).toHaveBeenCalledWith(event);
+            expect(ems.publish).toHaveBeenCalledWith(event);
           }
         });
     });
@@ -338,13 +324,13 @@ describe('AlphaEmsBaseApi', () => {
           throwError(() => 'someError'))
       } as unknown as HttpClient;
       const emsApi = new AlphaEmsApi(
-        ls, oas, lbs, mockHttpClient);
+        ems, mockHttpClient);
       emsApi.baseUpdate(body)
         .subscribe({
           error: e => {
             expect(e).toEqual('someError');
-            expect(ls.postErrorLog).toHaveBeenCalled();
-            expect(lbs.publish).not.toHaveBeenCalled();
+            expect(ems.postErrorLog).toHaveBeenCalled();
+            expect(ems.publish).not.toHaveBeenCalled();
           }
         });
     });
@@ -366,14 +352,14 @@ describe('AlphaEmsBaseApi', () => {
         post: jest.fn().mockImplementation(() => of(dso))
       } as unknown as HttpClient;
       const emsApi = new AlphaEmsApi(
-        ls, oas, lbs, mockHttpClient);
+        ems, mockHttpClient);
       const event = new AlphaEmsBaseApiEvent(
         'delete', body);
       emsApi.delete(['1'])
         .subscribe({
           next: body => {
             expect(body).toBeUndefined();
-            expect(lbs.publish).toHaveBeenCalledWith(event);
+            expect(ems.publish).toHaveBeenCalledWith(event);
           }
         });
     });
@@ -391,7 +377,7 @@ describe('AlphaEmsBaseApi', () => {
         post: jest.fn().mockImplementation(() => of(dso))
       } as unknown as HttpClient;
       const emsApi = new AlphaEmsApi(
-        ls, oas, lbs, mockHttpClient);
+        ems, mockHttpClient);
       const event = new AlphaEmsBaseApiEvent(
         'update', body);
       emsApi.delete(['1'])
@@ -401,7 +387,7 @@ describe('AlphaEmsBaseApi', () => {
             expect(body!.id).toEqual('1');
             expect(body!.name).toEqual(('name'));
             expect(body!.age).toEqual(1);
-            expect(lbs.publish).toHaveBeenCalledWith(event);
+            expect(ems.publish).toHaveBeenCalledWith(event);
           }
         });
     });
@@ -412,13 +398,13 @@ describe('AlphaEmsBaseApi', () => {
           throwError(() => 'someError'))
       } as unknown as HttpClient;
       const emsApi = new AlphaEmsApi(
-        ls, oas, lbs, mockHttpClient);
+        ems, mockHttpClient);
       emsApi.delete(['1'])
         .subscribe({
           error: e => {
             expect(e).toEqual('someError');
-            expect(ls.postErrorLog).toHaveBeenCalled();
-            expect(lbs.publish).not.toHaveBeenCalled();
+            expect(ems.postErrorLog).toHaveBeenCalled();
+            expect(ems.publish).not.toHaveBeenCalled();
           }
         });
     });

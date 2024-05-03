@@ -1,16 +1,12 @@
 import {AlphaEmsBaseComponent} from './alpha-ems-base-component';
 import {AlphaEmsBaseApi} from "./alpha-ems-base-api";
-import {
-  IAlphaHttpObjectResultDso,
-  IAlphaLocalBusService,
-  IAlphaLoggerService,
-  IAlphaOAuthService
-} from "@pvway/alpha-common";
+import {IAlphaHttpObjectResultDso} from "@pvway/alpha-common";
 import {HttpClient} from "@angular/common/http";
 import {IAlphaEmsFormModel} from "./i-alpha-ems-form-model";
 import {Observable, of, throwError} from 'rxjs';
 import {AlphaEmsFormInput} from "./alpha-ems-form-input";
 import {AlphaEmsFormResult} from "./alpha-ems-form-result";
+import {AlphaEmsService} from "./alpha-ems.service";
 
 interface IHead {
   id: string,
@@ -48,12 +44,13 @@ class Factory {
   }
 }
 
+const ems = new AlphaEmsService();
+
 class AlphaEmsApi extends AlphaEmsBaseApi<IHead, IBody, IEi> {
-  constructor(ls: IAlphaLoggerService,
-              oas: IAlphaOAuthService,
-              lbs: IAlphaLocalBusService,
-              httpClient: HttpClient) {
-    super(ls, oas, lbs, httpClient,
+  constructor(
+    ems: AlphaEmsService,
+    httpClient: HttpClient) {
+    super(ems, httpClient,
       'AlphaEmApi', 'https://AlphaEm',
       Factory.factorHeadFromDso,
       Factory.factorBodyFromDso,
@@ -136,22 +133,10 @@ class EmsComponent extends AlphaEmsBaseComponent<IHead, IBody, IEi> {
 }
 
 describe('AlphaEmsBaseComponent', () => {
-
-  const ls = {
-    postErrorLog: jest.fn()
-  } as unknown as IAlphaLoggerService;
-  const oas = {
-    authorize: jest.fn(
-      (req: Observable<any>) => req)
-  } as unknown as IAlphaOAuthService;
-  const lbs = {
-    publish: jest.fn()
-  } as unknown as IAlphaLocalBusService;
-
   let mockHttpClient = {} as unknown as HttpClient;
 
   it('should create an instance', () => {
-    const api = new AlphaEmsApi(ls, oas, lbs, mockHttpClient);
+    const api = new AlphaEmsApi(ems, mockHttpClient);
     const emsComp = new EmsComponent(api);
     expect(emsComp).toBeTruthy();
   });
@@ -159,7 +144,7 @@ describe('AlphaEmsBaseComponent', () => {
   describe('loadForm for read', () => {
 
     it('should load form in read mode passing a valid body', () => {
-      const api = new AlphaEmsApi(ls, oas, lbs, mockHttpClient);
+      const api = new AlphaEmsApi(ems, mockHttpClient);
       const emsComp = new EmsComponent(api);
       const body: IBody = { id: '1', name: 'one', age: 1 };
       const fi = AlphaEmsFormInput.factorForRead(
@@ -185,7 +170,7 @@ describe('AlphaEmsBaseComponent', () => {
       const httpClient = {
         post: jest.fn(() => of(dso))
       } as unknown as HttpClient;
-      const api = new AlphaEmsApi(ls, oas, lbs, httpClient);
+      const api = new AlphaEmsApi(ems, httpClient);
       const emsComp = new EmsComponent(api);
       const fi = AlphaEmsFormInput
         .factorForRead<IBody>(['1']);
@@ -210,7 +195,7 @@ describe('AlphaEmsBaseComponent', () => {
         post: jest.fn(() =>
           throwError(() => 'someError'))
       } as unknown as HttpClient;
-      const api = new AlphaEmsApi(ls, oas, lbs, httpClient);
+      const api = new AlphaEmsApi(ems, httpClient);
       const emsComp = new EmsComponent(api);
       const fi = AlphaEmsFormInput
         .factorForRead<IBody>(['1']);
@@ -235,7 +220,7 @@ describe('AlphaEmsBaseComponent', () => {
       const httpClient = {
         post: jest.fn(() => of(dso))
       } as unknown as HttpClient;
-      const api = new AlphaEmsApi(ls, oas, lbs, httpClient);
+      const api = new AlphaEmsApi(ems, httpClient);
       const emsComp = new EmsComponent(api);
       const fi = AlphaEmsFormInput
         .factorForNew<IBody>();
@@ -268,7 +253,7 @@ describe('AlphaEmsBaseComponent', () => {
         post: jest.fn(() =>
           throwError(() => 'someError'))
       } as unknown as HttpClient;
-      const api = new AlphaEmsApi(ls, oas, lbs, httpClient);
+      const api = new AlphaEmsApi(ems, httpClient);
       const emsComp = new EmsComponent(api);
       const fi = AlphaEmsFormInput
         .factorForNew<IBody>();
@@ -295,7 +280,7 @@ describe('AlphaEmsBaseComponent', () => {
       const httpClient = {
         post: jest.fn(() => of(dso))
       } as unknown as HttpClient;
-      const api = new AlphaEmsApi(ls, oas, lbs, httpClient);
+      const api = new AlphaEmsApi(ems, httpClient);
       const emsComp = new EmsComponent(api);
       const fi = AlphaEmsFormInput
         .factorForEdit<IBody>(['1']);
@@ -329,12 +314,6 @@ describe('AlphaEmsBaseComponent', () => {
       emsComp.onDelete().subscribe({
         error: e => expect(e).toEqual('someError')
       });
-
-
-
-
-
-
     });
 
     it('should load form in edit mode handling an httpError', () => {
@@ -342,7 +321,7 @@ describe('AlphaEmsBaseComponent', () => {
         post: jest.fn(() =>
           throwError(() => 'someError'))
       } as unknown as HttpClient;
-      const api = new AlphaEmsApi(ls, oas, lbs, httpClient);
+      const api = new AlphaEmsApi(ems, httpClient);
       const emsComp = new EmsComponent(api);
       const fi = AlphaEmsFormInput
         .factorForEdit<IBody>(['1']);

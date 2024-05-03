@@ -8,7 +8,7 @@ import {Observable, of, throwError} from "rxjs";
 import {AlphaRefreshData} from "./alpha-refresh-data";
 import {AlphaSessionData} from "./alpha-session-data";
 import {HttpErrorResponse} from "@angular/common/http";
-import {AlphaAuthStatusEnum, IAlphaAuthEnvelop, IAlphaLoggerService} from "@pvway/alpha-common";
+import {AlphaAuthStatusEnum, IAlphaAuthEnvelop} from "./alpha-oas-abstractions";
 
 describe('AlphaOasService', () => {
 
@@ -16,9 +16,7 @@ describe('AlphaOasService', () => {
   let localStore: { [key: string]: string } = {};
   let service: AlphaOasService;
   let httpMock: HttpTestingController;
-  const ls = {
-    postErrorLog: jest.fn()
-  } as any as IAlphaLoggerService;
+  const postErrorLog= jest.fn();
   const onPrincipalUpdated = jest.fn();
 
   beforeEach(() => {
@@ -101,7 +99,7 @@ describe('AlphaOasService', () => {
     rd.store();
     service.init(
       undefined, undefined, undefined,
-      ls, onPrincipalUpdated).subscribe({
+      postErrorLog, onPrincipalUpdated).subscribe({
       next: status => {
         expect(status).toEqual('identity refreshed');
         const sd = AlphaSessionData.retrieve();
@@ -121,7 +119,7 @@ describe('AlphaOasService', () => {
     service.useRefresh(() => throwError(() => 'error'));
     service.init(
       undefined, undefined, undefined,
-      ls, onPrincipalUpdated).subscribe({
+      postErrorLog, onPrincipalUpdated).subscribe({
       error: error => {
         expect(service.principal.status).toEqual(AlphaAuthStatusEnum.Anonymous);
         expect(error).toEqual('error');
@@ -135,7 +133,7 @@ describe('AlphaOasService', () => {
     const refreshUrl = 'https://localhost/token';
     service.init(
       undefined, refreshUrl, undefined,
-      ls, onPrincipalUpdated).subscribe({
+      postErrorLog, onPrincipalUpdated).subscribe({
       error: error => {
         expect(service.principal.status)
           .toEqual(AlphaAuthStatusEnum.Anonymous);
@@ -159,7 +157,7 @@ describe('AlphaOasService', () => {
     expect(sd.isExpiredOrExpiring).toBeFalsy();
     service.init(
       getMeUrl, undefined, undefined,
-      ls, onPrincipalUpdated).subscribe({
+      postErrorLog, onPrincipalUpdated).subscribe({
       next: status => {
         expect(status).toEqual('principal reloaded');
       }
@@ -226,7 +224,7 @@ describe('AlphaOasService', () => {
 
     service.init(
       getMeUrl, refreshUrl, undefined,
-      ls, onPrincipalUpdated).subscribe({
+      postErrorLog, onPrincipalUpdated).subscribe({
       next: status => {
         expect(status).toBeTruthy();
       }

@@ -1,12 +1,6 @@
 import {Injectable} from '@angular/core';
 import {DialogService} from "primeng/dynamicdialog";
 import {Observable, of} from "rxjs";
-import {
-  IAlphaLocalBusService, IAlphaLoggerService,
-  IAlphaOAuthService,
-  IAlphaTranslationService,
-  IAlphaUploadApiService
-} from "@pvway/alpha-common";
 
 @Injectable({
   providedIn: 'root'
@@ -48,50 +42,120 @@ export class AlphaPrimeService {
     callback: (payload: any) => any,
     channel?: string) => number
     = () => -1;
-  unsubscribe:(
-    id: number) => any = () => {};
+  unsubscribe: (
+    id: number) => any = () => {
+  };
 
   /**
    * Initializes the service.
    *
    * @param {DialogService} ds - The dialog service used for displaying dialogs.
-   * @param {boolean} isProduction - A flag indicating if the application is running in production mode.   *
-   * @param {IAlphaTranslationService} ts - AlphaTranslationService
-   * @param {IAlphaLoggerService} ls - (optional) AlphaLoggerService
-   * @param {IAlphaOAuthService} oas - (optional) OAuthService containing signIn method
-   * @param {IAlphaUploadApiService} uas - (optional) UploadApiService containing upload and deleteUpload methods.
-   * @param {IAlphaLocalBusService} lbs - (optional) LocalBusService containing subscribe and unSubscribe methods.
+   * @param {boolean} isProduction - A flag indicating if the application is running in production mode.
+   * @param translationService
+   * @param loggerService
+   * @param oAuthService
+   * @param uploadService
+   * @param localBusService
    * @param {string} modalStyleClass - (optional) The CSS class to be applied to modal dialogs.
    * @return {void}
    */
   init(
     ds: DialogService,
     isProduction: boolean,
-    ts: IAlphaTranslationService,
-    ls?: IAlphaLoggerService,
-    oas?: IAlphaOAuthService,
-    uas?: IAlphaUploadApiService,
-    lbs?: IAlphaLocalBusService,
+    translationService: {
+      getTr: (
+        key: string,
+        languageCode?: string) => string
+    },
+    loggerService?: {
+      postNavigationLog: (
+        path: string,
+        title: string) => any
+    },
+    oAuthService?: {
+      signIn: (
+        username: string,
+        password: string,
+        rememberMe: boolean) => Observable<boolean>
+    },
+    uploadService?: {
+      upload: (
+        data: any,
+        notifyProgress: (progress: number) => any) => Observable<string>,
+      deleteUpload: (
+        uploadId: string) => Observable<any>
+    },
+    localBusService?: {
+      publish: (
+        payload: any,
+        channel: string) => number,
+      subscribe: (
+        callback: (payload: any) => any,
+        channel?: string) => number,
+      unsubscribe: (
+        id: number) => any
+    },
     modalStyleClass?: string): void {
     this.ds = ds;
     this.isProduction = isProduction;
-    this.getTr = ts.getTr;
-    if (ls) {
-      this.postNavigationLog = ls.postNavigationLog;
+    this.getTr = translationService.getTr;
+    if (loggerService) {
+      this.addLoggerService(
+        loggerService.postNavigationLog)
     }
-    if (oas) {
-      this.signIn = oas.signIn;
+    if (oAuthService) {
+      this.addOAuthService(oAuthService.signIn);
     }
-    if (uas) {
-      this.upload = uas.upload;
-      this.deleteUpload = uas.deleteUpload;
+    if (uploadService) {
+      this.addUploadService(
+        uploadService.upload,
+        uploadService.deleteUpload);
     }
-    if (lbs) {
-      this.publish = lbs.publish;
-      this.subscribe = lbs.subscribe;
-      this.unsubscribe = lbs.unsubscribe;
+    if (localBusService) {
+      this.addLocalBusService(
+        localBusService.publish,
+        localBusService.subscribe,
+        localBusService.unsubscribe);
     }
     this.modalStyleClass = modalStyleClass;
+  }
+
+  addLoggerService(postNavigationLog: (
+    path: string,
+    title: string) => any): void {
+    this.postNavigationLog = postNavigationLog;
+  }
+
+  addOAuthService(
+    signIn: (
+      username: string,
+      password: string,
+      rememberMe: boolean) => Observable<boolean>) {
+    this.signIn = signIn;
+  }
+
+  addUploadService(
+    upload: (
+      data: any,
+      notifyProgress: (progress: number) => any) => Observable<string>,
+    deleteUpload: (
+      uploadId: string) => Observable<any>): void {
+    this.upload = upload;
+    this.deleteUpload = deleteUpload;
+  }
+
+  addLocalBusService(
+    publish: (
+      payload: any,
+      channel: string) => number,
+    subscribe: (
+      callback: (payload: any) => any,
+      channel?: string) => number,
+    unsubscribe: (
+      id: number) => any): void {
+    this.publish = publish;
+    this.subscribe = subscribe;
+    this.unsubscribe = unsubscribe;
   }
 
   generateRandomName(len?: number): string {

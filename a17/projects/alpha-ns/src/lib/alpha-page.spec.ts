@@ -1,7 +1,5 @@
-// Importing required libraries and modules
-import { AlphaPage } from './alpha-page';
+import { IAlphaPage, AlphaPage } from './alpha-page';
 import { describe, expect, it } from '@jest/globals';
-import {IAlphaLoggerService, IAlphaPage} from "@pvway/alpha-common";
 
 describe('AlphaPage', () => {
   let alphaPage: AlphaPage;
@@ -31,5 +29,4 @@ describe('AlphaPage', () => {
     expect(alphaPage.logTitle).toBe('Log Title');
   });
 
-  // More tests to be written here for other methods and properties as you define them
 });
