@@ -1,8 +1,7 @@
 import { Injectable, Type } from '@angular/core';
-import { DialogService, DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { Observable, Subscriber } from 'rxjs';
 import {AlphaPrimeService} from "./alpha-prime.service";
-import {IAlphaLoggerService} from "@pvway/alpha-common";
 
 @Injectable({
   providedIn: 'root'
@@ -10,23 +9,6 @@ import {IAlphaLoggerService} from "@pvway/alpha-common";
 export class AlphaPrimeModalService {
 
   constructor(private mPs: AlphaPrimeService) {
-  }
-  /**
-   * Initializes the dialog service.
-   *
-   * @param {DialogService} ds - The DialogService object to be initialized.
-   * @param {DialogService} ls - The Alpha Logger Service
-   * @param {string} [modalStyleClass] - Optional. The CSS class to be applied to the modals created by the DialogService.
-   * @return {void}
-   * @deprecated please use the AlphaPrimeService init method for initializing this service
-   */
-  init(
-    ds: DialogService,
-    ls: IAlphaLoggerService,
-    modalStyleClass?: string): void {
-    this.mPs.ds = ds;
-    this.mPs.postNavigationLog = ls.postNavigationLog;
-    this.mPs.modalStyleClass = modalStyleClass;
   }
 
   /**
