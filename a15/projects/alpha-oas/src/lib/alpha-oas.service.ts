@@ -6,16 +6,13 @@ import {AlphaSessionData} from "./alpha-session-data";
 import {AlphaRefreshData} from "./alpha-refresh-data";
 import {AlphaAuthEnvelopFactory} from "./alpha-auth-envelop";
 import {AlphaUserFactory} from "./alpha-user";
-import {
-  AlphaAuthStatusEnum, IAlphaAuthEnvelop, IAlphaLoggerService,
-  IAlphaOAuthService, IAlphaPrincipal, IAlphaUser
-} from "@pvway/alpha-common";
+import {AlphaAuthStatusEnum, IAlphaAuthEnvelop,
+  IAlphaPrincipal, IAlphaUser} from "./alpha-oas-abstractions";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AlphaOasService
-  implements IAlphaOAuthService {
+export class AlphaOasService {
 
   private readonly mContext = 'OAuthService';
   private readonly mPrincipal: AlphaPrincipal;
@@ -47,24 +44,25 @@ export class AlphaOasService
    * @param {string} [getMeUrl] - The URL for retrieving user information.
    * @param {string} [refreshUrl] - The URL for refreshing authentication.
    * @param {string} [signInUrl] - The URL for signing in.
-   * @param {IAlphaLoggerService} [ls] - the logger
-   * @param {(principal: IAlphaPrincipal) => any} [onPrincipalUpdated] -
-   * a delegate that will be triggered whenever the principal is updated
-   * @return {Observable<any>} - An Observable that emits the result of the initialization process.
+   * @param {function} [postErrorLog] - A function that handles error logging.
+   *   It accepts three parameters: context, method, and error.
+   * @param {function} [onPrincipalUpdated] - A function that will be triggered whenever the principal is updated.
+   *   It accepts one parameter: principal of type IAlphaPrincipal.
+   *
+   * @return {Observable} - An Observable that emits the result of the initialization process.
    */
   init(getMeUrl?: string,
        refreshUrl?: string,
        signInUrl?: string,
-       ls?: IAlphaLoggerService,
+       postErrorLog?: (context: string, method: string, error: string) => any,
        onPrincipalUpdated?: (principal: IAlphaPrincipal) => any): Observable<string> {
 
     this.mSignInUrl = signInUrl;
     this.mRefreshUrl = refreshUrl;
     this.mGetMeUrl = getMeUrl;
-    // postErrorLog defaults to nop
-    this.mPostErrorLog = ls === undefined ?
-      (() => {}) : ls.postErrorLog;
-    // notifyStateChange defaults to nop
+    if (postErrorLog) {
+      this.mPostErrorLog = postErrorLog;
+    }
     if (onPrincipalUpdated) {
       this.mOnPrincipalUpdated = onPrincipalUpdated;
     }

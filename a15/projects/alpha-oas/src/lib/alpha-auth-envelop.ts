@@ -1,5 +1,7 @@
+// noinspection JSUnresolvedReference
+
 import { AlphaUserFactory } from './alpha-user';
-import {IAlphaAuthEnvelop, IAlphaUser} from "@pvway/alpha-common";
+import {IAlphaAuthEnvelop, IAlphaUser} from "./alpha-oas-abstractions";
 
 // FACTORY
 export class AlphaAuthEnvelopFactory {

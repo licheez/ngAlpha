@@ -1,6 +1,8 @@
-// FACTORY
-import {IAlphaUser} from "@pvway/alpha-common";
+// noinspection JSUnresolvedReference
 
+import {IAlphaUser} from "./alpha-oas-abstractions";
+
+// FACTORY
 export class AlphaUserFactory {
   static factorFromDso(dso: any): IAlphaUser {
     const ds = new DsoSlicer(dso);

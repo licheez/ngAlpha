@@ -1,4 +1,6 @@
-import {IAlphaPrincipal, AlphaAuthStatusEnum, IAlphaUser} from "@pvway/alpha-common";
+// noinspection JSUnresolvedReference
+
+import {AlphaAuthStatusEnum, IAlphaPrincipal, IAlphaUser} from "./alpha-oas-abstractions";
 
 export class AlphaPrincipal implements IAlphaPrincipal {
 
