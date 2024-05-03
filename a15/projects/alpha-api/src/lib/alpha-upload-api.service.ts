@@ -1,13 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable, Subscriber, of, mergeMap, catchError, throwError} from "rxjs";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {
-  AlphaHttpObjectResult,
-  IAlphaHttpObjectResultDso,
-  IAlphaLoggerService,
-  IAlphaOAuthService,
-  IAlphaUploadApiService
-} from "@pvway/alpha-common";
+import {AlphaHttpObjectResult, IAlphaHttpObjectResultDso} from "@pvway/alpha-common";
 
 class UsoChunkUpload {
   dataChunk: string;
@@ -24,8 +18,7 @@ class UsoChunkUpload {
 @Injectable({
   providedIn: 'root'
 })
-export class AlphaUploadApiService
-  implements IAlphaUploadApiService{
+export class AlphaUploadApiService{
 
   private mContext = "AlphaUploadApiService";
   private mChunkSize = 3000000; // 3 Mb
@@ -42,22 +35,22 @@ export class AlphaUploadApiService
    *
    * @param {string} uploadUrl - The URL to which the file uploads will be sent.
    * @param {string} deleteUploadUrl - The URL to which delete requests will be sent.
-   * @param {IAlphaOAuthService} oas - The AlphaOAuthService instance for authorization.
-   * @param {IAlphaLoggerService} ls - The AlphaLoggerService instance for error logging.
    * @param {number} [chunkSize] - Optional parameter for specifying the upload chunk size.
    *                              If not provided, a default value will be used.
-   * @return {void}
+   * @param {Function} authorize - A function that authorizes HTTP requests.
+   * @param {Function} postErrorLog - A function that posts error logs.
+   * @return {void} A void return type.
    */
   init(
     uploadUrl: string,
     deleteUploadUrl: string,
-    oas: IAlphaOAuthService,
-    ls: IAlphaLoggerService,
+    authorize: (httpRequest: Observable<any>) => Observable<any>,
+    postErrorLog: (context: string, method: string, error: string) => any,
     chunkSize?: number): void {
     this.mUploadUrl = uploadUrl;
     this.mDeleteUploadUrl = deleteUploadUrl;
-    this.mAuthorize = oas.authorize;
-    this.mPostErrorLog = ls.postErrorLog;
+    this.mAuthorize = authorize;
+    this.mPostErrorLog = postErrorLog;
     if (chunkSize) {
       this.mChunkSize = chunkSize;
     }

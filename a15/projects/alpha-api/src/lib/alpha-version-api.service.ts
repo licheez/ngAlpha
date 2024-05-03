@@ -1,13 +1,12 @@
 import {Injectable} from '@angular/core';
 import {catchError, map, Observable, of, throwError} from "rxjs";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {AlphaHttpObjectResult, IAlphaLoggerService, IAlphaVersionApiService} from "@pvway/alpha-common";
+import {AlphaHttpObjectResult} from "@pvway/alpha-common";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AlphaVersionApiService
-  implements IAlphaVersionApiService {
+export class AlphaVersionApiService {
 
   private readonly mContext = "AlphaVersionApiService";
   private mUrl: string | undefined;
@@ -24,14 +23,14 @@ export class AlphaVersionApiService
    * Initializes the application with the provided version URL and optional error logging function.
    *
    * @param {string} getVersionUrl - The URL to retrieve the version information from.
-   * @param {IAlphaLoggerService} ls - The service for error logging (optional).
+   * @param postErrorLog
    * @return {void}
    */
   init(
     getVersionUrl: string,
-    ls: IAlphaLoggerService):void {
+    postErrorLog: (context: string, method: string, error: string) => any):void {
     this.mUrl = getVersionUrl;
-    this.postErrorLog = ls.postErrorLog;
+    this.postErrorLog = postErrorLog;
   }
 
   /** Inject your own getVersion method  */
