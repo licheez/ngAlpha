@@ -1,28 +1,16 @@
 import {TestBed} from '@angular/core/testing';
 
 import {AlphaTsService} from './alpha-ts.service';
-import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {AlphaTsApiService} from "./alpha-ts-api.service";
 import {of, throwError} from "rxjs";
 import {AlphaTranslationCache} from "./alpha-translation-cache";
+import {HttpClient} from "@angular/common/http";
 
 describe('AlphaTsService', () => {
   let service: AlphaTsService;
-  let apiSvc: AlphaTsApiService;
-  let httpMock: HttpTestingController;
   const postErrorLog = jest.fn();
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [AlphaTsApiService]
-    });
+    TestBed.configureTestingModule({});
     service = TestBed.inject(AlphaTsService);
-    httpMock = TestBed.inject(HttpTestingController);
-    apiSvc = TestBed.inject(AlphaTsApiService);
-  });
-
-  afterEach(() => {
-    httpMock.verify();
   });
 
   it('should be created', () => {
@@ -55,10 +43,14 @@ describe('AlphaTsService', () => {
         translationsCache: tc
       }
     };
-
+    const httpClient = {
+      get: jest.fn(() => of(dso))
+    } as unknown as HttpClient;
+    const spy =
+      jest.spyOn(httpClient, 'get');
     const url = 'https://localhost/getTcu';
     service.changeLanguageCode('fr');
-    service.init(url)
+    service.init(httpClient, url)
       .subscribe({
         next: status => {
           expect(status).toEqual('translations loaded');
@@ -66,25 +58,26 @@ describe('AlphaTsService', () => {
           expect(tr).toEqual('Ajouter');
         }
       });
-    const req = httpMock
-      .match(() => true)[0];
-    expect(req.request.method).toEqual('GET');
-    req.flush(dso);
+    expect(spy).toHaveBeenCalled();
   });
 
   it('init should fail when calling the api', () => {
     // let's fake the call to the api by returning the
     // default translation cache
-    apiSvc.useGetTranslationCacheUpdate(
-      () =>
-        throwError(() => 'error'));
+    const httpClient = {
+      get: jest.fn(() =>
+        throwError(() => 'error'))
+    } as unknown as HttpClient;
+    const spy =
+      jest.spyOn(httpClient, 'get');
     const url = 'https://localhost/getTcu';
 
-    service.init(url, postErrorLog).subscribe({
+    service.init(httpClient, url, postErrorLog).subscribe({
       error: e => {
         expect(e).toEqual('error');
       }
     });
+    expect(spy).toHaveBeenCalled();
   });
 
   it('should find the key and the language', () => {
@@ -103,7 +96,9 @@ describe('AlphaTsService', () => {
 
   it('should not find the key', () => {
     service.init(
-      undefined, postErrorLog);
+      undefined,
+      undefined,
+      postErrorLog);
     const key = 'noKey';
     service.changeLanguageCode('zh');
     const translation = service.getTr(key);

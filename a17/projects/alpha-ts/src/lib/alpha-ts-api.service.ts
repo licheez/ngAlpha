@@ -9,27 +9,35 @@ import {IAlphaTranslationCache} from "./alpha-ts-abstractions";
 })
 export class AlphaTsApiService {
 
+  private mHttp: HttpClient | undefined;
   private mContext = 'AlphaTsApiService';
   private _getTranslationCacheUpdateUrl: string | undefined;
   private _getTranslationCacheUpdate = this.getTranslationCacheUpdateBuiltIn;
-  private mPostErrorLog: ((context: string, method: string, error: string) => any) | undefined;
-
-  constructor(
-    private mHttp: HttpClient) {
-  }
+  private mPostErrorLog:
+    (context: string, method: string, error: string) => any =
+    () => {};
 
   /**
    * Initializes the method with the provided parameters.
    *
+   * @param httpClient
    * @param {string | undefined} getTranslationCacheUpdateUrl - The URL for updating the translation cache.
    * @param {Function} [postErrorLog] - The function for posting error logs. It takes three parameters: context (string), method (string), error (string).
    * @return {void}
    */
   init(
-    getTranslationCacheUpdateUrl: string | undefined,
+    httpClient?: HttpClient,
+    getTranslationCacheUpdateUrl?: string,
     postErrorLog?: (context: string, method: string, error: string) => any): void {
-    this._getTranslationCacheUpdateUrl = getTranslationCacheUpdateUrl;
-    this.mPostErrorLog = postErrorLog;
+    if (httpClient) {
+      this.mHttp = httpClient;
+    }
+    if (getTranslationCacheUpdateUrl) {
+      this._getTranslationCacheUpdateUrl = getTranslationCacheUpdateUrl;
+    }
+    if (postErrorLog) {
+      this.mPostErrorLog = postErrorLog;
+    }
   }
 
   useGetTranslationCacheUpdate(getTranslationCacheUpdate: (lastUpdateDate: Date) =>
@@ -45,7 +53,8 @@ export class AlphaTsApiService {
   private getTranslationCacheUpdateBuiltIn(lastUpdateDate: Date):
     Observable<IAlphaTranslationCache | null> {
     const pDate = encodeURI(lastUpdateDate.toISOString());
-    if (!this._getTranslationCacheUpdateUrl) {
+    if (!this._getTranslationCacheUpdateUrl
+        || this.mHttp === undefined) {
       return new Observable(
         (subscriber: Subscriber<IAlphaTranslationCache | null>) => {
           const tc = AlphaTranslationCache.default;
@@ -70,9 +79,7 @@ export class AlphaTsApiService {
           return AlphaTranslationCache.factorFromDso(dsoTc);
         }),
         catchError((error: HttpErrorResponse) => {
-          if (this.mPostErrorLog) {
-            this.mPostErrorLog(this.mContext, url, JSON.stringify(error));
-          }
+          this.mPostErrorLog(this.mContext, url, JSON.stringify(error));
           return throwError(() => error);
         }));
   }

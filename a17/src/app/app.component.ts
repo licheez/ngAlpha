@@ -7,9 +7,12 @@ import {DividerModule} from "primeng/divider";
 import {AlphaLbsService} from "@pvway/alpha-lbs";
 import {AlphaLsService} from "@pvway/alpha-ls";
 import {AlphaNsService} from "@pvway/alpha-ns";
+import {AlphaPrimeService} from "@pvway/alpha-prime";
+import {AlphaTsService} from "@pvway/alpha-ts";
 
 import {AppSitemap} from "./app.sitemap";
 import {IAlphaPage} from "@pvway/alpha-ns";
+import {of} from "rxjs";
 
 @Component({
   standalone: true,
@@ -53,11 +56,19 @@ export class AppComponent implements OnInit {
     (subscriptionId: number) => any =
     (subscriptionId: number) => this.unsubscribe(subscriptionId);
 
+  // TS
+  getTr:
+    (key: string, languageCode?: string) => string =
+    (key: string, languageCode?: string) =>
+      this.mTs.getTr(key, languageCode);
+
   constructor(
     private mRouter: Router,
     private mLbs: AlphaLbsService,
     private mLs: AlphaLsService,
-    private mNs: AlphaNsService
+    private mNs: AlphaNsService,
+    private mPs: AlphaPrimeService,
+    private mTs: AlphaTsService
   ) { }
 
   ngOnInit() {
@@ -68,6 +79,7 @@ export class AppComponent implements OnInit {
   initAlpha(): void {
     this.initLs();
     this.initNs();
+    this.initPs();
   }
 
   initLs(): void {
@@ -90,6 +102,29 @@ export class AppComponent implements OnInit {
     this.mNs.init(
       this.mRouter, AppSitemap.welcome,
       this.postNavigationLog, notifyNavigation);
+  }
+
+  initPs():void {
+    const ts = {
+      getTr: this.getTr
+    };
+    const oas = {
+      signIn: () => of(true)
+    };
+    const ls = {
+      postNavigationLog: this.postNavigationLog
+    };
+    const uas = {
+      upload:() => of('uploadId'),
+      deleteUpload: () => of({})
+    };
+    const lbs = {
+      publish: this.mLbs.publish,
+      subscribe: this.mLbs.subscribe,
+      unsubscribe: this.mLbs.unsubscribe
+    };
+    this.mPs.init(
+      false, ts, ls, oas, uas, lbs);
   }
 
 }
