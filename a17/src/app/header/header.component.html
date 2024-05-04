@@ -1,6 +1,6 @@
 <alpha-prime-debug-tag tag="HeaderComponent"></alpha-prime-debug-tag>
 
-<div class="grid align-items-center">
+<div class="grid align-items-center" style="display: flex;">
   <div class="col">
     <button
       pButton class="mr-2 p-button p-button-rounded"
@@ -10,7 +10,8 @@
       pButton class="mr-6 p-button p-button-rounded"
       type="button" (click)="onPs()">Ps</button>
   </div>
-  <div class="col-fixed">
+  <div class="col-fixed align-items-center" style="display: flex;">
+    <span class="font-italic mr-4">{{currentPage}}</span>
     <button
       pButton class="p-button-secondary p-button-rounded p-button-sm"
       type="button" (click)="onToggleTags()">Toggle tags</button>
