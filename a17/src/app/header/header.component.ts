@@ -44,6 +44,6 @@ export class HeaderComponent implements OnInit {
   }
 
   onPs(): void {
-    this.mNs.navigate(AppSitemap.psOutlet);
+    this.mNs.navigate(AppSitemap.psIntro);
   }
 }

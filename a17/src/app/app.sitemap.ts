@@ -23,20 +23,28 @@ export class AppSitemap {
   //#endregion
 
   //#region Ps
-  static psHome: IAlphaPage = {
-    parentRoute: 'ps',
+  static psIntro: IAlphaPage = {
+    parentRoute: 'ps/',
     route: 'home',
     area: 'ps',
     logRoute: '/ps/home',
-    logTitle: 'Prime Service: Home'
+    logTitle: 'Prime Service: Intro'
   };
 
   static psButtons: IAlphaPage = {
-    parentRoute: 'ps',
+    parentRoute: 'ps/',
     route: 'buttons',
     area: 'ps',
     logRoute: '/ps/buttons',
     logTitle: 'Prime Service: Buttons'
+  };
+
+  static psScroller: IAlphaPage = {
+    parentRoute: 'ps/',
+    route: 'scroller',
+    area: 'ps',
+    logRoute: '/ps/scroller',
+    logTitle: 'Prime Service: Scroller'
   };
 
   //#endregion
