@@ -1,1 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
+html, body {
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 0 auto;
+  max-width: 1700px;
+}
+
+body {
+  background-color: var(--surface-a);
+  color: var(--text-color);
+}
+
+a {
+  color: #39D;
+  text-decoration: underline;
+  cursor: pointer;
+}

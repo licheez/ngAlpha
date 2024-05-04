@@ -2,9 +2,11 @@ import { TestBed } from '@angular/core/testing';
 
 import { AlphaLsService } from './alpha-ls.service';
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {HttpErrorResponse} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {of, throwError} from "rxjs";
 
 describe('AlphaLsService', () => {
+
   let service: AlphaLsService;
   let httpMock: HttpTestingController;
 
@@ -37,15 +39,17 @@ describe('AlphaLsService', () => {
   });
 
   it('tests postNavigationLog method', () => {
-    const url = 'https://test-url.com';
-    service.init(undefined, url);
-    service.postNavigationLog('somePath', 'someTitle');
-    const req = httpMock.expectOne(url);
-    expect(req.request.method).toEqual('POST');
-    expect(req.request.body).toBeDefined();
-    req.flush({});
+    const httpClient = {
+      post: jest.fn(
+        () => of({}))
+    } as unknown as HttpClient;
+    const spy = jest.spyOn(httpClient, 'post');
 
-    httpMock.verify();
+    const url = 'https://test-url.com';
+    service.init(httpClient, undefined, url);
+    service.postNavigationLog('somePath', 'someTitle');
+    expect(spy).toHaveBeenCalledWith(url,
+      {"clientReferrer": "", "path": "somePath", "title": "someTitle"});
   });
 
   it('tests usePostNavigationLog method', () => {
@@ -67,12 +71,17 @@ describe('AlphaLsService', () => {
           status: 400,
           statusText: 'Bad Request'});
     const url = 'http://localhost:8080';
-    service.init(undefined, url);
+    const httpClient = {
+      post: jest.fn(
+        () => throwError(()=>errorResponse))
+    } as unknown as HttpClient;
+    const spy = jest.spyOn(httpClient, 'post');
+    service.init(httpClient, undefined, url);
     jest.spyOn(console, 'error');
     service.postNavigationLog(
       'somePath', 'someTitle');
-    const req = httpMock.expectOne(url);
-    req.flush({}, errorResponse);
+    expect(spy).toHaveBeenCalledWith(url,
+      {"clientReferrer": "", "path": "somePath", "title": "someTitle"})
     expect(console.error).toHaveBeenCalled();
   });
 
@@ -84,15 +93,16 @@ describe('AlphaLsService', () => {
   });
 
   it('tests postErrorLog method', () => {
+    const httpClient = {
+      post: jest.fn(
+        () => of({}))
+    } as unknown as HttpClient;
+    const spy = jest.spyOn(httpClient, 'post');
     const url = 'https://test-url.com';
-    service.init(url);
+    service.init(httpClient, url);
     service.postErrorLog('someContext','someMethod', 'someError');
-    const req = httpMock.expectOne(url);
-    expect(req.request.method).toEqual('POST');
-    expect(req.request.body).toBeDefined();
-    req.flush({});
-
-    httpMock.verify();
+    expect(spy).toHaveBeenCalledWith(url,
+      {"context": "someContext", "error": "someError", "method": "someMethod"})
   });
 
   it('tests usePostErrorLog method', () => {
@@ -115,13 +125,17 @@ describe('AlphaLsService', () => {
           error: 'test 400 error',
           status: 400,
           statusText: 'Bad Request'});
+    const httpClient = {
+      post: jest.fn(
+        () => throwError(() => errorResponse))
+    } as unknown as HttpClient;
+    const spy = jest.spyOn(httpClient, 'post');
     const url = 'http://localhost:8080';
-    service.init(url);
+    service.init(httpClient, url);
     jest.spyOn(console, 'error');
     service.postErrorLog(
       'someContext', 'someMethod', 'someError');
-    const req = httpMock.expectOne(url);
-    req.flush({}, errorResponse);
+    expect(spy).toHaveBeenCalled();
     expect(console.error).toHaveBeenCalled();
   });
 
