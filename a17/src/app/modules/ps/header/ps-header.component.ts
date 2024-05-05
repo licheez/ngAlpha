@@ -25,6 +25,10 @@ export class PsHeaderComponent {
     this.mNs.navigate(AppSitemap.psButtons);
   }
 
+  onModals(): void {
+    this.mNs.navigate(AppSitemap.psModals);
+  }
+
   onScroller(): void {
     this.mNs.navigate(AppSitemap.psScroller);
   }

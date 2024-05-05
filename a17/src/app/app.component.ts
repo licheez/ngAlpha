@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Type} from '@angular/core';
 import {Router, RouterOutlet} from "@angular/router";
 import {NgIf} from "@angular/common";
 import {HeaderComponent} from "./header/header.component";
@@ -7,12 +7,14 @@ import {DividerModule} from "primeng/divider";
 import {AlphaLbsService} from "@pvway/alpha-lbs";
 import {AlphaLsService} from "@pvway/alpha-ls";
 import {AlphaNsService} from "@pvway/alpha-ns";
-import {AlphaPrimeService} from "@pvway-dev/alpha-prime";
+import {AlphaPrimeModalService, AlphaPrimeService} from "@pvway-dev/alpha-prime";
 import {AlphaTsService} from "@pvway/alpha-ts";
 
 import {AppSitemap} from "./app.sitemap";
 import {IAlphaPage} from "@pvway/alpha-ns";
 import {of} from "rxjs";
+import {DialogService} from "primeng/dynamicdialog";
+import {IAlphaPrimeModalConfig} from "@pvway-dev/alpha-prime/lib/services/alpha-prime-modal-abstractions";
 
 @Component({
   standalone: true,
@@ -24,6 +26,7 @@ import {of} from "rxjs";
     HeaderComponent,
     DividerModule
   ],
+  providers: [DialogService],
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
@@ -64,8 +67,10 @@ export class AppComponent implements OnInit {
 
   constructor(
     private mRouter: Router,
+    private mDs: DialogService,
     private mLbs: AlphaLbsService,
     private mLs: AlphaLsService,
+    private mMs: AlphaPrimeModalService,
     private mNs: AlphaNsService,
     private mPs: AlphaPrimeService,
     private mTs: AlphaTsService) { }
@@ -77,6 +82,7 @@ export class AppComponent implements OnInit {
 
   initAlpha(): void {
     this.initLs();
+    this.initMs();
     this.initNs();
     this.initPs();
   }
@@ -90,6 +96,15 @@ export class AppComponent implements OnInit {
       (path: string, title: string) =>
         console.info(`Ls.LogNav: ${path}: ${title}`)
     );
+  }
+
+  initMs(): void {
+    const openModal:
+      (component: Type<any>, ddc: IAlphaPrimeModalConfig) => any =
+      (component: Type<any>, ddc: IAlphaPrimeModalConfig) =>
+        this.mDs.open(component, ddc);
+    this.mMs.init(
+      openModal, this.postNavigationLog);
   }
 
   initNs(): void {

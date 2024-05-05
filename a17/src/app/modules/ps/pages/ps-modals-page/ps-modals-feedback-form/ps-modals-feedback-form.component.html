@@ -1,0 +1,13 @@
+<alpha-prime-debug-tag tag="psModalsFeedbcakForm"></alpha-prime-debug-tag>
+
+
+<div class="text-center">
+  <p-rating [(ngModel)]="rate" />
+</div>
+<p-divider></p-divider>
+<div class="text-right">
+  <alpha-prime-ok-button
+    [disabled]="rate === undefined"
+    (clicked)="onDone()"
+  ></alpha-prime-ok-button>
+</div>

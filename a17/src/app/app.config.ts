@@ -5,6 +5,7 @@ import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {AlphaOasInterceptor} from "../../projects/alpha-oas/src/lib/alpha-oas-interceptor";
 import {AppSitemap} from "./app.sitemap";
 import {WelcomePageComponent} from "./pages/welcome-page/welcome-page.component";
+import {provideAnimations} from "@angular/platform-browser/animations";
 
 const routes: Routes = [
   // MAIN
@@ -22,6 +23,7 @@ export const appConfig: ApplicationConfig = {
 
   providers: [
     provideRouter(routes),
+    provideAnimations(),
     { provide: HTTP_INTERCEPTORS, useClass: AlphaOasInterceptor, multi: true }
   ]
 };

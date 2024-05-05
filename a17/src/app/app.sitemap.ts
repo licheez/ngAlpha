@@ -39,6 +39,14 @@ export class AppSitemap {
     logTitle: 'Prime Service: Buttons'
   };
 
+  static psModals: IAlphaPage = {
+    parentRoute: 'ps/',
+    route: 'modals',
+    area: 'ps',
+    logRoute: '/ps/modals',
+    logTitle: 'Prime Service: Modals'
+  };
+
   static psScroller: IAlphaPage = {
     parentRoute: 'ps/',
     route: 'scroller',
