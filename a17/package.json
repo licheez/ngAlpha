@@ -30,8 +30,9 @@
     "@pvway/alpha-lbs": "file:./dist/alpha-lbs",
     "@pvway/alpha-ls": "file:./dist/alpha-ls",
     "@pvway/alpha-ns": "file:./dist/alpha-ns",
-    "@pvway-dev/alpha-prime": "17.2.5",
-    "@pvway/alpha-ts": "file:./dist/alpha-ts"
+    "@pvway/alpha-ts": "file:./dist/alpha-ts",
+    "@pvway-dev/alpha-common": "17.3.2",
+    "@pvway-dev/alpha-prime": "17.2.5"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.2.3",

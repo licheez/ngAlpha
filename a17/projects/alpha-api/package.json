@@ -1,5 +1,5 @@
 {
-  "name": "@pvway/alpha-api",
+  "name": "@pvway-dev/alpha-api",
   "version": "17.2.0",
   "peerDependencies": {
     "@angular/common": "^17.2.0",
