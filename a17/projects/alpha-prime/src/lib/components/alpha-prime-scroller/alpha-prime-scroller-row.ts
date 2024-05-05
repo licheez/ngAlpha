@@ -38,6 +38,16 @@ export class AlphaPrimeScrollerRow<T> {
    * */
   hiddenHeight: number = -1;
 
+  get dims(): string {
+    const p = this.position;
+    const t = Math.round(this.measuredTop);
+    const b = Math.round(this.measuredBottom);
+    const h = Math.round(this.measuredHeight);
+    const vh = Math.round(this.visibleHeight);
+    const hh = Math.round(this.hiddenHeight);
+    return `p:${p} t:${t} b:${b} h:${h} vh:${vh} hh:${hh}`
+  }
+
   constructor(data: T) {
     this.data = data;
   }
@@ -46,7 +56,7 @@ export class AlphaPrimeScrollerRow<T> {
    This method is called by the html container for this row
    see [ngStyle] tag
    the method
-   * sets the measureHeight of the row
+   * sets the measureHeight of the row including the margin
    * and returns the margin
    Remark: there is no processing on the margin.
    The margin is passed as an input parameter

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import { AlphaPrimeDebugTagComponent } from "@pvway/alpha-prime";
+import { AlphaPrimeDebugTagComponent } from "@pvway-dev/alpha-prime";
 import {ButtonModule} from "primeng/button";
 import {AlphaNsService} from "@pvway/alpha-ns";
 import {AppSitemap} from "../app.sitemap";

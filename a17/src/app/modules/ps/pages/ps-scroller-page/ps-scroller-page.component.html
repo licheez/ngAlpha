@@ -1,1 +1,39 @@
-<p>ps-scroller-page works!</p>
+<div class="text-center mb-2">
+  Dims: {{modelDims}}
+</div>
+<div class="text-center mb-2">
+  Stats: {{modelStats}}
+</div>
+<p-divider></p-divider>
+<div *ngIf="sliderVisible">
+  <p-slider  [range]="true" [max]="sliderMax" [ngModel]="sliderRange" [disabled]="true" ></p-slider>
+  <p-divider></p-divider>
+</div>
+<div *ngIf="model"
+  alphaPrimeRemainingHeight [bottomMarginInPx]="20"
+  style="overflow-y: auto; max-width: 500px; margin: auto;">
+
+  <alpha-prime-scroller [model]="model" (scrolled)="onScrolled()">
+
+    <div *ngFor="let row of model!.vRows"
+        #loopItem
+         [ngStyle]="
+             {
+                 'margin-bottom.px': row.measureHeight(loopItem, 5)
+             }">
+          <div class="app-border rounded p-2">
+            <div>
+              {{row.dims}}
+            </div>
+            <div style="font-style: italic;  padding: 10px 0">
+              {{row.data.index + 1}} - {{row.data.text}}
+            </div>
+            <div class="text-right">
+              {{row.dims}}
+            </div>
+          </div>
+    </div>
+
+  </alpha-prime-scroller>
+
+</div>

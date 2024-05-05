@@ -72,10 +72,9 @@ export class AlphaPrimeScrollerBag {
         if (spaceAbove > row.measuredTop) {
           // this row is partially above the scrolling window
           row.position = 'partiallyAbove';
-          hiddenHeight = spaceAbove - height;
-          row.visibleHeight = height - hiddenHeight;
+          row.visibleHeight = height - spaceAbove;
+          hiddenHeight = height - row.visibleHeight;
           row.hiddenHeight = hiddenHeight;
-          this.totalHeightOfInvisibleRowsAbove += hiddenHeight;
         } else {
           if (row.measuredTop > panelBottom) {
             // this row is fully bellow the scrolling window
@@ -99,7 +98,6 @@ export class AlphaPrimeScrollerBag {
               hiddenHeight = row.measuredBottom - panelBottom;
               row.visibleHeight = height - hiddenHeight;
               row.hiddenHeight = hiddenHeight;
-              this.totalHeightOfInvisibleRowsBellow += hiddenHeight;
             }
           }
         }

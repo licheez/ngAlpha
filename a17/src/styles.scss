@@ -17,3 +17,18 @@ a {
   text-decoration: underline;
   cursor: pointer;
 }
+
+.app-border {
+  border-width: 1px;
+  border-style: solid;
+}
+
+.app-border.rounded {
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.app-border.selected {
+  border-width: 3px;
+}
+

@@ -51,6 +51,13 @@ export class AlphaPrimeScrollerComponent  implements OnDestroy, AfterViewInit  {
       ? this._model
       : {
          rows: [],
+         spaceAbove: -1,
+         panelHeight: -1,
+         panelBottom: -1,
+         contentHeight: -1,
+         spaceBellow: -1,
+         paddingTop: -1,
+         paddingBottom: -1,
          busy: false
         } as unknown as AlphaPrimeScrollerModel<any>;
   }
@@ -106,6 +113,8 @@ export class AlphaPrimeScrollerComponent  implements OnDestroy, AfterViewInit  {
   }
 
   private updatePaddings(top: number, bottom: number): void {
+    this.model.paddingTop = top;
+    this.model.paddingBottom = bottom;
     this.paddingTop = top;
     this.paddingBottom = bottom;
     // console.log(top, bottom);
@@ -116,31 +125,39 @@ export class AlphaPrimeScrollerComponent  implements OnDestroy, AfterViewInit  {
       return;
     }
     const spDiv = this.scrollPanel;
-    const spaceAbove = spDiv.scrollTop;
-    this.scrolled.emit(spaceAbove);
-    const panelHeight = spDiv.clientHeight;
-    const panelBottom = panelHeight + spaceAbove;
-    const contentHeight = spDiv.scrollHeight;
+    this.model.spaceAbove = spDiv.scrollTop;
+    //const spaceAbove = spDiv.scrollTop;
+    this.scrolled.emit(this.model.spaceAbove);
+    this.model.panelHeight = spDiv.clientHeight;
+    this.model.panelBottom = this.model.spaceAbove +
+                             this.model.panelHeight;
+    this.model.contentHeight = spDiv.scrollHeight;
 
     const sb = new AlphaPrimeScrollerBag (this.rows)
 
     sb.analyseRows(
-      contentHeight, this.fixedHeight, spaceAbove, panelBottom);
+      this.model.contentHeight,
+      this.fixedHeight,
+      this.model.spaceAbove,
+      this.model.panelBottom);
 
-    const spaceBellow = Math.round(contentHeight - spaceAbove - panelHeight);
+    this.model.spaceBellow = Math.round(
+      this.model.contentHeight -
+      this.model.spaceAbove -
+      this.model.panelHeight);
 
     // console.log(`panelHeight:${panelHeight}-contentHeight:${contentHeight}`);
     // console.log(`sa:${spaceAbove}-sb:${spaceBellow}-fvri:${firstVisibleRow}-pt:${this.paddingTop}-lvri:${lastVisibleRow}-pb:${this.paddingBottom}`);
     // console.log(`padTop:${this.paddingTop}, padBtm:${this.paddingBottom}`);
 
     if (this.paddingTop > 0
-      && spaceAbove <= this.paddingTop
+      && this.model.spaceAbove <= this.paddingTop
       && this.model.visibleFrom !== 0) {
       this.slideUp(sb);
       return;
     }
 
-    if (spaceBellow <= this.paddingBottom + 5) {
+    if (this.model.spaceBellow <= this.paddingBottom + 5) {
 
       if (this.model.visibleTo < this.model.nbRows) {
         this.slideDown(sb);

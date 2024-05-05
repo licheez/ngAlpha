@@ -7,7 +7,7 @@ import {DividerModule} from "primeng/divider";
 import {AlphaLbsService} from "@pvway/alpha-lbs";
 import {AlphaLsService} from "@pvway/alpha-ls";
 import {AlphaNsService} from "@pvway/alpha-ns";
-import {AlphaPrimeService} from "@pvway/alpha-prime";
+import {AlphaPrimeService} from "@pvway-dev/alpha-prime";
 import {AlphaTsService} from "@pvway/alpha-ts";
 
 import {AppSitemap} from "./app.sitemap";
@@ -33,16 +33,6 @@ export class AppComponent implements OnInit {
   title = 'a17';
   ready = false;
 
-  // LS
-  postErrorLog:
-    (context: string, method: string, error: string) => any =
-    (context: string, method: string, error: string) =>
-      this.mLs.postErrorLog(context, method, error);
-  postNavigationLog:
-    (path: string, title: string) => any =
-    (path: string, title: string) =>
-      this.mLs.postNavigationLog(path, title);
-
   // LBS
   publish:
     (payload: any, channel: string) => number =
@@ -56,6 +46,16 @@ export class AppComponent implements OnInit {
     (subscriptionId: number) => any =
     (subscriptionId: number) => this.unsubscribe(subscriptionId);
 
+  // LS
+  postErrorLog:
+    (context: string, method: string, error: string) => any =
+    (context: string, method: string, error: string) =>
+      this.mLs.postErrorLog(context, method, error);
+  postNavigationLog:
+    (path: string, title: string) => any =
+    (path: string, title: string) =>
+      this.mLs.postNavigationLog(path, title);
+
   // TS
   getTr:
     (key: string, languageCode?: string) => string =
@@ -68,8 +68,7 @@ export class AppComponent implements OnInit {
     private mLs: AlphaLsService,
     private mNs: AlphaNsService,
     private mPs: AlphaPrimeService,
-    private mTs: AlphaTsService
-  ) { }
+    private mTs: AlphaTsService) { }
 
   ngOnInit() {
     this.ready = true;
@@ -119,9 +118,9 @@ export class AppComponent implements OnInit {
       deleteUpload: () => of({})
     };
     const lbs = {
-      publish: this.mLbs.publish,
-      subscribe: this.mLbs.subscribe,
-      unsubscribe: this.mLbs.unsubscribe
+      publish: this.publish,
+      subscribe: this.subscribe,
+      unsubscribe: this.unsubscribe
     };
     this.mPs.init(
       false, ts, ls, oas, uas, lbs);
