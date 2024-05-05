@@ -1,5 +1,5 @@
 {
-  "name": "@pvway-dev/alpha-common",
+  "name": "@pvway/alpha-common",
   "version": "17.3.2",
 
   "peerDependencies": {
