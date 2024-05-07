@@ -1,6 +1,6 @@
 {
   "name": "@pvway/alpha-common",
-  "version": "17.3.2",
+  "version": "17.3.4",
 
   "peerDependencies": {
     "@angular/common": "^17.2.0",

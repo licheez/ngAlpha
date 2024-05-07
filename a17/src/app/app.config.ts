@@ -11,7 +11,13 @@ const routes: Routes = [
   // MAIN
   { path: AppSitemap.welcome.route , component: WelcomePageComponent},
   // LAZY MODULES
-  // PS
+  // ------------
+  // COMMON SERVICES
+  { path: AppSitemap.comOutlet.route ,
+    loadChildren: () => import('./modules/com/com.module')
+      .then(m => m.ComModule)
+  },
+  // PRIME SERVICES
   { path: AppSitemap.psOutlet.route,
     loadChildren: () => import('./modules/ps/ps.module')
       .then(m => m.PsModule)

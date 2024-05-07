@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {PsScrollerApi} from "./ps-scroller-api";
+import {PsScrollerApi} from "../ps-scroller-api";
 import {
   AlphaPrimeProgressBarComponent,
   AlphaPrimeRemainingHeightDirective,
   AlphaPrimeScrollerComponent,
   AlphaPrimeScrollerModel
 } from "@pvway-dev/alpha-prime";
-import {PsScrollerItem} from "./ps-scroller-item";
+import {PsScrollerItem} from "../ps-scroller-item";
 import {Observable} from "rxjs";
 import {NgForOf, NgIf, NgStyle} from "@angular/common";
 import {DividerModule} from "primeng/divider";

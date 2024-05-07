@@ -1,0 +1,25 @@
+<alpha-prime-debug-tag tag="psEmsCustList"></alpha-prime-debug-tag>
+<div *ngIf="model"
+  alphaPrimeRemainingHeight [bottomMarginInPx]="20"
+     style="overflow-y: auto">
+
+  <alpha-prime-scroller [model]="model">
+
+    <div *ngFor="let row of model!.vRows"
+      #loopItem
+      [ngStyle]="
+       {
+           'margin-bottom.px': row.measureHeight(loopItem, 5)
+       }">
+
+      <app-ems-cust-card
+        [head]="row.data"
+        [selected]="row.data.id === selectedItem?.id"
+        (clicked)="onRowSelected($event)"
+      ></app-ems-cust-card>
+
+    </div>
+
+  </alpha-prime-scroller>
+
+</div>

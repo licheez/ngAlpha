@@ -117,7 +117,9 @@ class EmsComponent extends AlphaEmsBaseComponent<IHead, IBody, IEi> {
 
   constructor(
     api: AlphaEmsBaseApi<IHead, IBody, IEi>) {
-    super(api, (gfi: AlphaEmsFormInput<IBody>) =>
+    super(api, (
+      api: AlphaEmsBaseApi<IHead, IBody, IEi>,
+      gfi: AlphaEmsFormInput<IBody>) =>
         new EmsForm(api, gfi), false);
     this.verbose = true;
   }

@@ -31,7 +31,7 @@
     "@pvway/alpha-ls": "file:./dist/alpha-ls",
     "@pvway/alpha-ns": "file:./dist/alpha-ns",
     "@pvway/alpha-ts": "file:./dist/alpha-ts",
-    "@pvway-dev/alpha-common": "17.3.2",
+    "@pvway/alpha-common": "17.3.4",
     "@pvway-dev/alpha-prime": "17.2.5"
   },
   "devDependencies": {

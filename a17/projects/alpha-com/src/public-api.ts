@@ -18,6 +18,7 @@ export * from './lib/api/alpha-upload-api.service';
 export * from './lib/api/alpha-version-api.service';
 
 // ems
+export * from './lib/ems/alpha-ems.service';
 export * from './lib/ems/alpha-ems-base-api';
 export * from './lib/ems/alpha-ems-base-api-event';
 export * from './lib/ems/alpha-ems-base-component';
