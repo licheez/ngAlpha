@@ -1,4 +1,14 @@
 <alpha-prime-debug-tag tag="psEmsCustList"></alpha-prime-debug-tag>
+
+<div class="mb-2">
+  <alpha-prime-filter-box
+    [term]="term"
+    [showAdd]="true"
+    (termChange)="onTermChanged($event)"
+    (addClicked)="onAdd($event)"
+  ></alpha-prime-filter-box>
+</div>
+
 <div *ngIf="model"
   alphaPrimeRemainingHeight [bottomMarginInPx]="20"
      style="overflow-y: auto">

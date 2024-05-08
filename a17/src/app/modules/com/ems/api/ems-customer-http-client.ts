@@ -1,6 +1,11 @@
 import {HttpClient} from "@angular/common/http";
 import {Observable, of, throwError} from "rxjs";
-import {AlphaEmsUsoOptionSet, IAlphaHttpListResultDso, IAlphaHttpObjectResultDso} from "@pvway/alpha-common";
+import {
+  AlphaEmsUsoOptionSet,
+  AlphaUtils,
+  IAlphaHttpListResultDso,
+  IAlphaHttpObjectResultDso
+} from "@pvway/alpha-common";
 
 export class EmsCustomerHttpClient {
 
@@ -20,9 +25,11 @@ export class EmsCustomerHttpClient {
       if (url === EmsCustomerHttpClient.ControllerUrl
         + '/list') {
         const usoList = body as AlphaEmsUsoOptionSet;
-        const skip = Number(usoList.pairs[0].value);
-        const take = Number(usoList.pairs[1].value);
-        const listReply = this.list(skip, take);
+        const term = usoList.pairs[0].value;
+        const skip = Number(usoList.pairs[1].value);
+        const take = Number(usoList.pairs[2].value);
+        const listReply =
+          this.list(skip, take, term);
         return of(listReply);
       } else if (url === EmsCustomerHttpClient.ControllerUrl
         + '/body') {
@@ -56,8 +63,21 @@ export class EmsCustomerHttpClient {
     }
   } as unknown as HttpClient;
 
-  list(skip: number, take: number): IAlphaHttpListResultDso {
-    const items = this.customers.slice(skip, skip + take);
+  list(skip: number, take: number, term?: string):
+    IAlphaHttpListResultDso {
+    const fItems = term
+      ? this.customers.filter(item =>
+        AlphaUtils.contains(item.name, term))
+      : this.customers;
+    const sItems = fItems.sort(
+      (a : any, b: any) => {
+        if (a.name === b.name){
+          return 0
+        } else return (a.name < b.name)
+          ? -1 : 1
+      });
+    const items =
+      sItems.slice(skip, skip + take);
     return {
       statusCode: 'O',
       mutationCode: 'N',
