@@ -47,7 +47,7 @@ export class AppComponent implements OnInit {
       this.mLbs.subscribe(callback, channel);
   unsubscribe:
     (subscriptionId: number) => any =
-    (subscriptionId: number) => this.unsubscribe(subscriptionId);
+    (subscriptionId: number) => this.mLbs.unsubscribe(subscriptionId);
 
   // LS
   postErrorLog:

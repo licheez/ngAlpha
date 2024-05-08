@@ -24,6 +24,7 @@ export class EmsPageComponent {
   }
 
   onItemSelected(custHead: ICustomerHead): void {
+    console.log(custHead);
     this.selectedItem = custHead;
   }
 }

@@ -42,6 +42,7 @@ export class EmsCustFormModel
     this.name = body.name;
     this.address = body.address;
     this.countryHeads = [body.countryHead];
+    this.countryIso = body.countryHead.iso;
   }
 
   populateForNew(ei: ICustomerEi): void {

@@ -1,18 +1,18 @@
 <alpha-prime-debug-tag tag="emsCustForm"></alpha-prime-debug-tag>
 <form *ngIf="fm" novalidate autocomplete="off"
-      class="p-fluid p-formgrid grid m-0">
+      class="p-fluid p-form-grid grid m-0">
 
   <!-- NAME -->
   <div class="p-field col-12">
     <label >
       <alpha-prime-label caption="name"
-                         [value]="fm!.name" ></alpha-prime-label>
+                         [value]="fm.name" ></alpha-prime-label>
     </label>
     <input  name="name"
             type="text"
             [maxlength]="50"
-            [readOnly]="fm!.fi.mode === 'read'"
-            [(ngModel)]="fm!.name"
+            [readOnly]="fm.fi.mode === 'read'"
+            [(ngModel)]="fm.name"
             pInputText>
   </div>
 
@@ -20,13 +20,13 @@
   <div class="p-field col-12">
     <label >
       <alpha-prime-label caption="address"
-                         [value]="fm!.address" ></alpha-prime-label>
+                         [value]="fm.address" ></alpha-prime-label>
     </label>
     <input  name="name"
             type="text"
             [maxlength]="50"
-            [readOnly]="fm!.fi.mode === 'read'"
-            [(ngModel)]="fm!.address"
+            [readOnly]="fm.fi.mode === 'read'"
+            [(ngModel)]="fm.address"
             pInputText>
   </div>
 
@@ -34,23 +34,26 @@
   <div class="p-field col-12">
     <label >
       <alpha-prime-label caption="country"
-                         [value]="fm!.countryIso" ></alpha-prime-label>
+                         [value]="fm.countryIso" ></alpha-prime-label>
     </label>
     <alpha-prime-select
         [showClear]="false"
-        [options]="fm!.countryOptions"
-        [(optionId)]="fm!.countryIso"
+        [readonly]="fm.fi.mode === 'read'"
+        [readonlyCaption]="fm.countryHead?.name"
+        [options]="fm.countryOptions"
+        [(optionId)]="fm.countryIso"
     ></alpha-prime-select>
   </div>
 
   <div class="col-12 mt-3 text-right">
     <alpha-prime-cancel-button class="mr-2"
+        *ngIf="fm.fi.mode !== 'read'"
         (clicked)="onCancel()"
     ></alpha-prime-cancel-button>
     <alpha-prime-save-button
-        *ngIf="fm!.fi.mode !== 'read'"
+        *ngIf="fm.fi.mode !== 'read'"
         (clicked)="onSave()"
-        [disabled]="fm!.invalid"
+        [disabled]="fm.invalid"
         [busy]="busy"
     ></alpha-prime-save-button>
   </div>
