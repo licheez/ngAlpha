@@ -20,6 +20,8 @@ export class EmsCustomerHttpClient {
     {id: '1', name: 'one', address: 'addressOne', countryHead: {iso: 'BE', name: 'Belgium'}}
   ];
 
+  constructor() { }
+
   httpClient = {
     post: (url: string, body: any): Observable<any> => {
       if (url === EmsCustomerHttpClient.ControllerUrl
@@ -152,8 +154,8 @@ export class EmsCustomerHttpClient {
     };
     this.customers.push(body);
     return {
-      statusCode: 'C',
-      mutationCode: 'N',
+      statusCode: 'O',
+      mutationCode: 'C',
       notifications: [],
       hasMoreResults: true,
       data: body
@@ -169,8 +171,8 @@ export class EmsCustomerHttpClient {
     body.address = uso.address;
     body.countryHead = countryHead!;
     return {
-      statusCode: 'U',
-      mutationCode: 'N',
+      statusCode: 'O',
+      mutationCode: 'U',
       notifications: [],
       hasMoreResults: true,
       data: body

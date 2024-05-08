@@ -12,7 +12,7 @@ export interface ICustomerBody extends ICustomerHead {
 }
 
 export interface ICustomerEi {
-  countryHeads: ICustomerHead[];
+  countryHeads: ICountryHead[];
 }
 
 export class CustomerFactory {
@@ -42,7 +42,7 @@ interface Body {
 }
 
 interface Ei {
-  countryHeads: ICustomerHead[];
+  countryHeads: ICountryHead[];
 }
 
 // DSO SLICER
@@ -96,7 +96,7 @@ class CustomerBody extends CustomerHead
 }
 
 class CustomerEi implements ICustomerEi {
-  countryHeads: ICustomerHead[];
+  countryHeads: ICountryHead[];
   constructor(ei: Ei) {
     this.countryHeads = ei.countryHeads;
   }

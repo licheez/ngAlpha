@@ -9,12 +9,32 @@ import {
 import {EmsCustFormModel} from "./ems-cust-form-model";
 import {ICustomerBody, ICustomerEi, ICustomerHead} from "../../model/customer";
 import {EmsCustomerApi} from "../../api/ems-customer-api";
-
+import {
+  AlphaPrimeCancelButtonComponent,
+  AlphaPrimeDebugTagComponent,
+  AlphaPrimeLabelComponent,
+  AlphaPrimeSaveButtonComponent,
+  AlphaPrimeSelectComponent
+} from "@pvway-dev/alpha-prime";
+import {NgIf} from "@angular/common";
+import {FormsModule} from "@angular/forms";
+import {InputTextModule} from "primeng/inputtext";
+import {DividerModule} from "primeng/divider";
 
 @Component({
   selector: 'app-ems-cust-form',
   standalone: true,
-  imports: [],
+  imports: [
+    AlphaPrimeDebugTagComponent,
+    NgIf,
+    AlphaPrimeLabelComponent,
+    FormsModule,
+    InputTextModule,
+    AlphaPrimeSelectComponent,
+    DividerModule,
+    AlphaPrimeSaveButtonComponent,
+    AlphaPrimeCancelButtonComponent
+  ],
   templateUrl: './ems-cust-form.component.html',
   styleUrl: './ems-cust-form.component.scss'
 })
@@ -33,9 +53,11 @@ export class EmsCustFormComponent
   @Output()
   saved =
     new EventEmitter<AlphaEmsFormResult<ICustomerBody>>();
+  @Output()
   cancelled = new EventEmitter();
 
-  constructor(ems: AlphaEmsService) {
+  constructor(
+    ems: AlphaEmsService) {
     super(
       new EmsCustomerApi(ems),
       (

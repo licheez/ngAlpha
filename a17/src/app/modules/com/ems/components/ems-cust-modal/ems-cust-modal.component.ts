@@ -2,11 +2,18 @@ import {Component, OnInit} from '@angular/core';
 import {AlphaEmsFormInput, AlphaEmsFormResult} from "@pvway/alpha-common";
 import {ICustomerBody} from "../../model/customer";
 import {DynamicDialogConfig, DynamicDialogRef} from "primeng/dynamicdialog";
+import {AlphaPrimeDebugTagComponent} from "@pvway-dev/alpha-prime";
+import {EmsCustFormComponent} from "../ems-cust-form/ems-cust-form.component";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-ems-cust-modal',
   standalone: true,
-  imports: [],
+  imports: [
+    AlphaPrimeDebugTagComponent,
+    EmsCustFormComponent,
+    NgIf
+  ],
   templateUrl: './ems-cust-modal.component.html',
   styleUrl: './ems-cust-modal.component.scss'
 })

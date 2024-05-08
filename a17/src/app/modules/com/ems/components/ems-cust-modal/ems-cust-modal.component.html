@@ -1,1 +1,7 @@
-<p>ps-ems-cust-modal works!</p>
+<alpha-prime-debug-tag tag='emsCustModal'></alpha-prime-debug-tag>
+<app-ems-cust-form
+  *ngIf="fi"
+  [fi]="fi"
+  (saved)="onSaved($event)"
+  (cancelled)="onCancelled()"
+></app-ems-cust-form>

@@ -42,8 +42,8 @@ export class EmsCustListComponent implements OnInit {
   @Output() itemSelected = new EventEmitter<ICustomerHead>();
 
   constructor(
-    private mMs: AlphaPrimeModalService,
-    ems: AlphaEmsService) {
+    ems: AlphaEmsService,
+    private mMs: AlphaPrimeModalService) {
     this.mApi = new EmsCustomerApi(ems);
   }
 
