@@ -84,7 +84,7 @@ describe('AlphaPrimeScrollerBag', () => {
       expect(sb.firstVisibleRow).toEqual(0);
       expect(sb.lastVisibleRow).toEqual(3);
       expect(sb.totalHeightOfInvisibleRowsAbove).toEqual(0);
-      expect(sb.totalHeightOfInvisibleRowsBellow).toEqual(3);
+      expect(sb.totalHeightOfInvisibleRowsBellow).toEqual(2);
     });
 
     it('should handle fixed height 2 when space above is 3', () => {
@@ -117,8 +117,8 @@ describe('AlphaPrimeScrollerBag', () => {
       expect(row1.measuredTop).toEqual(2);
       expect(row1.measuredBottom).toEqual(4);
       expect(row1.position).toEqual('partiallyAbove');
-      expect(row1.visibleHeight).toEqual(1);
-      expect(row1.hiddenHeight).toEqual(1);
+      expect(row1.visibleHeight).toEqual(-1);
+      expect(row1.hiddenHeight).toEqual(3);
 
       expect(row2.measuredTop).toEqual(4);
       expect(row2.measuredBottom).toEqual(6);
@@ -140,7 +140,7 @@ describe('AlphaPrimeScrollerBag', () => {
 
       expect(sb.firstVisibleRow).toEqual(1);
       expect(sb.lastVisibleRow).toEqual(4);
-      expect(sb.totalHeightOfInvisibleRowsAbove).toEqual(3);
+      expect(sb.totalHeightOfInvisibleRowsAbove).toEqual(2);
       expect(sb.totalHeightOfInvisibleRowsBellow).toEqual(0);
     });
 
@@ -202,7 +202,7 @@ describe('AlphaPrimeScrollerBag', () => {
       expect(sb.firstVisibleRow).toEqual(0);
       expect(sb.lastVisibleRow).toEqual(3);
       expect(sb.totalHeightOfInvisibleRowsAbove).toEqual(0);
-      expect(sb.totalHeightOfInvisibleRowsBellow).toEqual(12);
+      expect(sb.totalHeightOfInvisibleRowsBellow).toEqual(8);
     });
 
     it('should handle item measuredHeight -1 when space above is 0', () => {
@@ -265,7 +265,7 @@ describe('AlphaPrimeScrollerBag', () => {
       expect(sb.firstVisibleRow).toEqual(0);
       expect(sb.lastVisibleRow).toEqual(3);
       expect(sb.totalHeightOfInvisibleRowsAbove).toEqual(0);
-      expect(sb.totalHeightOfInvisibleRowsBellow).toEqual(7.8);
+      expect(sb.totalHeightOfInvisibleRowsBellow).toEqual(3.8);
     });
 
   });

@@ -90,6 +90,39 @@
         }
       }
     },
+    "AlphaCom": {
+      "projectType": "library",
+      "root": "projects/alpha-com",
+      "sourceRoot": "projects/alpha-com/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/alpha-com/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/alpha-com/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/alpha-com/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "tsConfig": "projects/alpha-com/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    },
     "AlphaLbs": {
       "projectType": "library",
       "root": "projects/alpha-lbs",
@@ -115,39 +148,6 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "tsConfig": "projects/alpha-lbs/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
-          }
-        }
-      }
-    },
-    "AlphaTs": {
-      "projectType": "library",
-      "root": "projects/alpha-ts",
-      "sourceRoot": "projects/alpha-ts/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "project": "projects/alpha-ts/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/alpha-ts/tsconfig.lib.prod.json"
-            },
-            "development": {
-              "tsConfig": "projects/alpha-ts/tsconfig.lib.json"
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "tsConfig": "projects/alpha-ts/tsconfig.spec.json",
             "polyfills": [
               "zone.js",
               "zone.js/testing"
@@ -189,105 +189,6 @@
         }
       }
     },
-    "AlphaOas": {
-      "projectType": "library",
-      "root": "projects/alpha-oas",
-      "sourceRoot": "projects/alpha-oas/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "project": "projects/alpha-oas/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/alpha-oas/tsconfig.lib.prod.json"
-            },
-            "development": {
-              "tsConfig": "projects/alpha-oas/tsconfig.lib.json"
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "tsConfig": "projects/alpha-oas/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
-          }
-        }
-      }
-    },
-    "AlphaCom": {
-      "projectType": "library",
-      "root": "projects/alpha-com",
-      "sourceRoot": "projects/alpha-com/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "project": "projects/alpha-com/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/alpha-com/tsconfig.lib.prod.json"
-            },
-            "development": {
-              "tsConfig": "projects/alpha-com/tsconfig.lib.json"
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "tsConfig": "projects/alpha-com/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
-          }
-        }
-      }
-    },
-    "AlphaApi": {
-      "projectType": "library",
-      "root": "projects/alpha-api",
-      "sourceRoot": "projects/alpha-api/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "project": "projects/alpha-api/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/alpha-api/tsconfig.lib.prod.json"
-            },
-            "development": {
-              "tsConfig": "projects/alpha-api/tsconfig.lib.json"
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "tsConfig": "projects/alpha-api/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
-          }
-        }
-      }
-    },
     "AlphaNs": {
       "projectType": "library",
       "root": "projects/alpha-ns",
@@ -313,6 +214,39 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "tsConfig": "projects/alpha-ns/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    },
+    "AlphaOas": {
+      "projectType": "library",
+      "root": "projects/alpha-oas",
+      "sourceRoot": "projects/alpha-oas/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/alpha-oas/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/alpha-oas/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/alpha-oas/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "tsConfig": "projects/alpha-oas/tsconfig.spec.json",
             "polyfills": [
               "zone.js",
               "zone.js/testing"
@@ -354,23 +288,23 @@
         }
       }
     },
-    "AlphaEms": {
+    "AlphaTs": {
       "projectType": "library",
-      "root": "projects/alpha-ems",
-      "sourceRoot": "projects/alpha-ems/src",
+      "root": "projects/alpha-ts",
+      "sourceRoot": "projects/alpha-ts/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "project": "projects/alpha-ems/ng-package.json"
+            "project": "projects/alpha-ts/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/alpha-ems/tsconfig.lib.prod.json"
+              "tsConfig": "projects/alpha-ts/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/alpha-ems/tsconfig.lib.json"
+              "tsConfig": "projects/alpha-ts/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -378,7 +312,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "tsConfig": "projects/alpha-ems/tsconfig.spec.json",
+            "tsConfig": "projects/alpha-ts/tsconfig.spec.json",
             "polyfills": [
               "zone.js",
               "zone.js/testing"

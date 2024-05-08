@@ -85,13 +85,11 @@ describe('AlphaPrimeService', () => {
     expect(true).toBeTruthy();
 
     service.init(
-      mockDialogService,
       isProduction,
       mockTs, mockLs,
-      mockOas, mockUas, mockLbs,
-      modalStyleClass);
+      mockOas, mockUas,
+      mockLbs);
 
-    expect(service.ds).toEqual(mockDialogService);
     expect(service.isProduction).toBe(isProduction);
     expect(service.getTr).toBe(mockTs.getTr);
     expect(service.postNavigationLog).toBe(mockLs.postNavigationLog);
@@ -101,7 +99,6 @@ describe('AlphaPrimeService', () => {
     expect(service.publish).toBe(mockLbs.publish);
     expect(service.subscribe).toBe(mockLbs.subscribe);
     expect(service.unsubscribe).toBe(mockLbs.unsubscribe);
-    expect(service.modalStyleClass).toBe(modalStyleClass);
   });
 
   it('should getTr', () => {

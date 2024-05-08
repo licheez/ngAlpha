@@ -1,17 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 
 import { AlphaPrimeModalService } from './alpha-prime-modal.service';
-import {DialogService} from "primeng/dynamicdialog";
-import {IAlphaLoggerService} from "@pvway/alpha-common";
 
 describe('AlphaPrimeModalService', () => {
   let service: AlphaPrimeModalService;
-  const ls = {
-    postNavigationLog: jest.fn()
-  } as unknown as IAlphaLoggerService;
-  const dialogServiceMock = {
-    open: jest.fn()
-  } as unknown as DialogService;
+  const dsOpen = jest.fn();
+  const postNavigationLog = jest.fn();
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
@@ -23,17 +17,17 @@ describe('AlphaPrimeModalService', () => {
   });
 
   it ('should init', () => {
-    service.init(dialogServiceMock, ls, 'someClass');
-    expect(service['mPs'].ds).toEqual(dialogServiceMock);
-    expect(service['mPs'].postNavigationLog).toEqual(ls.postNavigationLog);
-    expect(service['mPs'].modalStyleClass).toEqual('someClass');
+    service.init(dsOpen, postNavigationLog,  'someClass');
+    expect(service['dsOpen']).toEqual(dsOpen);
+    expect(service['postNavigationLog']).toEqual(postNavigationLog);
+    expect(service['modalStyleClass']).toEqual('someClass');
   });
 
   it ('should init without styleClass', () => {
-    service.init(dialogServiceMock, ls);
-    expect(service['mPs'].ds).toEqual(dialogServiceMock);
-    expect(service['mPs'].postNavigationLog).toEqual(ls.postNavigationLog);
-    expect(service['mPs'].modalStyleClass).toBeUndefined();
+    service.init(dsOpen, postNavigationLog);
+    expect(service['dsOpen']).toEqual(dsOpen);
+    expect(service['postNavigationLog']).toEqual(postNavigationLog);
+    expect(service['modalStyleClass']).toBeUndefined();
   });
 
   it('openModal should fail when not initialized', () => {
@@ -52,17 +46,15 @@ describe('AlphaPrimeModalService', () => {
     // Let's mock dialogService with
     // the open method that will pass the component to the
     // ddc.data instance
-    const dialogServiceMock = {
-      open: jest.fn((component: any, ddc: any) => {
+    const dsOpen= jest.fn((component: any, ddc: any) => {
         // this simulates the behaviour of the modal component
         console.log('modal opens', ddc);
         ddc.data.setInstance(component);
-      })
-    } as unknown as DialogService;
+      });
 
     const component: any = {};
     service.init(
-      dialogServiceMock, ls, 'globalClass');
+      dsOpen, postNavigationLog, 'globalClass');
     service
       .openModal<any>(component, 'anchor', 'modal')
       .subscribe({
