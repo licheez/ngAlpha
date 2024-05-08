@@ -16,7 +16,7 @@ export class EmsCustomerHttpClient {
   ];
 
   httpClient = {
-    post: (url: string, body: any) => {
+    post: (url: string, body: any): Observable<any> => {
       if (url === EmsCustomerHttpClient.ControllerUrl
         + '/list') {
         const usoList = body as AlphaEmsUsoOptionSet;
@@ -56,46 +56,43 @@ export class EmsCustomerHttpClient {
     }
   } as unknown as HttpClient;
 
-  list(skip: number, take: number): Observable<any> {
+  list(skip: number, take: number): IAlphaHttpListResultDso {
     const items = this.customers.slice(skip, skip + take);
-    const res: IAlphaHttpListResultDso = {
+    return {
       statusCode: 'O',
       mutationCode: 'N',
       notifications: [],
       hasMoreResults: true,
       data: items
-    }
-    return of(res);
+    };
   }
 
-  body(id: string): Observable<any> {
+  body(id: string): IAlphaHttpObjectResultDso {
     const body = this.customers.find(
       x => x.id === id);
-    const res: IAlphaHttpObjectResultDso = {
+    return {
       statusCode: 'O',
       mutationCode: 'N',
       notifications: [],
       hasMoreResults: true,
       data: body
-    }
-    return of(res);
+    };
   }
 
-  ei(): Observable<any> {
+  ei(): IAlphaHttpObjectResultDso {
     const ei = {
       countryHeads: this.countryHeads
     };
-    const res: IAlphaHttpObjectResultDso = {
+    return {
       statusCode: 'O',
       mutationCode: 'N',
       notifications: [],
       hasMoreResults: true,
       data: ei
     };
-    return of(res);
   }
 
-  bodyFe(id: string): Observable<any> {
+  bodyFe(id: string): IAlphaHttpObjectResultDso {
     const body = this.customers.find(
       x => x.id === id);
     const ei = {
@@ -105,17 +102,16 @@ export class EmsCustomerHttpClient {
       body: body,
       ei: ei
     };
-    const res: IAlphaHttpObjectResultDso = {
+    return {
       statusCode: 'O',
       mutationCode: 'N',
       notifications: [],
       hasMoreResults: true,
       data: ec
     };
-    return of(res);
   }
 
-  create(uso: any): Observable<any> {
+  create(uso: any): IAlphaHttpObjectResultDso {
     const countryHead = this.countryHeads.find(
       c => c.iso === uso.countryIso);
 
@@ -135,10 +131,16 @@ export class EmsCustomerHttpClient {
       countryHead: countryHead!
     };
     this.customers.push(body);
-    return of(body);
+    return {
+      statusCode: 'C',
+      mutationCode: 'N',
+      notifications: [],
+      hasMoreResults: true,
+      data: body
+    };
   }
 
-  update(uso: any): Observable<any> {
+  update(uso: any): IAlphaHttpObjectResultDso {
     const body = this.customers.find(
       x => x.id === uso.id)!;
     const countryHead = this.countryHeads.find(
@@ -146,16 +148,29 @@ export class EmsCustomerHttpClient {
     body.name = uso.name;
     body.address = uso.address;
     body.countryHead = countryHead!;
-    return of(body);
+    return {
+      statusCode: 'U',
+      mutationCode: 'N',
+      notifications: [],
+      hasMoreResults: true,
+      data: body
+    };
   }
 
-  delete(id: string): Observable<any> {
+  delete(id: string): IAlphaHttpObjectResultDso {
     const index = this.customers
       .findIndex(x => x.id === id);
     if (index !== -1) {
       this.customers.splice(index, 1);
     }
-    return of(null);
+    return {
+      statusCode: 'D',
+      mutationCode: 'N',
+      notifications: [],
+      hasMoreResults: true,
+      data: null
+    };
+
   }
 
 }
