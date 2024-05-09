@@ -36,21 +36,22 @@ class UsoNavigationLog {
 })
 export class AlphaLsService {
 
-  constructor(
-    private mHttp: HttpClient) {
-  }
+  private mHttp: HttpClient | undefined;
 
   /**
    * Initialize the service with optional
    * error log and navigation log URLs.
    *
+   * @param httpClient
    * @param {string} [postErrorLogUrl] - The URL to which error logs will be posted.
    * @param {string} [postNavigationLogUrl] - The URL to which navigation logs will be posted.
    *
    * @return {void}
    */
-  init(postErrorLogUrl?: string,
+  init(httpClient: HttpClient,
+       postErrorLogUrl?: string,
        postNavigationLogUrl?: string):void {
+    this.mHttp = httpClient;
     this._postErrorLogUrl = postErrorLogUrl ?? null;
     this._postNavigationLogUrl = postNavigationLogUrl ?? null;
   }
@@ -76,7 +77,7 @@ export class AlphaLsService {
   }
   private postNavigationLogBuiltIn(path: string, title: string): void {
     const url = this._postNavigationLogUrl;
-    if (!url) {
+    if (!url || this.mHttp === undefined) {
       return;
     }
     const body = new UsoNavigationLog(path, title);
@@ -123,7 +124,7 @@ export class AlphaLsService {
     error: string): void {
 
     const url = this._postErrorLogUrl;
-    if (!url) {
+    if (!url || this.mHttp === undefined) {
       return;
     }
     const body = new UsoLog(context, method, error);
