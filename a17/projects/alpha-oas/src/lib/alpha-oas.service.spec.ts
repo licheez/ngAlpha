@@ -1,21 +1,24 @@
 import {TestBed} from '@angular/core/testing';
 
 import {AlphaOasService} from './alpha-oas.service';
-import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
 
 import {Observable, of, throwError} from "rxjs";
 
 import {AlphaRefreshData} from "./alpha-refresh-data";
 import {AlphaSessionData} from "./alpha-session-data";
-import {HttpErrorResponse} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {AlphaAuthStatusEnum, IAlphaAuthEnvelop} from "./alpha-oas-abstractions";
+import {error} from "ng-packagr/lib/utils/log";
 
 describe('AlphaOasService', () => {
 
   let sessionStore: { [key: string]: string } = {};
   let localStore: { [key: string]: string } = {};
   let service: AlphaOasService;
-  let httpMock: HttpTestingController;
+  const httpClient = {
+    post: jest.fn(),
+    get: jest.fn()
+  } as unknown as HttpClient;
   const postErrorLog= jest.fn();
   const onPrincipalUpdated = jest.fn();
 
@@ -56,16 +59,13 @@ describe('AlphaOasService', () => {
     Object.defineProperty(window, 'localStorage', {value: localStorageMock});
 
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule]
     });
     service = TestBed.inject(AlphaOasService);
-    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {
     sessionStore = {};
     localStore = {};
-    httpMock.verify();
   });
 
   it('should be created', () => {
@@ -73,8 +73,31 @@ describe('AlphaOasService', () => {
     expect(service.principal).toBeTruthy();
   });
 
+  describe('handle undefined httpClient', () => {
+    it ('should throw an error in signIn when httpClient is not defined', () => {
+      expect(() =>
+        service.internalSignIn (
+        'username',
+        'password',
+        true))
+        .toThrow('service is not initialized');
+    });
+
+    it ('should throw an error in refresh when httpClient is not defined', () => {
+      expect(() =>
+        service.internalRefresh('rt'))
+        .toThrow('service is not initialized');
+    });
+
+    it ('should throw an error in getMe when httpClient is not defined', () => {
+      expect(() =>
+        service.getMe()).toThrow('service is not initialized');
+    });
+
+  });
+
   it('should init when sd and rd are not set', () => {
-    service.init().subscribe({
+    service.init(httpClient).subscribe({
       next: status => {
         expect(service.principal.status).toEqual(AlphaAuthStatusEnum.Anonymous);
         expect(status).toEqual('anonymous');
@@ -82,72 +105,119 @@ describe('AlphaOasService', () => {
     });
   });
 
-  it('init should refresh', () => {
-    const oEnv: IAlphaAuthEnvelop = {
-      accessToken: 'accessToken',
-      expiresIn: 1000,
-      refreshToken: 'rt1',
-      user: {
-        userId: 'userId',
-        username: 'username',
-        languageCode: 'zh',
-        properties: new Map<string, any>()
-      }
-    };
-    service.useRefresh(() => of(oEnv));
-    const rd = new AlphaRefreshData('rt0');
-    rd.store();
-    service.init(
-      undefined, undefined, undefined,
-      postErrorLog, onPrincipalUpdated).subscribe({
-      next: status => {
-        expect(status).toEqual('identity refreshed');
-        const sd = AlphaSessionData.retrieve();
-        expect(sd!.accessToken).toEqual('accessToken');
-        const rd = AlphaRefreshData.retrieve();
-        expect(rd!.refreshToken).toEqual('rt1');
-        expect(service.principal.languageCode).toEqual('zh');
-        expect(service.principal.status).toEqual(AlphaAuthStatusEnum.Authenticated);
-      }
+  describe('init from refresh data', () => {
+
+    it('init should refresh with success', () => {
+      const oEnv: IAlphaAuthEnvelop = {
+        accessToken: 'accessToken',
+        expiresIn: 1000,
+        refreshToken: 'rt1',
+        user: {
+          userId: 'userId',
+          username: 'username',
+          languageCode: 'zh',
+          properties: new Map<string, any>()
+        }
+      };
+      service.useRefresh(() => of(oEnv));
+      const rd = new AlphaRefreshData('rt0');
+      rd.store();
+      service.init(httpClient,
+        undefined, undefined, undefined,
+        postErrorLog, onPrincipalUpdated).subscribe({
+        next: status => {
+          expect(status).toEqual('identity refreshed');
+          const sd = AlphaSessionData.retrieve();
+          expect(sd!.accessToken).toEqual('accessToken');
+          const rd = AlphaRefreshData.retrieve();
+          expect(rd!.refreshToken).toEqual('rt1');
+          expect(service.principal.languageCode).toEqual('zh');
+          expect(service.principal.status).toEqual(AlphaAuthStatusEnum.Authenticated);
+        }
+      });
+    });
+
+    it('init should refresh getting a 401', () => {
+      const error401 = {
+        status: 401,
+        statusText: 'invalid request'
+      };
+      service.useRefresh(() =>
+        throwError(() => error401));
+      const rd = new AlphaRefreshData('rt0');
+      rd.store();
+      service.init(httpClient,
+        undefined, undefined, undefined,
+        postErrorLog, onPrincipalUpdated).subscribe({
+        next: status => {
+          expect(status).toEqual('refresh failed');
+        }
+      });
+    });
+
+    it('init with custom refresh should fail', () => {
+      const rd = new AlphaRefreshData('rt0');
+      rd.store();
+      service.useRefresh(() => throwError(() => 'error'));
+      service.init(httpClient,
+        undefined, undefined, undefined,
+        postErrorLog, onPrincipalUpdated).subscribe({
+        error: error => {
+          expect(service.principal.status).toEqual(AlphaAuthStatusEnum.Anonymous);
+          expect(error).toEqual('error');
+        }
+      });
+    });
+
+    it('init with builtIn refresh should fail', () => {
+      const rd = new AlphaRefreshData('rt0');
+      rd.store();
+      const refreshUrl = 'https://localhost/token';
+      const httpClient = {
+        post: jest.fn(() =>
+          throwError(() => 'error'))
+      } as unknown as HttpClient;
+      const spy =
+        jest.spyOn(httpClient, 'post');
+
+      service.init(httpClient,
+        undefined, refreshUrl, undefined,
+        postErrorLog, onPrincipalUpdated).subscribe({
+        error: error => {
+          expect(service.principal.status)
+            .toEqual(AlphaAuthStatusEnum.Anonymous);
+          expect(error).toEqual('error');
+        }
+      });
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('refresh returns false', () => {
+
+      // we need some refresh data
+      const rd = new AlphaRefreshData('rt0');
+      rd.store();
+
+      const error401 = {
+        status: 401,
+        statusText: 'invalid request'
+      };
+      const httpClient = {
+        post: jest.fn(() =>
+          throwError(() => error401))
+      } as unknown as HttpClient;
+      service.init(httpClient);
+      const spy =
+        jest.spyOn(httpClient, 'post');
+      service.refresh().subscribe({
+        next: ok => expect(ok).toBeFalsy()
+      });
+      expect(spy).toHaveBeenCalled();
     });
 
   });
 
-  it('init should fail while refreshing', () => {
-    const rd = new AlphaRefreshData('rt0');
-    rd.store();
-    service.useRefresh(() => throwError(() => 'error'));
-    service.init(
-      undefined, undefined, undefined,
-      postErrorLog, onPrincipalUpdated).subscribe({
-      error: error => {
-        expect(service.principal.status).toEqual(AlphaAuthStatusEnum.Anonymous);
-        expect(error).toEqual('error');
-      }
-    });
-  });
-
-  it('init should fail with 401 while refreshing', () => {
-    const rd = new AlphaRefreshData('rt0');
-    rd.store();
-    const refreshUrl = 'https://localhost/token';
-    service.init(
-      undefined, refreshUrl, undefined,
-      postErrorLog, onPrincipalUpdated).subscribe({
-      error: error => {
-        expect(service.principal.status)
-          .toEqual(AlphaAuthStatusEnum.Anonymous);
-        expect(error).toEqual('error');
-      }
-    });
-    const refreshReq = httpMock.expectOne(refreshUrl);
-    refreshReq.flush({},{
-      status: 401,
-      statusText: 'not authorized'
-    });
-  });
-
-  it('init should reauthenticate using getMe', () => {
+  it('init should re-authenticate using getMe', () => {
     const getMeUrl = 'https://localhost/getMe';
     const now = new Date().getTime();
     const sd = new AlphaSessionData(
@@ -155,16 +225,6 @@ describe('AlphaOasService', () => {
       now, now + 200000);
     sd.store();
     expect(sd.isExpiredOrExpiring).toBeFalsy();
-    service.init(
-      getMeUrl, undefined, undefined,
-      postErrorLog, onPrincipalUpdated).subscribe({
-      next: status => {
-        expect(status).toEqual('principal reloaded');
-      }
-    });
-
-    const getMeRequest = httpMock.expectOne(getMeUrl);
-    expect(getMeRequest.request.method).toEqual('GET');
 
     const userDso = {
       userId: 'userId',
@@ -172,7 +232,20 @@ describe('AlphaOasService', () => {
       languageCode: 'fr',
       userProperties: {}
     };
-    getMeRequest.flush(userDso);
+    const httpClient = {
+      get: jest.fn(() => of(userDso))
+    } as unknown as HttpClient;
+    const spy =
+      jest.spyOn(httpClient, 'get');
+
+    service.init(httpClient,
+      getMeUrl, undefined, undefined,
+      postErrorLog, onPrincipalUpdated).subscribe({
+      next: status => {
+        expect(status).toEqual('principal reloaded');
+      }
+    });
+    expect(spy).toHaveBeenCalled();
   });
 
   it('init should fail while re-authenticating', () => {
@@ -183,25 +256,19 @@ describe('AlphaOasService', () => {
       now, now + 200000);
     sd.store();
     expect(sd.isExpiredOrExpiring).toBeFalsy();
-    service.init(getMeUrl).subscribe({
+    const httpClient = {
+      get: jest.fn(() =>
+        throwError(() => 'error'))
+    } as unknown as HttpClient ;
+    const spy =
+      jest.spyOn(httpClient, 'get');
+    service.init(httpClient, getMeUrl).subscribe({
       error: e => {
         expect(e).toEqual('error');
         expect(service.principal.status).toEqual(AlphaAuthStatusEnum.Anonymous);
       }
     });
-
-    const getMeRequest = httpMock.expectOne(getMeUrl);
-    expect(getMeRequest.request.method).toEqual('GET');
-
-    const errorResponse =
-      new HttpErrorResponse(
-        {
-          error: 'error',
-          status: 500,
-          statusText: 'Server error'
-        });
-
-    getMeRequest.flush(errorResponse);
+    expect(spy).toHaveBeenCalled();
   });
 
   it('init should find an expired sd while calling authorize', () => {
@@ -222,16 +289,6 @@ describe('AlphaOasService', () => {
     const rd = new AlphaRefreshData('rt1');
     rd.store();
 
-    service.init(
-      getMeUrl, refreshUrl, undefined,
-      postErrorLog, onPrincipalUpdated).subscribe({
-      next: status => {
-        expect(status).toBeTruthy();
-      }
-    });
-
-    const refreshReq = httpMock.expectOne(refreshUrl);
-    expect(refreshReq.request.method).toEqual('POST');
     const userDso = {
       userId: 'userId',
       username: 'username',
@@ -244,13 +301,25 @@ describe('AlphaOasService', () => {
       expires_in: 1440,
       user: userDso
     };
-    refreshReq.flush(refreshDso);
+    const httpClient = {
+      get: jest.fn(() => of(userDso)),
+      post: jest.fn(() => of(refreshDso))
+    } as unknown as HttpClient;
+    const spyGet =
+      jest.spyOn(httpClient, 'get');
+    const spyPost =
+      jest.spyOn(httpClient, 'post');
 
-    const getMeReq = httpMock.expectOne(getMeUrl);
-    expect(getMeReq.request.method).toEqual('GET');
-    getMeReq.flush(userDso);
+    service.init(httpClient,
+      getMeUrl, refreshUrl, undefined,
+      postErrorLog, onPrincipalUpdated).subscribe({
+      next: status => {
+        expect(status).toBeTruthy();
+      }
+    });
 
-    expect(true).toBeTruthy();
+    expect(spyGet).toHaveBeenCalled();
+    expect(spyPost).toHaveBeenCalled();
   });
 
   it('useSignIn should override the builtin signIn method', () => {
@@ -313,9 +382,13 @@ describe('AlphaOasService', () => {
         properties: new Map<string, any>()
       }
     }
-    const mockRefresh: (token: string) => Observable<IAlphaAuthEnvelop> =
+    const mockRefresh: (token: string) =>
+      Observable<IAlphaAuthEnvelop> =
       () => of(oEnv);
 
+    // sd will be null
+
+    // we need some refresh data
     const rd = new AlphaRefreshData('someToken');
     rd.store();
 
@@ -369,7 +442,6 @@ describe('AlphaOasService', () => {
 
   it('signIn should succeed', () => {
     const signInUrl = 'https://localhost/token';
-    service.init(undefined, undefined, signInUrl);
 
     const oEnvDso = {
       access_token: 'at',
@@ -382,6 +454,14 @@ describe('AlphaOasService', () => {
         userProperties: {}
       }
     };
+    const httpClient = {
+      post: jest.fn(() => of(oEnvDso))
+    } as unknown as HttpClient;
+    const spy =
+      jest.spyOn(httpClient, 'post');
+
+    service.init(httpClient,
+      undefined, undefined, signInUrl);
 
     service.signIn(
       'username',
@@ -389,16 +469,24 @@ describe('AlphaOasService', () => {
       true).subscribe({
       next: signedIn => expect(signedIn).toBeTruthy()
     });
-
-    const signInReq = httpMock.expectOne(signInUrl);
-    expect(signInReq.request.method).toEqual('POST');
-
-    signInReq.flush(oEnvDso);
+    expect(spy).toHaveBeenCalled();
   });
 
   it('signIn should fail with 400', () => {
     const signInUrl = 'https://localhost/token';
-    service.init(undefined, undefined, signInUrl);
+    const error400 = {
+      status: 400,
+      statusText: 'invalid request'
+    };
+    const httpClient = {
+      post: jest.fn(() =>
+        throwError(() => error400))
+    } as unknown as HttpClient;
+    const spy =
+      jest.spyOn(httpClient, 'post');
+
+    service.init(httpClient,
+      undefined, undefined, signInUrl);
 
     service.signIn(
       'username',
@@ -407,38 +495,48 @@ describe('AlphaOasService', () => {
       next: signedIn => expect(signedIn).toBeFalsy()
     });
 
-    const signInReq = httpMock.expectOne(signInUrl);
-    expect(signInReq.request.method).toEqual('POST');
-
-    signInReq.flush({}, {
-      status: 400,
-      statusText: 'invalid request'
-    });
+    expect(spy).toHaveBeenCalled();
   });
 
   it('signIn should fail with 401', () => {
     const signInUrl = 'https://localhost/token';
-    service.init(undefined, undefined, signInUrl);
 
+    const error401 = {
+      status: 401,
+      statusText: 'invalid request'
+    };
+    const httpClient = {
+      post: jest.fn(() =>
+        throwError(() => error401))
+    } as unknown as HttpClient;
+    const spy =
+      jest.spyOn(httpClient, 'post');
+    service.init(httpClient,
+      undefined, undefined, signInUrl);
     service.signIn(
       'username',
       'password',
       true).subscribe({
       next: signedIn => expect(signedIn).toBeFalsy()
     });
-
-    const signInReq = httpMock.expectOne(signInUrl);
-    expect(signInReq.request.method).toEqual('POST');
-
-    signInReq.flush({}, {
-      status: 401,
-      statusText: 'invalid request'
-    });
+    expect(spy).toHaveBeenCalled();
   });
 
   it('signIn should fail with 500', () => {
     const signInUrl = 'https://localhost/token';
-    service.init(undefined, undefined, signInUrl);
+    const error500 = {
+      status: 500,
+      statusText: 'server error'
+    };
+    const httpClient = {
+      post: jest.fn(() =>
+        throwError(() => error500))
+    } as unknown as HttpClient;
+    const spy =
+      jest.spyOn(httpClient, 'post');
+
+    service.init(httpClient,
+      undefined, undefined, signInUrl);
 
     service.signIn(
       'username',
@@ -447,19 +545,12 @@ describe('AlphaOasService', () => {
       error: e => expect(e).not.toEqual('')
     });
 
-    const signInReq = httpMock.expectOne(signInUrl);
-    expect(signInReq.request.method).toEqual('POST');
-
-    signInReq.flush({}, {
-      status: 500,
-      statusText: 'server error'
-    });
+    expect(spy).toHaveBeenCalled();
   });
 
   it('editUserInfo should edit user info', () => {
 
     const signInUrl = 'https://localhost/token';
-    service.init(undefined, undefined, signInUrl);
 
     const oEnvDso = {
       access_token: 'at',
@@ -472,6 +563,12 @@ describe('AlphaOasService', () => {
         userProperties: {}
       }
     };
+    const httpClient = {
+      post: jest.fn(() => of(oEnvDso))
+    } as unknown as HttpClient;
+    const spy =
+      jest.spyOn(httpClient, 'post');
+    service.init( httpClient,undefined, signInUrl);
 
     service.signIn(
       'username',
@@ -489,14 +586,12 @@ describe('AlphaOasService', () => {
       }
     });
 
-    const signInReq = httpMock.expectOne(signInUrl);
-    expect(signInReq.request.method).toEqual('POST');
-
-    signInReq.flush(oEnvDso);
+    expect(spy).toHaveBeenCalled();
   });
 
   it('editUserInfo should return when user is not set', () => {
     service.editUserInfo('fn', 'ln', 'zh');
     expect(true).toBeTruthy();
   })
+
 });

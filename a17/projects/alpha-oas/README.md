@@ -78,6 +78,7 @@ This is usually done in the onNgInit method of the app.component.
 
 ``` typescript
 import {Component, OnInit} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
 import {RouterOutlet} from '@angular/router';
 import {environment} from "../environments/environment";
 
@@ -99,6 +100,7 @@ export class AppComponent implements OnInit {
   title = 'a17';
 
   constructor(
+    private mHttp: HttpClient,
     private mLs: AlphaLsService,
     private mLbs: AlphaLbsService,
     private mOas: AlphaOasService,
@@ -115,7 +117,7 @@ export class AppComponent implements OnInit {
     const watchOasStateChanges = (principal: AlphaPrincipal) => {
       this.mLbs.publish(principal, 'PRINCIPAL_UPDATED');
     }
-    this.mOas.init(
+    this.mOas.init(mHttp,
       getMeUrl, refreshUrl, signInUrl,
       this.mLs.postErrorLog, watchOasStateChanges)
       .subscribe({

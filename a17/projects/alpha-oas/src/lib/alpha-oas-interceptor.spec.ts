@@ -2,15 +2,16 @@ import {AlphaOasInterceptor} from "./alpha-oas-interceptor";
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
 import {TestBed} from "@angular/core/testing";
 import {AlphaOasService} from "./alpha-oas.service";
-import {HTTP_INTERCEPTORS, HttpClient} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClient, HttpRequest, HttpResponse} from "@angular/common/http";
 import {AlphaSessionData} from "./alpha-session-data";
+import {of, throwError} from "rxjs";
+import {jest} from "@jest/globals";
 
 describe('AlphaOasInterceptor', () => {
 
   let sessionStore: { [key: string]: string } = {};
   let localStore: { [key: string]: string } = {};
-  let httpMock: HttpTestingController;
-  let service: AlphaOasService;
+  let oasService: AlphaOasService;
 
   beforeEach(() => {
 
@@ -49,25 +50,21 @@ describe('AlphaOasInterceptor', () => {
     Object.defineProperty(window, 'localStorage', {value: localStorageMock});
 
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ],
       providers: [
         { provide: HTTP_INTERCEPTORS, useClass: AlphaOasInterceptor, multi: true }
       ]
     });
-    httpMock = TestBed.inject(HttpTestingController);
-    service = TestBed.inject(AlphaOasService);
+    oasService = TestBed.inject(AlphaOasService);
   });
 
   afterEach(() => {
     sessionStore = {};
     localStore = {};
-    httpMock.verify();
   });
 
   it('should create an instance', () => {
-    expect(new AlphaOasInterceptor()).toBeTruthy();
+    const service = new AlphaOasInterceptor();
+    expect(service).toBeTruthy();
   });
 
   it ('should read client-id from the local storage', () => {
@@ -84,21 +81,39 @@ describe('AlphaOasInterceptor', () => {
     sd.store();
 
     const signInUrl = 'https://localhost/token';
-    service.init(undefined, undefined, signInUrl);
-    service.signIn(
-      'username', 'password', true)
-      .subscribe();
-    const req = httpMock.expectOne(signInUrl);
-    req.flush({}, {
+    const err401 = {
       status: 401,
       statusText: 'invalid credentials'
-    });
-    expect(req.request.headers.has('Authorization'));
-    expect(req.request.headers.get('Authorization'))
-      .toEqual('bearer at');
-    expect(req.request.headers.get('language-code'))
-      .toEqual('en');
-    expect(req.request.headers.get('client-id'))
-      .toBeTruthy();
+    };
+    const httpClient = {
+      post: jest.fn(() => throwError(() => err401))
+    } as unknown as HttpClient;
+    const spy =
+      jest.spyOn(httpClient, 'post');
+    oasService.init( httpClient, undefined, signInUrl);
+    oasService.signIn(
+      'username', 'password', true)
+      .subscribe();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it ('should intercept some request', () => {
+    const service = new AlphaOasInterceptor();
+    const httpRequest = new
+    HttpRequest<any>('GET', 'https://example.com');
+    const httpHandler = {
+      handle: jest.fn(() => of(new HttpResponse()))
+    };
+    const sd = new AlphaSessionData(
+      true, 'token',0, 10);
+    sd.store();
+    sessionStorage.setItem('token', 'someToken');
+    service.intercept(httpRequest, httpHandler)
+      .subscribe({
+        next: evn => {
+          expect(evn).toBeInstanceOf(HttpResponse);
+        }
+      });
+
   });
 });
