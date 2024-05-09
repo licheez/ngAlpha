@@ -15,7 +15,7 @@ import {
   AlphaPrimeLabelComponent,
   AlphaPrimeSaveButtonComponent,
   AlphaPrimeSelectComponent
-} from "@pvway-dev/alpha-prime";
+} from "@pvway/alpha-prime";
 import {NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {InputTextModule} from "primeng/inputtext";

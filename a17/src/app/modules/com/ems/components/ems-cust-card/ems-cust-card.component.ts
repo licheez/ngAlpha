@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {AlphaPrimeDebugTagComponent} from "@pvway-dev/alpha-prime";
+import {AlphaPrimeDebugTagComponent} from "@pvway/alpha-prime";
 import {NgClass, NgIf} from "@angular/common";
 import {ICustomerHead} from "../../model/customer";
 

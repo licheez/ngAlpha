@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Output} from '@angular/core';
-import {AlphaPrimeDebugTagComponent, AlphaPrimeOkButtonComponent} from "@pvway-dev/alpha-prime";
+import {AlphaPrimeDebugTagComponent, AlphaPrimeOkButtonComponent} from "@pvway/alpha-prime";
 import {RatingModule} from "primeng/rating";
 import {FormsModule} from "@angular/forms";
 import {DividerModule} from "primeng/divider";

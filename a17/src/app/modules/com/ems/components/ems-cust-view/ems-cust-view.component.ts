@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {AlphaPrimeDebugTagComponent} from "@pvway-dev/alpha-prime";
+import {AlphaPrimeDebugTagComponent} from "@pvway/alpha-prime";
 import {ICustomerBody, ICustomerHead} from "../../model/customer";
 import {AlphaEmsFormInput} from "@pvway/alpha-common";
 import {EmsCustFormComponent} from "../ems-cust-form/ems-cust-form.component";

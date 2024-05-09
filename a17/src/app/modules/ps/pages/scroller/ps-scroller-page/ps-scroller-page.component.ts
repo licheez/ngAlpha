@@ -5,7 +5,7 @@ import {
   AlphaPrimeRemainingHeightDirective,
   AlphaPrimeScrollerComponent,
   AlphaPrimeScrollerModel
-} from "@pvway-dev/alpha-prime";
+} from "@pvway/alpha-prime";
 import {PsScrollerItem} from "../ps-scroller-item";
 import {Observable} from "rxjs";
 import {NgForOf, NgIf, NgStyle} from "@angular/common";

@@ -3,7 +3,7 @@ import {Observable} from "rxjs";
 import {ICustomerBody, ICustomerEi, ICustomerHead} from "../../model/customer";
 import {EmsCustomerApi} from "../../api/ems-customer-api";
 import {ICountryHead} from "../../model/country";
-import {IAlphaPrimeSelectOption} from "@pvway-dev/alpha-prime";
+import {IAlphaPrimeSelectOption} from "@pvway/alpha-prime";
 
 export class EmsCustFormModel
   implements IAlphaEmsFormModel<ICustomerHead, ICustomerBody, ICustomerEi> {

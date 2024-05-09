@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AlphaEmsFormInput, AlphaEmsFormResult} from "@pvway/alpha-common";
 import {ICustomerBody} from "../../model/customer";
 import {DynamicDialogConfig, DynamicDialogRef} from "primeng/dynamicdialog";
-import {AlphaPrimeDebugTagComponent} from "@pvway-dev/alpha-prime";
+import {AlphaPrimeDebugTagComponent} from "@pvway/alpha-prime";
 import {EmsCustFormComponent} from "../ems-cust-form/ems-cust-form.component";
 import {NgIf} from "@angular/common";
 

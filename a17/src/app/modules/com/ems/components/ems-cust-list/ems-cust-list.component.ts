@@ -3,7 +3,7 @@ import {
   AlphaPrimeDebugTagComponent, AlphaPrimeFilterBoxComponent, AlphaPrimeModalService,
   AlphaPrimeRemainingHeightDirective, AlphaPrimeScrollerComponent,
   AlphaPrimeScrollerModel
-} from "@pvway-dev/alpha-prime";
+} from "@pvway/alpha-prime";
 import {AlphaEmsFormResult, AlphaEmsService} from "@pvway/alpha-common";
 import {NgForOf, NgIf, NgStyle} from "@angular/common";
 import {EmsCustCardComponent} from "../ems-cust-card/ems-cust-card.component";

@@ -3,7 +3,7 @@ import {
   AlphaPrimeConfirmationModalComponent,
   AlphaPrimeDebugTagComponent,
   AlphaPrimeModalService
-} from "@pvway-dev/alpha-prime";
+} from "@pvway/alpha-prime";
 import {ButtonModule} from "primeng/button";
 import {PsModalsFeedbackModalComponent} from "../ps-modals-feedback-modal/ps-modals-feedback-modal.component";
 import {NgIf} from "@angular/common";

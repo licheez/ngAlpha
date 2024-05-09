@@ -7,14 +7,13 @@ import {DividerModule} from "primeng/divider";
 import {AlphaLbsService} from "@pvway/alpha-lbs";
 import {AlphaLsService} from "@pvway/alpha-ls";
 import {AlphaNsService} from "@pvway/alpha-ns";
-import {AlphaPrimeModalService, AlphaPrimeService} from "@pvway-dev/alpha-prime";
+import {AlphaPrimeModalService, AlphaPrimeService, IAlphaPrimeModalConfig} from "@pvway/alpha-prime";
 import {AlphaTsService} from "@pvway/alpha-ts";
 
 import {AppSitemap} from "./app.sitemap";
 import {IAlphaPage} from "@pvway/alpha-ns";
 import {of} from "rxjs";
 import {DialogService} from "primeng/dynamicdialog";
-import {IAlphaPrimeModalConfig} from "@pvway-dev/alpha-prime/lib/services/alpha-prime-modal-abstractions";
 
 @Component({
   standalone: true,
