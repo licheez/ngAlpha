@@ -2,11 +2,11 @@
 
 This package was build using Angular 17.2.0
 
-It exposes
+It exposes 
 * two main services
   * AlphaAosService
   * AlphaAosInterceptor
-* important classes
+* some important classes
   * AlphaPrincipal
   * AlphaUser
   * SessionData
@@ -78,6 +78,7 @@ This is usually done in the onNgInit method of the app.component.
 
 ``` typescript
 import {Component, OnInit} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
 import {RouterOutlet} from '@angular/router';
 import {environment} from "../environments/environment";
 
@@ -99,6 +100,7 @@ export class AppComponent implements OnInit {
   title = 'a17';
 
   constructor(
+    private mHttp: HttpClient,
     private mLs: AlphaLsService,
     private mLbs: AlphaLbsService,
     private mOas: AlphaOasService,
@@ -115,7 +117,7 @@ export class AppComponent implements OnInit {
     const watchOasStateChanges = (principal: AlphaPrincipal) => {
       this.mLbs.publish(principal, 'PRINCIPAL_UPDATED');
     }
-    this.mOas.init(
+    this.mOas.init(mHttp,
       getMeUrl, refreshUrl, signInUrl,
       this.mLs.postErrorLog, watchOasStateChanges)
       .subscribe({
@@ -147,20 +149,20 @@ The init method will actually try to reauthenticate the user and populate the pr
 It covers the following use cases
 
 #### Use Case 1: The user was authenticated and refreshes the browser
-* pre-conditions:
+* pre-conditions: 
   * the user was authenticated and tokens (access token and refresh token) are present in the sessions storage
   * the user refreshes the browser's page
 * primary flow: the OasService will call the **getMe** end point provided in the init signature. This call reach an authorized end point on the server side that will return user information such as its userId, username and languageCode along with a map of string/string properties such as its first name, last name... any think you want actually.
-* post-conditions:
+* post-conditions: 
   * the principal is set with a populated user
   * the principal status is _Authenticated_
 
 #### USe Case 2: The browser was closed (i.e. session data was erased)
-* pre-conditions:
+* pre-conditions: 
   * the user was authenticated in a former session (i.e. a refresh token is present in ths localStorage)
-  * in the meantime he closed and reopened the browser so that the oas data in session storage is gone
-* primary low: the OasService will call the **refresh** end point provided in the init signature. On successful refresh the service then calls the getMe method for populating the principal and the user.
-* post-conditions:
+  * in the meantime he closed and reopened the browser so that the oas data in session storage is gone 
+* primary low: the OasService will call the **refresh** end point provided in the init signature. On successful refresh the service then calls the getMe method for populating the principal and the user. 
+* post-conditions: 
   * the session storage accessToken is set back to new (fresh) values
   * a new refresh token is stored in the localStorage
   * the principal user is set with a populated user
@@ -228,9 +230,9 @@ export class DemoApiService {
 }
 ```
 
-As you can see the authorize method is called.
+As you can see the authorize method is called. 
 
-This method will wrap the logic for making sure the http request is authorized using a valid Authorization bearer.
+This method will wrap the logic for making sure the http request is authorized using a valid Authorization bearer. 
 
 It will also take care of automatically and transparently renewing any expired token using the OpenOAuth refresh flow.
 
@@ -269,3 +271,4 @@ This component is part of a suite of integrated components
 
 * [AlphaLocalSubService](https://www.npmjs.com/package/@pvway/alpha-lbs)
 * [AlphaLoggingService](https://www.npmjs.com/package/@pvway/alpha-ls)
+

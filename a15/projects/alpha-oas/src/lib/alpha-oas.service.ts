@@ -6,14 +6,17 @@ import {AlphaSessionData} from "./alpha-session-data";
 import {AlphaRefreshData} from "./alpha-refresh-data";
 import {AlphaAuthEnvelopFactory} from "./alpha-auth-envelop";
 import {AlphaUserFactory} from "./alpha-user";
-import {AlphaAuthStatusEnum, IAlphaAuthEnvelop,
-  IAlphaPrincipal, IAlphaUser} from "./alpha-oas-abstractions";
+import {
+  AlphaAuthStatusEnum, IAlphaAuthEnvelop,
+  IAlphaPrincipal, IAlphaUser
+} from "./alpha-oas-abstractions";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlphaOasService {
 
+  private mHttp: HttpClient | undefined;
   private readonly mContext = 'OAuthService';
   private readonly mPrincipal: AlphaPrincipal;
   private mSignInUrl: string | undefined;
@@ -33,14 +36,14 @@ export class AlphaOasService {
     return this.mPrincipal;
   }
 
-  constructor(
-    private mHttp: HttpClient) {
+  constructor() {
     this.mPrincipal = new AlphaPrincipal();
   }
 
   /**
    * Initializes the authentication process by retrieving session data, refresh data, or setting authentication to anonymous mode.
    *
+   * @param httpClient - need to inject the httpClient here
    * @param {string} [getMeUrl] - The URL for retrieving user information.
    * @param {string} [refreshUrl] - The URL for refreshing authentication.
    * @param {string} [signInUrl] - The URL for signing in.
@@ -51,12 +54,13 @@ export class AlphaOasService {
    *
    * @return {Observable} - An Observable that emits the result of the initialization process.
    */
-  init(getMeUrl?: string,
+  init(httpClient: HttpClient,
+       getMeUrl?: string,
        refreshUrl?: string,
        signInUrl?: string,
        postErrorLog?: (context: string, method: string, error: string) => any,
        onPrincipalUpdated?: (principal: IAlphaPrincipal) => any): Observable<string> {
-
+    this.mHttp = httpClient;
     this.mSignInUrl = signInUrl;
     this.mRefreshUrl = refreshUrl;
     this.mGetMeUrl = getMeUrl;
@@ -130,47 +134,51 @@ export class AlphaOasService {
       userName: string,
       password: string,
       rememberMe: boolean) => Observable<IAlphaAuthEnvelop>): void {
-    this._signIn = signIn;
+    this.internalSignIn = signIn;
   }
 
   /**
    * Inject your own refresh method */
   useRefresh(refresh: (
     refreshToken: string) => Observable<IAlphaAuthEnvelop>) {
-    this._refresh = refresh;
+    this.internalRefresh = refresh;
   }
 
   /** Inject your own authorize method */
   useAuthorize(authorize: (request: Observable<any>) => Observable<any>): void {
-    this._authorize = authorize;
+    this.internalAuthorize = authorize;
   }
 
-  private _signIn: (
+  internalSignIn: (
     userName: string,
     password: string,
     rememberMe: boolean) =>
     Observable<IAlphaAuthEnvelop> =
     (username: string, password: string) => {
 
-    const body = 'grant_type=password' +
-      '&username=' + encodeURIComponent(username) +
-      '&password=' + encodeURIComponent(password);
+      if (this.mHttp === undefined) {
+        throw new Error('service is not initialized');
+      }
 
-    const headers = new HttpHeaders()
-      .set('content-type', 'application/x-www-form-urlencoded');
+      const body = 'grant_type=password' +
+        '&username=' + encodeURIComponent(username) +
+        '&password=' + encodeURIComponent(password);
 
-    const url = this.mSignInUrl!;
-    return this.mHttp
-      .post<any>(url, body, {headers: headers})
-      .pipe(
-        map(dso =>
-          AlphaAuthEnvelopFactory.factorFromDso(dso)),
-        catchError(error => {
-          this.mPostErrorLog(this.mContext,
-            '_signIn', JSON.stringify(error));
-          return throwError(() => error);
-        }));
-  }
+      const headers = new HttpHeaders()
+        .set('content-type', 'application/x-www-form-urlencoded');
+
+      const url = this.mSignInUrl!;
+      return this.mHttp!
+        .post<any>(url, body, {headers: headers})
+        .pipe(
+          map(dso =>
+            AlphaAuthEnvelopFactory.factorFromDso(dso)),
+          catchError(error => {
+            this.mPostErrorLog(this.mContext,
+              '_signIn', JSON.stringify(error));
+            return throwError(() => error);
+          }));
+    }
 
   /**
    * On successful login call storeIdentity.
@@ -187,7 +195,7 @@ export class AlphaOasService {
 
     return new Observable<boolean>(
       (subscriber: Subscriber<boolean>) => {
-        this._signIn(username, password, rememberMe)
+        this.internalSignIn(username, password, rememberMe)
           .subscribe({
             next: (token: IAlphaAuthEnvelop) => {
               this.storeIdentity(token, rememberMe);
@@ -212,8 +220,12 @@ export class AlphaOasService {
    * default implementation of refresh
    * this implementation can be overridden by calling useRefresh
    */
-  private _refresh: (refreshToken: string) => Observable<IAlphaAuthEnvelop> =
+  internalRefresh: (refreshToken: string) => Observable<IAlphaAuthEnvelop> =
     (refreshToken: string) => {
+
+      if (this.mHttp === undefined) {
+        throw new Error('service is not initialized');
+      }
 
       const body = 'grant_type=refresh_token' +
         '&refresh_token=' + encodeURIComponent(refreshToken);
@@ -222,7 +234,7 @@ export class AlphaOasService {
         .set('content-type', 'application/x-www-form-urlencoded');
 
       const url = this.mRefreshUrl!;
-      return this.mHttp.post<any>(url, body, {headers: headers})
+      return this.mHttp!.post<any>(url, body, {headers: headers})
         .pipe(
           map(dso =>
             AlphaAuthEnvelopFactory.factorFromDso(dso)));
@@ -232,7 +244,8 @@ export class AlphaOasService {
    * refreshes the accessToken from the refreshToken
    * found in the local storage data
    */
-  private refresh(): Observable<boolean> {
+  refresh(): Observable<boolean> {
+
     const rd = AlphaRefreshData.retrieve();
     if (rd == null) {
       this.mPostErrorLog(this.mContext,
@@ -243,7 +256,7 @@ export class AlphaOasService {
 
     return new Observable<boolean>(
       (subscriber: Subscriber<boolean>) => {
-        this._refresh(rd.refreshToken)
+        this.internalRefresh(rd.refreshToken)
           .subscribe({
             next: (token: IAlphaAuthEnvelop) => {
               this.storeIdentity(token, true);
@@ -267,6 +280,9 @@ export class AlphaOasService {
    * called from the init() method when the session data is present
    */
   getMe(): Observable<IAlphaUser> {
+    if (!this.mHttp) {
+      throw new Error('service is not initialized');
+    }
     const url = this.mGetMeUrl!;
     const call = this.mHttp.get<any>(url)
       .pipe(
@@ -288,7 +304,7 @@ export class AlphaOasService {
   editUserInfo(
     firstName: string,
     lastName: string,
-    languageCode: string):void {
+    languageCode: string): void {
     if (!this.mPrincipal.user) {
       return;
     }
@@ -312,7 +328,7 @@ export class AlphaOasService {
    * if still valid fires the request directly else inserts a
    * refresh before firing the request
    */
-  private _authorize(httpRequest: Observable<any>): Observable<any> {
+   internalAuthorize(httpRequest: Observable<any>): Observable<any> {
     const sd = AlphaSessionData.retrieve();
     if (sd == null || sd.isExpiredOrExpiring) {
       return this.refresh()
@@ -334,7 +350,7 @@ export class AlphaOasService {
    * before calling the request
    */
   authorize(httpRequest: Observable<any>): Observable<any> {
-    return this._authorize(httpRequest);
+    return this.internalAuthorize(httpRequest);
   }
 
   /**
