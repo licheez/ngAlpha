@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable, Subscriber, of, mergeMap, catchError, throwError} from "rxjs";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {AlphaHttpObjectResult, IAlphaHttpObjectResultDso} from "@pvway/alpha-common";
+import {AlphaHttpObjectResult, IAlphaHttpObjectResultDso} from "../http/alpha-http-result";
 
 class UsoChunkUpload {
   dataChunk: string;
@@ -20,6 +20,7 @@ class UsoChunkUpload {
 })
 export class AlphaUploadApiService{
 
+  private mHttp: HttpClient | undefined;
   private mContext = "AlphaUploadApiService";
   private mChunkSize = 3000000; // 3 Mb
   private mAuthorize!: (httpRequest: Observable<any>) => Observable<any>;
@@ -27,12 +28,13 @@ export class AlphaUploadApiService{
   private mUploadUrl!: string;
   private mDeleteUploadUrl!: string;
 
-  constructor(private mHttp: HttpClient) {
+  constructor() {
   }
 
   /**
    * Initializes the uploader with the given parameters.
    *
+   * @param httpClient
    * @param {string} uploadUrl - The URL to which the file uploads will be sent.
    * @param {string} deleteUploadUrl - The URL to which delete requests will be sent.
    * @param {number} [chunkSize] - Optional parameter for specifying the upload chunk size.
@@ -42,11 +44,13 @@ export class AlphaUploadApiService{
    * @return {void} A void return type.
    */
   init(
+    httpClient: HttpClient,
     uploadUrl: string,
     deleteUploadUrl: string,
     authorize: (httpRequest: Observable<any>) => Observable<any>,
     postErrorLog: (context: string, method: string, error: string) => any,
     chunkSize?: number): void {
+    this.mHttp = httpClient;
     this.mUploadUrl = uploadUrl;
     this.mDeleteUploadUrl = deleteUploadUrl;
     this.mAuthorize = authorize;
@@ -66,6 +70,9 @@ export class AlphaUploadApiService{
   upload(
     data: any,
     notifyProgress: (progress: number) => any): Observable<string> {
+    if (!this.mHttp){
+      throw new Error('Service is not initialized');
+    }
     return new Observable(
       (subscriber: Subscriber<string>) => {
         const chunks: string[] = [];
@@ -95,6 +102,10 @@ export class AlphaUploadApiService{
     const pId = encodeURIComponent(uploadId);
     const url = this.mDeleteUploadUrl
       + `?uploadId=${pId}`;
+
+    if (!this.mHttp){
+      throw new Error('Service is not initialized');
+    }
 
     const call = this.mHttp.get<any>(url)
       .pipe(
@@ -140,7 +151,7 @@ export class AlphaUploadApiService{
     uploadId?: string): Observable<IAlphaHttpObjectResultDso | string> {
     const body = new UsoChunkUpload(dataChunk, uploadId);
     const call =
-      this.mHttp.post<string>(this.mUploadUrl, body)
+      this.mHttp!.post<string>(this.mUploadUrl, body)
         .pipe(
           catchError((error: HttpErrorResponse) => {
             this.mPostErrorLog(

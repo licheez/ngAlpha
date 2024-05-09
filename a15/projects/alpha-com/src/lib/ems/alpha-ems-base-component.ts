@@ -20,7 +20,9 @@ export abstract class AlphaEmsBaseComponent<TH, TB, TE> {
    */
   constructor(
     api: AlphaEmsBaseApi<TH, TB, TE>,
-    private mFactorForm: (gfi: AlphaEmsFormInput<TB>) =>
+    private mFactorForm: (
+      api: AlphaEmsBaseApi<TH, TB, TE>,
+      gfi: AlphaEmsFormInput<TB>) =>
       IAlphaEmsFormModel<TH, TB, TE>,
     allowAnonymousRead?: boolean) {
     this.api = api;
@@ -53,7 +55,8 @@ export abstract class AlphaEmsBaseComponent<TH, TB, TE> {
     return new Observable(
       (subscriber: Subscriber<IAlphaEmsFormModel<TH, TB, TE>>) => {
         if (this._fi.body !== undefined) {
-          const fm = this.mFactorForm(this._fi);
+          const fm =
+            this.mFactorForm(this.api, this._fi);
           fm.populateForRead(this._fi.body);
           subscriber.next(fm);
         } else {
@@ -64,7 +67,8 @@ export abstract class AlphaEmsBaseComponent<TH, TB, TE> {
                 if (this.verbose) {
                   console.log(body);
                 }
-                const fm = this.mFactorForm(this._fi);
+                const fm =
+                  this.mFactorForm(this.api, this._fi);
                 fm.populateForRead(body);
                 this.busy = false;
                 subscriber.next(fm);
@@ -90,7 +94,8 @@ export abstract class AlphaEmsBaseComponent<TH, TB, TE> {
               if (this.verbose) {
                 console.log(ei);
               }
-              const fm = this.mFactorForm(this._fi);
+              const fm =
+                this.mFactorForm(this.api, this._fi);
               fm.populateForNew(ei);
               this.busy = false;
               subscriber.next(fm);
@@ -116,7 +121,8 @@ export abstract class AlphaEmsBaseComponent<TH, TB, TE> {
               if (this.verbose) {
                 console.log(ec);
               }
-              const fm = this.mFactorForm(this._fi);
+              const fm =
+                this.mFactorForm(this.api, this._fi);
               fm.populateForEdit(ec.ei, ec.body!);
               this.busy = false;
               subscriber.next(fm);

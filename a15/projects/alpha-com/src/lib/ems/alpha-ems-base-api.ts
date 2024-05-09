@@ -1,11 +1,10 @@
-import {AlphaHttpObjectResult} from "@pvway/alpha-common";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {catchError, map, Observable, throwError} from "rxjs";
 import {AlphaEmsUsoOptionSet} from "./alpha-ems-uso-option-set";
-import {AlphaHttpListResult} from "@pvway/alpha-common";
 import {AlphaEmsEditContainer, IAlphaEmsEditContainer} from "./alpha-ems-edit-container";
 import {AlphaEmsBaseApiEvent} from "./alpha-ems-base-api-event";
 import {AlphaEmsService} from "./alpha-ems.service";
+import {AlphaHttpListResult, AlphaHttpObjectResult} from "../http/alpha-http-result";
 
 export abstract class AlphaEmsBaseApi<TH, TB, TE> {
   protected constructor(
