@@ -1,6 +1,5 @@
 import {IAlphaTranslationCache, IAlphaTranslationItem, IAlphaTranslationRow} from "./alpha-ts-abstractions";
 
-
 export class AlphaTranslationCache implements IAlphaTranslationCache {
   private static readonly lsItemName = 'alphaTranslationsCache';
 

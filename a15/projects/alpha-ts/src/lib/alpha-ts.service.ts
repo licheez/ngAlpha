@@ -3,19 +3,20 @@ import {AlphaTranslationCache} from "./alpha-translation-cache";
 import {AlphaTsApiService} from "./alpha-ts-api.service";
 import {Observable, Observer} from "rxjs";
 import {IAlphaTranslationCache, IAlphaTranslationItem, IAlphaTranslationRow} from "./alpha-ts-abstractions";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlphaTsService {
 
+  private mApi = new AlphaTsApiService();
   private mContext = 'AlphaTsService';
   private mTranslationCache: IAlphaTranslationCache;
   private mLanguageCode = 'en';
   private mPostErrorLog: ((context: string, method: string, error: string) => any) | undefined;
 
-  constructor(
-    private mApi: AlphaTsApiService) {
+  constructor() {
     this.mTranslationCache = AlphaTranslationCache.default;
   }
 
@@ -40,16 +41,19 @@ export class AlphaTsService {
 
   /**
    * Initializes the service.
+   * @param httpClient
    * @param {string} [getTranslationCacheUpdateUrl] - The URL for updating the translation cache.
    * @param {Function} [postErrorLog] - The function for posting error logs.
    * @return {Observable<string>} An Observable that emits a string value.
    */
   init(
+    httpClient?: HttpClient,
     getTranslationCacheUpdateUrl?: string,
     postErrorLog?: (
       context: string, method: string, error: string) => any): Observable<string> {
 
-    this.mApi.init(getTranslationCacheUpdateUrl, postErrorLog);
+    this.mApi.init(
+      httpClient, getTranslationCacheUpdateUrl, postErrorLog);
 
     this.mPostErrorLog = postErrorLog;
 
