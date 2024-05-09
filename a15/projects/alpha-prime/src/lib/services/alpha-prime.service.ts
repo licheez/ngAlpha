@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {DialogService} from "primeng/dynamicdialog";
 import {Observable, of} from "rxjs";
 
 @Injectable({
@@ -7,8 +6,6 @@ import {Observable, of} from "rxjs";
 })
 export class AlphaPrimeService {
 
-  modalStyleClass: string | undefined;
-  ds!: DialogService;
   postNavigationLog: (path: string, title: string) => any =
     () => {
     };
@@ -49,18 +46,15 @@ export class AlphaPrimeService {
   /**
    * Initializes the service.
    *
-   * @param {DialogService} ds - The dialog service used for displaying dialogs.
    * @param {boolean} isProduction - A flag indicating if the application is running in production mode.
    * @param translationService
    * @param loggerService
    * @param oAuthService
    * @param uploadService
    * @param localBusService
-   * @param {string} modalStyleClass - (optional) The CSS class to be applied to modal dialogs.
    * @return {void}
    */
   init(
-    ds: DialogService,
     isProduction: boolean,
     translationService: {
       getTr: (
@@ -94,9 +88,7 @@ export class AlphaPrimeService {
         channel?: string) => number,
       unsubscribe: (
         id: number) => any
-    },
-    modalStyleClass?: string): void {
-    this.ds = ds;
+    }): void {
     this.isProduction = isProduction;
     this.getTr = translationService.getTr;
     if (loggerService) {
@@ -117,7 +109,6 @@ export class AlphaPrimeService {
         localBusService.subscribe,
         localBusService.unsubscribe);
     }
-    this.modalStyleClass = modalStyleClass;
   }
 
   addLoggerService(postNavigationLog: (

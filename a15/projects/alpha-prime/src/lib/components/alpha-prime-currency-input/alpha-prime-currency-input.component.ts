@@ -43,7 +43,7 @@ export class AlphaPrimeCurrencyInputComponent {
   // noinspection RegExpRedundantEscape
   realNumber: RegExp = /[0-9\,\.\-]/;
 
-  sVal: string | undefined;
+  sVal: string | number | undefined;
   @Input()
   set value(value: number | undefined) {
     switch (value) {
@@ -90,12 +90,13 @@ export class AlphaPrimeCurrencyInputComponent {
       : this.baseInputStyle;
   }
 
-  onTextChange(sVal: string) {
+  onTextChange(sVal: string | number | undefined) {
     if (!sVal) {
       this.onClear();
       return;
     }
-
+    // make sure sVal is a string
+    sVal = `${sVal}`;
     this.sVal = sVal.replaceAll(',', '.');
     if (this.sVal === '-0'
       || this.sVal === '-.'

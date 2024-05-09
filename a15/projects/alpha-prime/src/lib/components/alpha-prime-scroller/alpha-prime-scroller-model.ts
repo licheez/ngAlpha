@@ -5,8 +5,30 @@ export class AlphaPrimeScrollerModel<T> {
   onLoading: () => any = () => {};
   onLoaded: (item: T | undefined) => any = () => {};
 
+  // for debugging purpose
+  spaceAbove = -1;
+  panelHeight = -1;
+  panelBottom = -1;
+  contentHeight = -1;
+  spaceBellow = -1;
+  paddingTop = -1;
+  paddingBottom = -1;
   visibleFrom = 0;
   visibleTo = 0;
+
+  get dims(): string {
+    const sa = Math.round(this.spaceAbove);
+    const ph = Math.round(this.panelHeight);
+    const pb = Math.round(this.panelBottom);
+    const ch = Math.round(this.contentHeight);
+    const sb = Math.round(this.spaceBellow);
+    const padT = Math.round(this.paddingTop);
+    const padB = Math.round(this.paddingBottom);
+    const vf = this.visibleFrom;
+    const vt = this.visibleTo;
+    return `sa: ${sa} ph: ${ph} pb:${pb} ch: ${ch} sb:${sb} padT:${padT} padB: ${padB} vf:${vf} vt:${vt}`;
+  }
+
   rows: AlphaPrimeScrollerRow<T>[] = [];
   get nbRows() {
     return this.rows.length;

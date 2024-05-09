@@ -36,5 +36,6 @@ export * from './lib/directives/alpha-prime-remaining-height.directive';
 
 export * from './lib/pipes/alpha-prime-boldify.pipe';
 
+export * from './lib/services/alpha-prime-modal-abstractions';
 export * from './lib/services/alpha-prime-modal.service';
 export * from './lib/services/alpha-prime.service';
