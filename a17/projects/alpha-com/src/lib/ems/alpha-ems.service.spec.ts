@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { AlphaEmsService } from './alpha-ems.service';
+import {HttpClient} from "@angular/common/http";
 
 describe('AlphaEmsService', () => {
   let service: AlphaEmsService;
@@ -18,9 +19,17 @@ describe('AlphaEmsService', () => {
     const authorize = jest.fn();
     const postErrorLog = jest.fn();
     const publish = jest.fn();
-    service.init(authorize, postErrorLog, publish);
+    const httpClient = {} as unknown as HttpClient;
+    service.init(httpClient, authorize, postErrorLog, publish);
+    expect(service.httpClient).toEqual(httpClient);
     expect(service.authorize).toEqual(authorize);
     expect(service.postErrorLog).toEqual(postErrorLog);
     expect(service.publish).toEqual(publish);
-  })
+  });
+
+  it('get httpClient should throw when service is not initialized', () => {
+    expect(() => service.httpClient)
+      .toThrow('AlphaEmsService is not initialized');
+  });
+
 });

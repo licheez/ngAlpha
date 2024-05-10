@@ -1,4 +1,4 @@
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {HttpErrorResponse} from "@angular/common/http";
 import {catchError, map, Observable, throwError} from "rxjs";
 import {AlphaEmsUsoOptionSet} from "./alpha-ems-uso-option-set";
 import {AlphaEmsEditContainer, IAlphaEmsEditContainer} from "./alpha-ems-edit-container";
@@ -7,14 +7,17 @@ import {AlphaEmsService} from "./alpha-ems.service";
 import {AlphaHttpListResult, AlphaHttpObjectResult} from "../http/alpha-http-result";
 
 export abstract class AlphaEmsBaseApi<TH, TB, TE> {
+
+  ems: AlphaEmsService;
+
   protected constructor(
-    private mEms: AlphaEmsService,
-    protected mHttp: HttpClient,
+    ems: AlphaEmsService,
     protected mContext: string,
     protected mBaseUrl: string,
     private factorHead: (dso: any) => TH,
     private factorBody: (dso: any) => TB,
     private factorEi: (dso: any) => TE) {
+    this.ems = ems;
   }
 
   list(authorize: boolean, skip: number, take: number,
@@ -31,7 +34,7 @@ export abstract class AlphaEmsBaseApi<TH, TB, TE> {
       methodName = 'list';
     }
     const url = this.mBaseUrl + `/${methodName}`;
-    const call = this.mHttp
+    const call = this.ems.httpClient
       .post<any>(url, body)
       .pipe(
         map(
@@ -42,10 +45,10 @@ export abstract class AlphaEmsBaseApi<TH, TB, TE> {
                 this.factorHead(dsoItem)).data
         ),
         catchError((error: HttpErrorResponse) => {
-          this.mEms.postErrorLog(this.mContext, url, JSON.stringify(error));
+          this.ems.postErrorLog(this.mContext, url, JSON.stringify(error));
           return throwError(() => error);
         }));
-    return authorize ? this.mEms.authorize(call) : call;
+    return authorize ? this.ems.authorize(call) : call;
   }
 
   getBody(authorize: boolean, keys: string[],
@@ -56,7 +59,7 @@ export abstract class AlphaEmsBaseApi<TH, TB, TE> {
     }
     const url = this.mBaseUrl + `/${methodName}`;
     const body = new AlphaEmsUsoOptionSet(keys, options);
-    const call = this.mHttp.post<any>(url, body)
+    const call = this.ems.httpClient.post<any>(url, body)
       .pipe(
         map(
           hRes => AlphaHttpObjectResult
@@ -65,11 +68,11 @@ export abstract class AlphaEmsBaseApi<TH, TB, TE> {
               dso => this.factorBody(dso)).data
         ),
         catchError((error: HttpErrorResponse) => {
-          this.mEms.postErrorLog(this.mContext, url, JSON.stringify(error));
+          this.ems.postErrorLog(this.mContext, url, JSON.stringify(error));
           return throwError(() => error);
         }));
 
-    return authorize ? this.mEms.authorize(call) : call;
+    return authorize ? this.ems.authorize(call) : call;
   }
 
   getBodyFe(keys: string[],
@@ -80,7 +83,7 @@ export abstract class AlphaEmsBaseApi<TH, TB, TE> {
     }
     const url = this.mBaseUrl + `/${methodName}`;
     const body = new AlphaEmsUsoOptionSet(keys, options);
-    const call = this.mHttp.post<any>(url, body)
+    const call = this.ems.httpClient.post<any>(url, body)
       .pipe(
         map(
           hRes => {
@@ -94,11 +97,11 @@ export abstract class AlphaEmsBaseApi<TH, TB, TE> {
           }
         ),
         catchError((error: HttpErrorResponse) => {
-          this.mEms.postErrorLog(this.mContext, url, JSON.stringify(error));
+          this.ems.postErrorLog(this.mContext, url, JSON.stringify(error));
           return throwError(() => error);
         }));
 
-    return this.mEms.authorize(call);
+    return this.ems.authorize(call);
   }
 
   getEi(options?: Map<string, string>,
@@ -111,7 +114,7 @@ export abstract class AlphaEmsBaseApi<TH, TB, TE> {
       methodName = 'ei';
     }
     let url = this.mBaseUrl + `/${methodName}`;
-    const call = this.mHttp.post<any>(url, body)
+    const call = this.ems.httpClient.post<any>(url, body)
       .pipe(
         map(
           hRes => AlphaHttpObjectResult
@@ -120,11 +123,11 @@ export abstract class AlphaEmsBaseApi<TH, TB, TE> {
               dso => this.factorEi(dso)).data
         ),
         catchError((error: HttpErrorResponse) => {
-          this.mEms.postErrorLog(this.mContext, url, JSON.stringify(error));
+          this.ems.postErrorLog(this.mContext, url, JSON.stringify(error));
           return throwError(() => error);
         }));
 
-    return this.mEms.authorize(call);
+    return this.ems.authorize(call);
   }
 
   baseCreate(body: any, methodName?: string): Observable<TB> {
@@ -132,7 +135,7 @@ export abstract class AlphaEmsBaseApi<TH, TB, TE> {
       methodName = 'create';
     }
     const url = this.mBaseUrl + `/${methodName}`;
-    const call = this.mHttp.post<any>(url, body)
+    const call = this.ems.httpClient.post<any>(url, body)
       .pipe(
         map(
           hRes => {
@@ -141,15 +144,15 @@ export abstract class AlphaEmsBaseApi<TH, TB, TE> {
                 hRes,
                 dso => this.factorBody(dso)).data;
             const event = new AlphaEmsBaseApiEvent('create', body);
-            this.mEms.publish(event, this.mContext);
+            this.ems.publish(event, this.mContext);
             return body;
           }
         ),
         catchError((error: HttpErrorResponse) => {
-          this.mEms.postErrorLog(this.mContext, url, JSON.stringify(error));
+          this.ems.postErrorLog(this.mContext, url, JSON.stringify(error));
           return throwError(() => error);
         }));
-    return this.mEms.authorize(call);
+    return this.ems.authorize(call);
   }
 
   baseUpdate(body: any, methodName?: string): Observable<TB> {
@@ -157,7 +160,7 @@ export abstract class AlphaEmsBaseApi<TH, TB, TE> {
       methodName = 'update';
     }
     const url = this.mBaseUrl + `/${methodName}`;
-    const call = this.mHttp.post<any>(url, body)
+    const call = this.ems.httpClient.post<any>(url, body)
       .pipe(
         map(
           hRes => {
@@ -166,15 +169,15 @@ export abstract class AlphaEmsBaseApi<TH, TB, TE> {
                 hRes,
                 dso => this.factorBody(dso)).data;
             const event = new AlphaEmsBaseApiEvent<TB>('update', body);
-            this.mEms.publish(event, this.mContext);
+            this.ems.publish(event, this.mContext);
             return body;
           }
         ),
         catchError((error: HttpErrorResponse) => {
-          this.mEms.postErrorLog(this.mContext, url, JSON.stringify(error));
+          this.ems.postErrorLog(this.mContext, url, JSON.stringify(error));
           return throwError(() => error);
         }));
-    return this.mEms.authorize(call);
+    return this.ems.authorize(call);
   }
 
   /** returns undefined on physical delete
@@ -187,7 +190,7 @@ export abstract class AlphaEmsBaseApi<TH, TB, TE> {
     }
     const url = this.mBaseUrl + `/${methodName}`;
     const body = new AlphaEmsUsoOptionSet(keys, options);
-    const call = this.mHttp.post<any>(url, body)
+    const call = this.ems.httpClient.post<any>(url, body)
       .pipe(
         map(
           hRes => {
@@ -198,14 +201,14 @@ export abstract class AlphaEmsBaseApi<TH, TB, TE> {
             const event = body
               ? new AlphaEmsBaseApiEvent<TB>('update', body)
               : new AlphaEmsBaseApiEvent('delete', null, keys);
-            this.mEms.publish(event, this.mContext);
+            this.ems.publish(event, this.mContext);
             return body;
           }),
         catchError((error: HttpErrorResponse) => {
-          this.mEms.postErrorLog(this.mContext, url, JSON.stringify(error));
+          this.ems.postErrorLog(this.mContext, url, JSON.stringify(error));
           return throwError(() => error);
         }));
-    return this.mEms.authorize(call);
+    return this.ems.authorize(call);
   }
 
 }

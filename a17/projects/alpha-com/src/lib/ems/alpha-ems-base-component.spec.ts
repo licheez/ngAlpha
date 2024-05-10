@@ -48,10 +48,8 @@ const ems = new AlphaEmsService();
 
 class AlphaEmsApi extends AlphaEmsBaseApi<IHead, IBody, IEi> {
   constructor(
-    ems: AlphaEmsService,
-    httpClient: HttpClient) {
-    super(ems, httpClient,
-      'AlphaEmApi', 'https://AlphaEm',
+    ems: AlphaEmsService) {
+    super(ems, 'AlphaEmApi', 'https://AlphaEm',
       Factory.factorHeadFromDso,
       Factory.factorBodyFromDso,
       Factory.factorEiFromDso);
@@ -120,7 +118,7 @@ class EmsComponent extends AlphaEmsBaseComponent<IHead, IBody, IEi> {
     super(api, (
       api: AlphaEmsBaseApi<IHead, IBody, IEi>,
       gfi: AlphaEmsFormInput<IBody>) =>
-        new EmsForm(api, gfi), false);
+      new EmsForm(api, gfi), false);
     this.verbose = true;
   }
 
@@ -138,7 +136,8 @@ describe('AlphaEmsBaseComponent', () => {
   let mockHttpClient = {} as unknown as HttpClient;
 
   it('should create an instance', () => {
-    const api = new AlphaEmsApi(ems, mockHttpClient);
+    ems.init(mockHttpClient);
+    const api = new AlphaEmsApi(ems);
     const emsComp = new EmsComponent(api);
     expect(emsComp).toBeTruthy();
   });
@@ -146,9 +145,10 @@ describe('AlphaEmsBaseComponent', () => {
   describe('loadForm for read', () => {
 
     it('should load form in read mode passing a valid body', () => {
-      const api = new AlphaEmsApi(ems, mockHttpClient);
+      ems.init(mockHttpClient);
+      const api = new AlphaEmsApi(ems);
       const emsComp = new EmsComponent(api);
-      const body: IBody = { id: '1', name: 'one', age: 1 };
+      const body: IBody = {id: '1', name: 'one', age: 1};
       const fi = AlphaEmsFormInput.factorForRead(
         [body.id], undefined, undefined, body);
       emsComp.setFi(fi);
@@ -161,7 +161,7 @@ describe('AlphaEmsBaseComponent', () => {
     });
 
     it('should load form in read mode w/o passing a valid body', () => {
-      const body = { id: '1', name: 'one', age: 1 };
+      const body = {id: '1', name: 'one', age: 1};
       const dso: IAlphaHttpObjectResultDso = {
         statusCode: 'O',
         mutationCode: 'N',
@@ -172,7 +172,8 @@ describe('AlphaEmsBaseComponent', () => {
       const httpClient = {
         post: jest.fn(() => of(dso))
       } as unknown as HttpClient;
-      const api = new AlphaEmsApi(ems, httpClient);
+      ems.init(httpClient);
+      const api = new AlphaEmsApi(ems);
       const emsComp = new EmsComponent(api);
       const fi = AlphaEmsFormInput
         .factorForRead<IBody>(['1']);
@@ -197,7 +198,8 @@ describe('AlphaEmsBaseComponent', () => {
         post: jest.fn(() =>
           throwError(() => 'someError'))
       } as unknown as HttpClient;
-      const api = new AlphaEmsApi(ems, httpClient);
+      ems.init(httpClient);
+      const api = new AlphaEmsApi(ems);
       const emsComp = new EmsComponent(api);
       const fi = AlphaEmsFormInput
         .factorForRead<IBody>(['1']);
@@ -211,7 +213,7 @@ describe('AlphaEmsBaseComponent', () => {
   describe('loadForm for new', () => {
 
     it('should load the form for new with success', () => {
-      const ei = { selectItems: ['item1', 'item2'] };
+      const ei = {selectItems: ['item1', 'item2']};
       const dso: IAlphaHttpObjectResultDso = {
         statusCode: 'O',
         mutationCode: 'N',
@@ -222,7 +224,8 @@ describe('AlphaEmsBaseComponent', () => {
       const httpClient = {
         post: jest.fn(() => of(dso))
       } as unknown as HttpClient;
-      const api = new AlphaEmsApi(ems, httpClient);
+      ems.init(httpClient);
+      const api = new AlphaEmsApi(ems);
       const emsComp = new EmsComponent(api);
       const fi = AlphaEmsFormInput
         .factorForNew<IBody>();
@@ -243,7 +246,7 @@ describe('AlphaEmsBaseComponent', () => {
 
       // simulate an error while saving
       httpClient.post = jest.fn(() =>
-        throwError(()=> 'someError'));
+        throwError(() => 'someError'));
       emsComp.onSave().subscribe({
         error: e => expect(e).toEqual("someError")
       });
@@ -255,7 +258,8 @@ describe('AlphaEmsBaseComponent', () => {
         post: jest.fn(() =>
           throwError(() => 'someError'))
       } as unknown as HttpClient;
-      const api = new AlphaEmsApi(ems, httpClient);
+      ems.init(httpClient);
+      const api = new AlphaEmsApi(ems);
       const emsComp = new EmsComponent(api);
       const fi = AlphaEmsFormInput
         .factorForNew<IBody>();
@@ -269,9 +273,9 @@ describe('AlphaEmsBaseComponent', () => {
   describe('loadForm for edit', () => {
 
     it('should load form in edit mode with success', () => {
-      const ei = { selectItems: ['item1', 'item2'] };
-      const body = { id: '1', name: 'one', age: 1 };
-      const ec = { ei: ei, body: body };
+      const ei = {selectItems: ['item1', 'item2']};
+      const body = {id: '1', name: 'one', age: 1};
+      const ec = {ei: ei, body: body};
       const dso: IAlphaHttpObjectResultDso = {
         statusCode: 'O',
         mutationCode: 'N',
@@ -282,7 +286,8 @@ describe('AlphaEmsBaseComponent', () => {
       const httpClient = {
         post: jest.fn(() => of(dso))
       } as unknown as HttpClient;
-      const api = new AlphaEmsApi(ems, httpClient);
+      ems.init(httpClient);
+      const api = new AlphaEmsApi(ems);
       const emsComp = new EmsComponent(api);
       const fi = AlphaEmsFormInput
         .factorForEdit<IBody>(['1']);
@@ -323,7 +328,8 @@ describe('AlphaEmsBaseComponent', () => {
         post: jest.fn(() =>
           throwError(() => 'someError'))
       } as unknown as HttpClient;
-      const api = new AlphaEmsApi(ems, httpClient);
+      ems.init(httpClient);
+      const api = new AlphaEmsApi(ems);
       const emsComp = new EmsComponent(api);
       const fi = AlphaEmsFormInput
         .factorForEdit<IBody>(['1']);

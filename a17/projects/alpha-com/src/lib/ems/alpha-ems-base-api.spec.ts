@@ -42,10 +42,9 @@ class Factory {
 }
 
 class AlphaEmsApi extends AlphaEmsBaseApi<IHead, IBody, IEi> {
-  constructor(ems: AlphaEmsService,
-              httpClient: HttpClient) {
+  constructor(ems: AlphaEmsService) {
     super(
-      ems, httpClient,
+      ems,
       'AlphaEmApi', 'https://AlphaEm',
       Factory.factorHeadFromDso,
       Factory.factorBodyFromDso,
@@ -61,7 +60,7 @@ describe('AlphaEmsBaseApi', () => {
 
   it('should create an instance', () => {
     const emsApi = new AlphaEmsApi(
-      ems, {} as unknown as HttpClient);
+      ems);
     expect(emsApi).toBeTruthy();
   });
 
@@ -80,8 +79,8 @@ describe('AlphaEmsBaseApi', () => {
       mockHttpClient = {
         post: jest.fn().mockImplementation(() => of(dso))
       } as unknown as HttpClient;
-      const emsApi = new AlphaEmsApi(
-        ems, mockHttpClient);
+      ems.init(mockHttpClient);
+      const emsApi = new AlphaEmsApi(ems);
       emsApi.list(true, 0, 10)
         .subscribe({
           next: heads => expect(heads.length).toEqual(2)
@@ -93,8 +92,8 @@ describe('AlphaEmsBaseApi', () => {
         post: jest.fn().mockImplementation(() =>
           throwError(() => 'someError'))
       } as unknown as HttpClient;
-      const emsApi = new AlphaEmsApi(
-        ems, mockHttpClient);
+      ems.init(mockHttpClient);
+      const emsApi = new AlphaEmsApi(ems);
       emsApi.list(true, 0, 10)
         .subscribe({
           error: e => {
@@ -120,8 +119,8 @@ describe('AlphaEmsBaseApi', () => {
       mockHttpClient = {
         post: jest.fn().mockImplementation(() => of(dso))
       } as unknown as HttpClient;
-      const emsApi = new AlphaEmsApi(
-        ems, mockHttpClient);
+      ems.init(mockHttpClient);
+      const emsApi = new AlphaEmsApi(ems);
       emsApi.getBody(true, ['1'])
         .subscribe({
           next: body => {
@@ -137,8 +136,8 @@ describe('AlphaEmsBaseApi', () => {
         post: jest.fn().mockImplementation(
           () => throwError(() => 'someError'))
       } as unknown as HttpClient;
-      const emsApi = new AlphaEmsApi(
-        ems, mockHttpClient);
+      ems.init(mockHttpClient);
+      const emsApi = new AlphaEmsApi(ems);
       emsApi.getBody(true, ['1'])
         .subscribe({
           error: e => {
@@ -169,8 +168,8 @@ describe('AlphaEmsBaseApi', () => {
       mockHttpClient = {
         post: jest.fn().mockImplementation(() => of(dso))
       } as unknown as HttpClient;
-      const emsApi = new AlphaEmsApi(
-        ems, mockHttpClient);
+      ems.init(mockHttpClient);
+      const emsApi = new AlphaEmsApi(ems);
       emsApi.getBodyFe(['1'])
         .subscribe({
           next: ec => {
@@ -185,8 +184,8 @@ describe('AlphaEmsBaseApi', () => {
         post: jest.fn().mockImplementation(
           () => throwError(() => 'someError'))
       } as unknown as HttpClient;
-      const emsApi = new AlphaEmsApi(
-        ems, mockHttpClient);
+      ems.init(mockHttpClient);
+      const emsApi = new AlphaEmsApi(ems);
       emsApi.getBodyFe(['1'])
         .subscribe({
           error: e => {
@@ -212,8 +211,8 @@ describe('AlphaEmsBaseApi', () => {
       mockHttpClient = {
         post: jest.fn().mockImplementation(() => of(dso))
       } as unknown as HttpClient;
-      const emsApi = new AlphaEmsApi(
-        ems, mockHttpClient);
+      ems.init(mockHttpClient);
+      const emsApi = new AlphaEmsApi(ems);
       emsApi.getEi()
         .subscribe({
           next: ei => {
@@ -227,8 +226,8 @@ describe('AlphaEmsBaseApi', () => {
         post: jest.fn().mockImplementation(
           () => throwError(() => 'someError'))
       } as unknown as HttpClient;
-      const emsApi = new AlphaEmsApi(
-        ems, mockHttpClient);
+      ems.init(mockHttpClient);
+      const emsApi = new AlphaEmsApi(ems);
       emsApi.getEi()
         .subscribe({
           error: e => {
@@ -253,8 +252,8 @@ describe('AlphaEmsBaseApi', () => {
       mockHttpClient = {
         post: jest.fn().mockImplementation(() => of(dso))
       } as unknown as HttpClient;
-      const emsApi = new AlphaEmsApi(
-        ems, mockHttpClient);
+      ems.init(mockHttpClient);
+      const emsApi = new AlphaEmsApi(ems);
       const event = new AlphaEmsBaseApiEvent(
         'create', body);
       emsApi.baseCreate({})
@@ -273,8 +272,8 @@ describe('AlphaEmsBaseApi', () => {
         post: jest.fn().mockImplementation(() =>
           throwError(() => 'someError'))
       } as unknown as HttpClient;
-      const emsApi = new AlphaEmsApi(
-        ems, mockHttpClient);
+      ems.init(mockHttpClient);
+      const emsApi = new AlphaEmsApi(ems);
       emsApi.baseCreate({})
         .subscribe({
           error: e => {
@@ -301,8 +300,8 @@ describe('AlphaEmsBaseApi', () => {
       mockHttpClient = {
         post: jest.fn().mockImplementation(() => of(dso))
       } as unknown as HttpClient;
-      const emsApi = new AlphaEmsApi(
-        ems, mockHttpClient);
+      ems.init(mockHttpClient);
+      const emsApi = new AlphaEmsApi(ems);
       const event = new AlphaEmsBaseApiEvent(
         'update', body);
       emsApi.baseUpdate(body)
@@ -322,8 +321,8 @@ describe('AlphaEmsBaseApi', () => {
         post: jest.fn().mockImplementation(() =>
           throwError(() => 'someError'))
       } as unknown as HttpClient;
-      const emsApi = new AlphaEmsApi(
-        ems, mockHttpClient);
+      ems.init(mockHttpClient);
+      const emsApi = new AlphaEmsApi(ems);
       emsApi.baseUpdate(body)
         .subscribe({
           error: e => {
@@ -350,8 +349,8 @@ describe('AlphaEmsBaseApi', () => {
       mockHttpClient = {
         post: jest.fn().mockImplementation(() => of(dso))
       } as unknown as HttpClient;
-      const emsApi = new AlphaEmsApi(
-        ems, mockHttpClient);
+      ems.init(mockHttpClient);
+      const emsApi = new AlphaEmsApi(ems);
       const event = new AlphaEmsBaseApiEvent(
         'delete', body);
       emsApi.delete(['1'])
@@ -375,8 +374,8 @@ describe('AlphaEmsBaseApi', () => {
       mockHttpClient = {
         post: jest.fn().mockImplementation(() => of(dso))
       } as unknown as HttpClient;
-      const emsApi = new AlphaEmsApi(
-        ems, mockHttpClient);
+      ems.init(mockHttpClient);
+      const emsApi = new AlphaEmsApi(ems);
       const event = new AlphaEmsBaseApiEvent(
         'update', body);
       emsApi.delete(['1'])
@@ -396,8 +395,8 @@ describe('AlphaEmsBaseApi', () => {
         post: jest.fn().mockImplementation(() =>
           throwError(() => 'someError'))
       } as unknown as HttpClient;
-      const emsApi = new AlphaEmsApi(
-        ems, mockHttpClient);
+      ems.init(mockHttpClient);
+      const emsApi = new AlphaEmsApi(ems);
       emsApi.delete(['1'])
         .subscribe({
           error: e => {
