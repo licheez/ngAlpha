@@ -1,0 +1,17 @@
+<p-inputSwitch
+  [style]="{ 'display': 'inline-block', 'vertical-align': 'middle' }"
+  (onChange)="onChange($event)"
+  [(ngModel)]="switchOption.selected"
+  [name]="name"
+  [disabled]="disabled">
+</p-inputSwitch>
+<span *ngIf="!disabled" class="p-pl-2"
+      style="display: inline-block; vertical-align: middle; cursor: pointer;"
+      (click)="onCaptionClicked()">
+      {{switchOption.caption}}
+</span>
+<span *ngIf="disabled" class="p-pl-2"
+      style="display: inline-block; vertical-align: middle;"
+      disabled="true">
+      {{switchOption.caption}}
+</span>

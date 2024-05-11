@@ -17,6 +17,9 @@
       ],
       "AlphaOas": [
         "dist/alpha-oas"
+      ],
+      "AlphaPrime": [
+        "dist/alpha-prime"
       ]
     },
     "baseUrl": "./",

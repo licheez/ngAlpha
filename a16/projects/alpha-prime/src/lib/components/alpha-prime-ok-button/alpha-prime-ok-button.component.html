@@ -1,0 +1,9 @@
+<button pButton
+        class="p-button-info"
+        [ngClass]="sm ? 'p-button-sm' : ''"
+        type="button"
+        icon="fa fa-check-square"
+        [disabled]="disabled"
+        pTooltip="{{caption}}"
+        (click)="onClicked()">
+</button>

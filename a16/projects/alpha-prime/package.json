@@ -1,0 +1,17 @@
+{
+  "name": "alpha-prime",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^16.2.0",
+    "@angular/core": "^16.2.0",
+    "primeflex": "^3.3.1",
+    "primeng": "16.9.1",
+    "@fortawesome/fontawesome-free": "^6.5.2",
+    "uuid": "^9.0.1",
+    "@types/uuid": "^9.0.8"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}
