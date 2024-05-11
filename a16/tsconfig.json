@@ -8,6 +8,9 @@
       ],
       "AlphaLbs": [
         "dist/alpha-lbs"
+      ],
+      "AlphaLs": [
+        "dist/alpha-ls"
       ]
     },
     "baseUrl": "./",
