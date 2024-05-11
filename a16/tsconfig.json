@@ -11,6 +11,9 @@
       ],
       "AlphaLs": [
         "dist/alpha-ls"
+      ],
+      "AlphaNs": [
+        "dist/alpha-ns"
       ]
     },
     "baseUrl": "./",
