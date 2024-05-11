@@ -99,6 +99,42 @@
           }
         }
       }
+    },
+    "AlphaCom": {
+      "projectType": "library",
+      "root": "projects/alpha-com",
+      "sourceRoot": "projects/alpha-com/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/alpha-com/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/alpha-com/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/alpha-com/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "tsConfig": "projects/alpha-com/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
     }
+  },
+  "cli": {
+    "analytics": "14df1ea6-6d26-4bec-80b1-1f9d4065ea97"
   }
 }
