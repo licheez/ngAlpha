@@ -37,7 +37,6 @@ export class EmsCustomerApi extends
   constructor(
     ems: AlphaEmsService) {
     super(ems,
-      new EmsCustomerHttpClient().httpClient,
       'EmsCustomerApi',
       EmsCustomerHttpClient.ControllerUrl,
       CustomerFactory.factorHeadFromDso,

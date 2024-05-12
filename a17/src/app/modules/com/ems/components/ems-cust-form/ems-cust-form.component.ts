@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {
-  AlphaEmsBaseApi,
   AlphaEmsBaseComponent,
   AlphaEmsFormInput,
   AlphaEmsFormResult,
@@ -58,12 +57,8 @@ export class EmsCustFormComponent
 
   constructor(
     ems: AlphaEmsService) {
-    super(
-      new EmsCustomerApi(ems),
-      (
-        api: AlphaEmsBaseApi<ICustomerHead, ICustomerBody, ICustomerEi>,
-        fi: AlphaEmsFormInput<ICustomerBody>) => new EmsCustFormModel(
-        api as EmsCustomerApi, fi),
+    super(new EmsCustomerApi(ems),
+      () => new EmsCustFormModel(),
       true)
   }
 

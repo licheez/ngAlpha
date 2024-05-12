@@ -1,22 +1,22 @@
-import {AlphaEmsFormInput, AlphaUtils, IAlphaEmsFormModel} from "@pvway/alpha-common";
+import {AlphaEmsBaseFormModel, AlphaUtils} from "@pvway/alpha-common";
 import {Observable} from "rxjs";
 import {ICustomerBody, ICustomerEi, ICustomerHead} from "../../model/customer";
-import {EmsCustomerApi} from "../../api/ems-customer-api";
 import {ICountryHead} from "../../model/country";
 import {IAlphaPrimeSelectOption} from "@pvway/alpha-prime";
+import {EmsCustomerApi} from "../../api/ems-customer-api";
 
 export class EmsCustFormModel
-  implements IAlphaEmsFormModel<ICustomerHead, ICustomerBody, ICustomerEi> {
-  api: EmsCustomerApi;
-  fi: AlphaEmsFormInput<ICustomerBody>;
-  body: ICustomerBody | undefined;
-  ei: ICustomerEi | undefined;
+  extends AlphaEmsBaseFormModel<ICustomerHead, ICustomerBody, ICustomerEi> {
 
+  get cApi(): EmsCustomerApi {
+    return this.api as EmsCustomerApi;
+  }
   get invalid(): boolean {
     return AlphaUtils.eon(this.name) ||
       AlphaUtils.eon(this.address) ||
       AlphaUtils.eon(this.countryIso);
   }
+
 
   name = '';
   address = '';
@@ -31,13 +31,6 @@ export class EmsCustFormModel
       : undefined;
   }
 
-  constructor(
-    api: EmsCustomerApi,
-    fi: AlphaEmsFormInput<ICustomerBody>) {
-    this.api = api;
-    this.fi = fi;
-  }
-
   populateForRead(body: ICustomerBody): void {
     this.name = body.name;
     this.address = body.address;
@@ -46,7 +39,6 @@ export class EmsCustFormModel
   }
 
   populateForNew(ei: ICustomerEi): void {
-    this.ei = ei;
     this.name = this.fi.params?.name;
     this.address = '';
     this.setCountries(ei);
@@ -54,7 +46,6 @@ export class EmsCustFormModel
   }
 
   populateForEdit(ei: ICustomerEi, body: ICustomerBody): void {
-    this.ei = ei;
     this.name = body.name;
     this.address = body.address;
     this.setCountries(ei);
@@ -62,12 +53,12 @@ export class EmsCustFormModel
   }
 
   createEntity(): Observable<ICustomerBody> {
-    return this.api.create(
+    return this.cApi.create(
       this.name!, this.address!, this.countryHead!);
   }
 
   updateEntity(): Observable<ICustomerBody> {
-    return this.api.update(
+    return this.cApi.update(
       this.body!.id,
       this.name!,
       this.address!,
