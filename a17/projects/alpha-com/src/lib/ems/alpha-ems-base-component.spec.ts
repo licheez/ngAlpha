@@ -1,12 +1,12 @@
 import {AlphaEmsBaseComponent} from './alpha-ems-base-component';
 import {AlphaEmsBaseApi} from "./alpha-ems-base-api";
 import {HttpClient} from "@angular/common/http";
-import {IAlphaEmsFormModel} from "./i-alpha-ems-form-model";
 import {Observable, of, throwError} from 'rxjs';
 import {AlphaEmsFormInput} from "./alpha-ems-form-input";
 import {AlphaEmsFormResult} from "./alpha-ems-form-result";
 import {AlphaEmsService} from "./alpha-ems.service";
 import {IAlphaHttpObjectResultDso} from "../http/alpha-http-result";
+import {AlphaEmsBaseFormModel} from "./alpha-ems-base-form-model";
 
 interface IHead {
   id: string,
@@ -56,32 +56,21 @@ class AlphaEmsApi extends AlphaEmsBaseApi<IHead, IBody, IEi> {
   }
 }
 
-class EmsForm implements IAlphaEmsFormModel<IHead, IBody, IEi> {
-
-  api: AlphaEmsBaseApi<IHead, IBody, IEi>;
-  fi: AlphaEmsFormInput<IBody>;
-  body: IBody | undefined;
-  ei: IEi | undefined;
+class EmsForm
+  extends AlphaEmsBaseFormModel<IHead, IBody, IEi>
+{
   invalid = false;
 
-  constructor(
-    api: AlphaEmsBaseApi<IHead, IBody, IEi>,
-    gfi: AlphaEmsFormInput<IBody>) {
-    this.api = api;
-    this.fi = gfi;
-  }
-
   populateForRead(body: IBody): void {
-    this.body = body;
+    // nop
   }
 
   populateForNew(ei: IEi): void {
-    this.ei = ei;
+    // nop
   }
 
   populateForEdit(ei: IEi, body: IBody): void {
-    this.ei = ei;
-    this.body = body;
+    // nop
   }
 
   createEntity(): Observable<IBody> {
@@ -101,7 +90,8 @@ class EmsForm implements IAlphaEmsFormModel<IHead, IBody, IEi> {
   }
 }
 
-class EmsComponent extends AlphaEmsBaseComponent<IHead, IBody, IEi> {
+class EmsComponent
+  extends AlphaEmsBaseComponent<IHead, IBody, IEi> {
 
   fm: EmsForm | undefined;
   error = {};
@@ -115,10 +105,8 @@ class EmsComponent extends AlphaEmsBaseComponent<IHead, IBody, IEi> {
 
   constructor(
     api: AlphaEmsBaseApi<IHead, IBody, IEi>) {
-    super(api, (
-      api: AlphaEmsBaseApi<IHead, IBody, IEi>,
-      gfi: AlphaEmsFormInput<IBody>) =>
-      new EmsForm(api, gfi), false);
+    super(api, () => new EmsForm(),
+      false);
     this.verbose = true;
   }
 
