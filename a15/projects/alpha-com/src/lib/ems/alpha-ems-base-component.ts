@@ -20,7 +20,7 @@ export abstract class AlphaEmsBaseComponent<TH, TB, TE> {
    */
   constructor(
     api: AlphaEmsBaseApi<TH, TB, TE>,
-    private mFactorForm: () =>
+    private mFactorForm: (fi: AlphaEmsFormInput<TB>)  =>
       AlphaEmsBaseFormModel<TH, TB, TE>,
     allowAnonymousRead?: boolean) {
     this.api = api;
@@ -205,7 +205,8 @@ export abstract class AlphaEmsBaseComponent<TH, TB, TE> {
   }
 
   private factorForm(): AlphaEmsBaseFormModel<TH, TB, TE> {
-    const fm = this.mFactorForm();
+    const fm =
+      this.mFactorForm(this._fi);
     fm.api = this.api;
     fm.fi = this._fi;
     return fm;
