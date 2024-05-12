@@ -27,7 +27,7 @@
     "zone.js": "~0.14.3",
     "uuid": "^9.0.1",
     "@types/uuid": "^9.0.8",
-    "@pvway/alpha-common": "^17.5.0",
+    "@pvway/alpha-common": "^17.6.0",
     "@pvway/alpha-lbs": "^17.2.0",
     "@pvway/alpha-ls": "^17.2.1",
     "@pvway/alpha-ns": "^17.2.1",
