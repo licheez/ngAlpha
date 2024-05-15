@@ -1,8 +1,8 @@
 import {AlphaEmsBaseApi} from "./alpha-ems-base-api";
 import {AlphaEmsFormInput} from "./alpha-ems-form-input";
-import {IAlphaEmsFormModel} from "./i-alpha-ems-form-model";
 import {Observable, Subscriber} from "rxjs";
 import {AlphaEmsFormResult} from "./alpha-ems-form-result";
+import {AlphaEmsBaseFormModel} from "./alpha-ems-base-form-model";
 
 export abstract class AlphaEmsBaseComponent<TH, TB, TE> {
   busy = false;
@@ -20,10 +20,8 @@ export abstract class AlphaEmsBaseComponent<TH, TB, TE> {
    */
   constructor(
     api: AlphaEmsBaseApi<TH, TB, TE>,
-    private mFactorForm: (
-      api: AlphaEmsBaseApi<TH, TB, TE>,
-      gfi: AlphaEmsFormInput<TB>) =>
-      IAlphaEmsFormModel<TH, TB, TE>,
+    private mFactorForm: (fi: AlphaEmsFormInput<TB>)  =>
+      AlphaEmsBaseFormModel<TH, TB, TE>,
     allowAnonymousRead?: boolean) {
     this.api = api;
     if (allowAnonymousRead !== undefined) {
@@ -38,7 +36,7 @@ export abstract class AlphaEmsBaseComponent<TH, TB, TE> {
    * @returns {Observable} - An observable of the generic form that should be casted to the concrete form.
    */
   protected loadForm(fi: AlphaEmsFormInput<TB>):
-    Observable<IAlphaEmsFormModel<TH, TB, TE>> {
+    Observable<AlphaEmsBaseFormModel<TH, TB, TE>> {
     this._fi = fi;
     switch (fi.mode) {
       case 'read':
@@ -51,13 +49,14 @@ export abstract class AlphaEmsBaseComponent<TH, TB, TE> {
   }
 
   private loadForRead(keys: string[], options?: Map<string, string>):
-    Observable<IAlphaEmsFormModel<TH, TB, TE>> {
+    Observable<AlphaEmsBaseFormModel<TH, TB, TE>> {
     return new Observable(
-      (subscriber: Subscriber<IAlphaEmsFormModel<TH, TB, TE>>) => {
+      (subscriber: Subscriber<AlphaEmsBaseFormModel<TH, TB, TE>>) => {
         if (this._fi.body !== undefined) {
           const fm =
-            this.mFactorForm(this.api, this._fi);
+            this.factorForm();
           fm.populateForRead(this._fi.body);
+          fm.body = this._fi.body;
           subscriber.next(fm);
         } else {
           this.busy = true;
@@ -68,8 +67,9 @@ export abstract class AlphaEmsBaseComponent<TH, TB, TE> {
                   console.log(body);
                 }
                 const fm =
-                  this.mFactorForm(this.api, this._fi);
+                  this.factorForm();
                 fm.populateForRead(body);
+                fm.body = body;
                 this.busy = false;
                 subscriber.next(fm);
               },
@@ -83,10 +83,10 @@ export abstract class AlphaEmsBaseComponent<TH, TB, TE> {
       });
   }
 
-  private loadForNew(options?: Map<string, string>): Observable<IAlphaEmsFormModel<TH, TB, TE>> {
+  private loadForNew(options?: Map<string, string>): Observable<AlphaEmsBaseFormModel<TH, TB, TE>> {
 
     return new Observable(
-      (subscriber: Subscriber<IAlphaEmsFormModel<TH, TB, TE>>) => {
+      (subscriber: Subscriber<AlphaEmsBaseFormModel<TH, TB, TE>>) => {
         this.busy = true;
         this.api.getEi(options)
           .subscribe({
@@ -95,8 +95,9 @@ export abstract class AlphaEmsBaseComponent<TH, TB, TE> {
                 console.log(ei);
               }
               const fm =
-                this.mFactorForm(this.api, this._fi);
+                this.factorForm();
               fm.populateForNew(ei);
+              fm.ei = ei;
               this.busy = false;
               subscriber.next(fm);
             },
@@ -111,9 +112,9 @@ export abstract class AlphaEmsBaseComponent<TH, TB, TE> {
   }
 
   private loadForEdit(keys: string[], options?: Map<string, string>):
-    Observable<IAlphaEmsFormModel<TH, TB, TE>> {
+    Observable<AlphaEmsBaseFormModel<TH, TB, TE>> {
     return new Observable(
-      (subscriber: Subscriber<IAlphaEmsFormModel<TH, TB, TE>>) => {
+      (subscriber: Subscriber<AlphaEmsBaseFormModel<TH, TB, TE>>) => {
         this.busy = true;
         this.api.getBodyFe(keys, options)
           .subscribe({
@@ -122,8 +123,10 @@ export abstract class AlphaEmsBaseComponent<TH, TB, TE> {
                 console.log(ec);
               }
               const fm =
-                this.mFactorForm(this.api, this._fi);
+                this.factorForm();
               fm.populateForEdit(ec.ei, ec.body!);
+              fm.ei = ec.ei;
+              fm.body = ec.body;
               this.busy = false;
               subscriber.next(fm);
             },
@@ -141,7 +144,7 @@ export abstract class AlphaEmsBaseComponent<TH, TB, TE> {
    * This method manages the busy state
    */
   protected save(
-    fm: IAlphaEmsFormModel<TH, TB, TE>): Observable<AlphaEmsFormResult<TB>> {
+    fm: AlphaEmsBaseFormModel<TH, TB, TE>): Observable<AlphaEmsFormResult<TB>> {
 
     return new Observable(
       (subscriber: Subscriber<AlphaEmsFormResult<TB>>) => {
@@ -200,5 +203,14 @@ export abstract class AlphaEmsBaseComponent<TH, TB, TE> {
           });
       });
   }
+
+  private factorForm(): AlphaEmsBaseFormModel<TH, TB, TE> {
+    const fm =
+      this.mFactorForm(this._fi);
+    fm.api = this.api;
+    fm.fi = this._fi;
+    return fm;
+  }
+
 
 }
