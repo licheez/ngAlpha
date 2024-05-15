@@ -1,0 +1,16 @@
+<alpha-prime-debug-tag tag="psModalsPage"></alpha-prime-debug-tag>
+
+<button
+  style="font-size: small"
+  pButton class="mr-2 p-button p-button-rounded p-button-success"
+  type="button" (click)="onOpenConfirmation()">Open Confirmation Modal</button>
+
+<button
+  style="font-size: small"
+  pButton class="mr-2 p-button p-button-rounded p-button-success"
+  type="button" (click)="onOpenFeedbackModal()">Open Feedback Modal</button>
+
+<div *ngIf="result" class="text-center">
+  <p-divider></p-divider>
+  result={{result}}
+</div>

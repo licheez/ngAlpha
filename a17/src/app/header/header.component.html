@@ -1,0 +1,27 @@
+<alpha-prime-debug-tag tag="HeaderComponent"></alpha-prime-debug-tag>
+
+<div class="grid align-items-center" style="display: flex;">
+  <div class="col">
+    <button
+      style="font-size: small"
+      pButton class="mr-2 p-button p-button-rounded"
+      type="button" (click)="onWelcome()">Home</button>
+
+    <button
+      pButton class="mr-2 p-button p-button-rounded"
+      type="button" (click)="onPs()">Ps</button>
+
+    <button
+      pButton class="mr-6 p-button p-button-rounded"
+      type="button" (click)="onCom()">Com</button>
+  </div>
+
+  <div class="col-fixed align-items-center" style="display: flex;">
+    <span class="font-italic mr-4">{{currentPage}}</span>
+    <button
+      pButton class="p-button-secondary p-button-rounded p-button-sm"
+      type="button" (click)="onToggleTags()">Toggle tags</button>
+  </div>
+</div>
+
+

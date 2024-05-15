@@ -1,0 +1,54 @@
+<alpha-prime-debug-tag tag="alphaLoginForm"></alpha-prime-debug-tag>
+<div *ngIf="fm">
+
+  <!-- USERNAME -->
+  <div class="p-field" >
+    <label for="username">
+      <alpha-prime-label
+        [value]="fm.username"
+        [caption]="usernameLit" ></alpha-prime-label>
+    </label>
+    <input id="username"
+           style="width: 100%;"
+           pInputText
+           type="text"
+           maxlength="256"
+           [disabled]="busy"
+           [(ngModel)]="fm.username">
+  </div>
+
+  <!-- PASSWORD -->
+  <div class="p-field" >
+    <label>
+      <alpha-prime-label [caption]="passwordLit"
+                         [value]="fm.password" ></alpha-prime-label>
+    </label>
+    <alpha-prime-password-input
+      [disabled]="busy"
+      [(password)]="fm.password"></alpha-prime-password-input>
+
+  </div>
+
+  <!-- ERROR -->
+  <div class=""
+       *ngIf="errorMessage">{{errorMessage}}
+  </div>
+
+  <!-- PROGRESS -->
+  <alpha-prime-progress-bar [busy]="busy"></alpha-prime-progress-bar>
+
+  <!-- BUTTONS -->
+  <div class="text-right" >
+    <alpha-prime-cancel-button *ngIf="showCancelButton"
+                               class="mr-4"
+                               (clicked)="onCancel()"
+                               [disabled]="busy"></alpha-prime-cancel-button>
+    <button pButton class="p-button-success p-ripple"
+            [label]="connectLabelLit"
+            (click)="onSubmit()"
+            [disabled]="busy || fm.invalid">
+    </button>
+  </div>
+
+</div>
+

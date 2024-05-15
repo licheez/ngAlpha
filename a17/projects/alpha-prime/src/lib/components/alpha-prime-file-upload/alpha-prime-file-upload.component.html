@@ -1,0 +1,74 @@
+<div *ngIf="readonly">
+  <input name="fileName"
+         pInputText
+         style="width: 100%;"
+         type="text"
+         [ngModel]="readonlyCaption"
+         [readOnly]="true" >
+</div>
+
+<div *ngIf="!readonly"
+     class="p-inputgroup">
+  <input
+    name="fileName"
+    pInputText
+    placeholder="{{fileLit}} {{accept}}"
+    style="width: 100%;"
+    type="text"
+    [(ngModel)]="fm.fileName"
+    [readOnly]="true" >
+
+  <button type="button"
+          *ngIf="!fm.hasData"
+          pButton pRipple
+          tabindex="-1"
+          (click)="onBrowse()"
+          [disabled]="disabled || busy"
+          class="p-button-warning"
+          icon="fa fa-folder-open"
+  >
+  </button>
+
+  <button type="button"
+          name="delete"
+          *ngIf="fm.hasData"
+          pButton pRipple
+          tabindex="-1"
+          [disabled]="disabled || busy"
+          icon="fa fa-trash-alt"
+          class="p-button-danger"
+          (click)="onClear()"
+  >
+  </button>
+
+  <button type="button"
+          name="save"
+          *ngIf="!fu && fm.hasData"
+          pButton pRipple
+          tabindex="-1"
+          [disabled]="disabled || busy"
+          icon="pi"
+          class="p-button-info"
+          (click)="onSave()"
+  >
+    <span *ngIf="!busy">
+        <i class="fas fa-upload"></i>
+      </span>
+    <span *ngIf="busy">
+        <i class="pi pi-spin pi-spinner"></i>
+      </span>
+  </button>
+</div>
+
+<alpha-prime-progress-bar
+  [busy]="uploading"
+  mode="tiny"
+  [value]="progress"
+></alpha-prime-progress-bar>
+
+<input #fileInput
+       name="fileInput"
+       type="file"
+       [accept]="accept"
+       style="display: none;"
+       (change)="onFileInputChanged($event)">

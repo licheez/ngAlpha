@@ -1,0 +1,23 @@
+:host {
+  /* flex-column-fill */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1 1 auto;
+}
+
+.forwardScrollPanel {
+  flex: 1 1 auto;
+  border-radius: 10px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.backwardScrollPanel {
+  flex: 1 1 auto;
+  border-radius: 10px;
+  overflow-y: auto;
+  padding-left: 5px;
+  transform: rotate(180deg);
+  direction: rtl;
+}

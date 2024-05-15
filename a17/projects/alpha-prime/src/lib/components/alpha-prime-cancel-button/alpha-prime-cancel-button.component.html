@@ -1,0 +1,9 @@
+<button pButton
+  class="p-button-secondary"
+        [ngClass]="sm ? 'p-button-sm' : ''"
+        type="button"
+        [disabled]="disabled"
+        pTooltip="{{caption}}"
+        icon="fa fa-ban"
+        (click)="onClicked()">
+</button>

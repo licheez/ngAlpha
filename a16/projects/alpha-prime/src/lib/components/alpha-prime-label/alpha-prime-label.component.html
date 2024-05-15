@@ -1,0 +1,7 @@
+<span style="display: inline-block;">{{caption}}</span>
+<span *ngIf="!showMessage && (empty || invalid)"
+      style="display: inline-block;"
+      class="p-invalid ml-1">*</span>
+<span *ngIf="showMessage && (empty || invalid)"
+      style="display: inline-block; color: red;"
+      class="ml-1 font-bold">{{requiredOrInvalidLit}}</span>

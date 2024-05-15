@@ -1,0 +1,54 @@
+<div *ngIf="!readonly"
+     style="font-size: x-small;"
+     class="p-inputgroup">
+
+  <p-dropdown
+    [style]="{
+            'width':'100%',
+            'border-top-right-radius': optionId && showClear || showAdd ? '0' : '',
+            'border-bottom-right-radius': optionId && showClear || showAdd ? '0' : ''}"
+    class="p-dropdown"
+    [options]="options"
+    [disabled]="disabled"
+    [readonly]="readonly"
+    [placeholder]="placeHolder"
+    appendTo="body"
+    [autoDisplayFirst]="false"
+    [virtualScroll]="true"
+    [virtualScrollItemSize]="30"
+    optionLabel="caption"
+    optionValue="id"
+    optionDisabled="disabled"
+    [ngModel]="optionId"
+    (ngModelChange)="onOptionChange($event)"
+    #dd
+  ></p-dropdown>
+
+  <button type="button"
+          pButton pRipple
+          tabindex="-1"
+          (click)="onClear()"
+          *ngIf="optionId && showClear"
+          class="p-button-secondary"
+          icon="pi">
+    <i class="fa fa-times"></i>
+  </button>
+
+  <button type="button"
+          *ngIf="showAdd"
+          tabindex="-1"
+          pButton pRipple
+          [disabled]="disabled"
+          (click)="onAdd()"
+          class="p-button-info"
+          icon="pi">
+    <i class="fa fa-plus"></i>
+  </button>
+
+</div>
+<div *ngIf="readonly">
+  <input type="text"
+         [readonly]="true"
+         [value]="readonlyCaption"
+         pInputText >
+</div>

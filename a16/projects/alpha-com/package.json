@@ -1,0 +1,38 @@
+{
+  "name": "@pvway/alpha-common",
+  "version": "16.1.0",
+  "peerDependencies": {
+    "@angular/common": "^16.2.0",
+    "@angular/core": "^16.2.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false,
+  "description": "This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.0.",
+  "main": "index.js",
+  "scripts": {
+    "test": "ng test AlphaCom"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/licheez/ngAlpha.git#develop"
+  },
+  "keywords": [
+    "utils",
+    "data-format",
+    "ymd",
+    "blob",
+    "entity-management",
+    "standard-response",
+    "response-wrapper",
+    "http",
+    "file-upload"
+  ],
+  "author": "Pierre Van Wallendael",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/licheez/ngAlpha/issues"
+  },
+  "homepage": "https://github.com/licheez/ngAlpha/tree/develop#readme"
+}

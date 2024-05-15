@@ -1,0 +1,19 @@
+<p-progressBar *ngIf="busy && mode==='indeterminate'"
+               mode="indeterminate"
+               [value]="value">
+</p-progressBar>
+
+<p-progressBar *ngIf="busy && mode==='determinate'"
+               [showValue]="true"
+               [style]="{'height': '1.3rem' }"
+               mode="determinate"
+               [value]="value">
+</p-progressBar>
+
+<p-progressBar *ngIf="busy && mode==='tiny'"
+               class="p-pro"
+               [showValue]="false"
+               [style]="{'height': '0.5rem' }"
+               mode="determinate"
+               [value]="value">
+</p-progressBar>

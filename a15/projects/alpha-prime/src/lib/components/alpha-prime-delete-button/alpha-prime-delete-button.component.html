@@ -1,0 +1,15 @@
+<button pButton
+        class="p-button-danger"
+        [ngClass]="sm ? 'p-button-sm' : ''"
+        type="button"
+        [disabled]="disabled"
+        pTooltip="{{caption}}"
+        icon="pi"
+        (click)="onClicked()">
+  <span *ngIf="!busy">
+    <i class="fa fa-trash-alt"></i>
+  </span>
+  <span *ngIf="busy">
+    <i class="pi pi-spin pi-spinner">
+  </i></span>
+</button>

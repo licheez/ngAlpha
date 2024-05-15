@@ -1,0 +1,12 @@
+<p>Select a country from a short list
+  (Austria, Belgium, Germany, Spain, France, Netherlands)</p>
+<alpha-prime-auto-complete
+  [feeder]="feeder"
+  [entry]="entry"
+  (selected)="onSelected($event)"
+  (cleared)="onCleared()"
+></alpha-prime-auto-complete>
+
+<p *ngIf="selectedCountry">
+  The selected country is '{{selectedCountry.iso}}' - '{{selectedCountry.name}}'
+</p>

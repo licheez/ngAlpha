@@ -1,0 +1,13 @@
+<alpha-prime-debug-tag tag="emsPage"></alpha-prime-debug-tag>
+<div class="grid">
+  <div class="col-3">
+    <app-ems-cust-list
+      (listLoaded)="onListLoaded($event)"
+      (itemSelected)="onItemSelected($event)"
+    ></app-ems-cust-list>
+  </div>
+  <div class="col">
+   <app-ems-cust-view [head]="selectedItem"
+   ></app-ems-cust-view>
+  </div>
+</div>

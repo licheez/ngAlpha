@@ -1,0 +1,59 @@
+<form *ngIf="!readonly" autocomplete="off">
+
+  <div class="p-inputgroup">
+    <p-autoComplete
+      [style]="{'width':'100%'}"
+      [inputStyle]="inputStyle"
+      class="p-autocomplete"
+      [(ngModel)]="model"
+      (onClear)="onClear()"
+      (completeMethod)="onFeed($event)"
+      (onSelect)="onSelected($event)"
+      [disabled]="disabled"
+      [emptyMessage]="emptyMessage"
+      [placeholder]="placeHolder"
+      appendTo="body"
+      [suggestions]="suggestions"
+      [ngModelOptions]="{standalone: true}"
+      [completeOnFocus]="false"
+      field="caption"
+      [autocomplete]="''"
+      [autoHighlight]="true"
+      [forceSelection]="false">
+      <ng-template let-entry pTemplate="item">
+        <span [innerHTML]="entry.caption | alphaPrimeBoldify:term"></span>
+      </ng-template>
+    </p-autoComplete>
+    <button *ngIf="term"
+            type="button"
+            pButton
+            pRipple
+            tabindex="-1"
+            (click)="onClear()"
+            [disabled]="disabled || searching"
+            class="p-button-secondary"
+            [ngClass]="sm ? 'p-button-sm' : ''"
+            icon="pi">
+      <i class="fa fa-times"></i>
+    </button>
+    <button type="button"
+            pButton
+            pRipple
+            tabindex="-1"
+            *ngIf="term &&!valid && !searching && showAdd"
+            (click)="onAdd()"
+            [disabled]="searching"
+            style="color: #EEF"
+            class="p-button-info"
+            [ngClass]="sm ? 'p-button-sm' : ''"
+            icon="pi">
+      <i class="fa fa-plus"></i>
+    </button>
+  </div>
+
+</form>
+
+<input *ngIf="readonly"
+       pInputText
+       [readOnly]="true"
+       [value]="readonlyCaption">
