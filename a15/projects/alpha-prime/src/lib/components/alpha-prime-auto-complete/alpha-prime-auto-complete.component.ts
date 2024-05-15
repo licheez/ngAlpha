@@ -158,8 +158,7 @@ export class AlphaPrimeAutoCompleteComponent {
     this.clear(true);
   }
 
-  onSelected(event: any): void {
-    const entry = event.value as IAlphaPrimeAutoCompleteEntry
+  onSelected(entry: IAlphaPrimeAutoCompleteEntry): void {
     this.term = entry.caption;
     this.selected.emit(entry);
     this.valid = true;
