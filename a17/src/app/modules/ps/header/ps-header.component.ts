@@ -21,6 +21,10 @@ export class PsHeaderComponent {
     this.mNs.navigate(AppSitemap.psIntro);
   }
 
+  onAutoComplete(): void {
+    this.mNs.navigate(AppSitemap.psAutoComplete);
+  }
+
   onButtons(): void {
     this.mNs.navigate(AppSitemap.psButtons);
   }

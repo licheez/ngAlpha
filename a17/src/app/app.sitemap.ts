@@ -39,6 +39,14 @@ export class AppSitemap {
     logTitle: 'Prime Services: Intro'
   };
 
+  static psAutoComplete: IAlphaPage = {
+    parentRoute: 'ps/',
+    route: 'autoComplete',
+    area: 'ps',
+    logRoute: '/ps/autoComplete',
+    logTitle: 'Prime Services: AutoComplete'
+  }
+
   static psButtons: IAlphaPage = {
     parentRoute: 'ps/',
     route: 'buttons',
