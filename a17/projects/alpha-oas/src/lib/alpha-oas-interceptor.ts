@@ -1,35 +1,22 @@
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
+import {HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpHandlerFn} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { v4 as uuidV4 } from 'uuid';
 import { AlphaSessionData } from "./alpha-session-data";
 
 export class AlphaOasInterceptor implements HttpInterceptor {
 
-  private readonly clientId: string;
-
-  constructor() {
-    /**
-     * the ClientId (client-id header) identifies the client.
-     * There will be one client-id for each browser.
-     * With this in place it will be possible to
-     * map a new user to his browsing history
-     * ClientId is only generated once and stored in
-     * the browser localstorage associated to the url
-     */
-    const clientId = localStorage.getItem('alphaClientId');
-    if (clientId) {
-      this.clientId = clientId;
-    } else
-    {
-      this.clientId = uuidV4();
-      localStorage.setItem('alphaClientId', this.clientId);
-    }
-  }
-
   intercept(req: HttpRequest<any>, next: HttpHandler):
     Observable<HttpEvent<any>> {
+    const eReq = AlphaOasInterceptor.enrichReq(req);
+    return next.handle(eReq);
+  }
 
-    let oReq: HttpRequest<any>;
+  static handlerFn(req: HttpRequest<any>, next: HttpHandlerFn): Observable<HttpEvent<any>> {
+    const eReq = this.enrichReq(req);
+    return next(eReq);
+  }
+
+  private static enrichReq(req: HttpRequest<any>): HttpRequest<any> {
     let headers = req.headers;
 
     // getting languageCode
@@ -46,8 +33,22 @@ export class AlphaOasInterceptor implements HttpInterceptor {
     // always add the language-code header
     headers = headers.append('language-code', languageCode);
 
+    /**
+     * the ClientId (client-id header) identifies the client.
+     * There will be one client-id for each browser.
+     * With this in place it will be possible to
+     * map a new user to his browsing history
+     * ClientId is only generated once and stored in
+     * the browser localstorage associated to the url
+     */
+    let clientId = localStorage.getItem('alphaClientId');
+    if (clientId == null)
+    {
+      clientId = uuidV4();
+      localStorage.setItem('alphaClientId', clientId);
+    }
     // always add the client-id header
-    headers = headers.append('client-id', this.clientId);
+    headers = headers.append('client-id', clientId);
 
     /**
      * when an accessToken is present insert the authorization header
@@ -61,9 +62,7 @@ export class AlphaOasInterceptor implements HttpInterceptor {
         `bearer ${token}`);
     }
 
-    oReq = req.clone({ headers });
-
-    return next.handle(oReq);
+    return req.clone({ headers });
   }
 
 }

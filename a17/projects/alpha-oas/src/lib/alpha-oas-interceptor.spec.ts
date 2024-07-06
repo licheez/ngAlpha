@@ -1,5 +1,4 @@
 import {AlphaOasInterceptor} from "./alpha-oas-interceptor";
-import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
 import {TestBed} from "@angular/core/testing";
 import {AlphaOasService} from "./alpha-oas.service";
 import {HTTP_INTERCEPTORS, HttpClient, HttpRequest, HttpResponse} from "@angular/common/http";
@@ -114,6 +113,26 @@ describe('AlphaOasInterceptor', () => {
           expect(evn).toBeInstanceOf(HttpResponse);
         }
       });
-
   });
+
+  it ('should provide an handlerFn', () => {
+    const httpRequest = new
+    HttpRequest<any>('GET', 'https://example.com');
+    const httpHandlerFn =
+      jest.fn(() => of(new HttpResponse()));
+
+    const sd = new AlphaSessionData(
+      true, 'token',0, 10);
+    sd.store();
+    sessionStorage.setItem('token', 'someToken');
+    const hFn =
+      AlphaOasInterceptor.handlerFn(httpRequest, httpHandlerFn)
+    hFn.subscribe({
+      next: evn =>
+        expect(evn).toBeInstanceOf(HttpResponse)
+    });
+  });
+
+
+
 });
