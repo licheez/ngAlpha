@@ -21,6 +21,9 @@
       ],
       "AlphaPrime": [
         "./dist/alpha-prime"
+      ],
+      "AlphaTs": [
+        "./dist/alpha-ts"
       ]
     },
     "outDir": "./dist/out-tsc",
