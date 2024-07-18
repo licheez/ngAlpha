@@ -18,6 +18,9 @@
       ],
       "AlphaOas": [
         "./dist/alpha-oas"
+      ],
+      "AlphaPrime": [
+        "./dist/alpha-prime"
       ]
     },
     "outDir": "./dist/out-tsc",

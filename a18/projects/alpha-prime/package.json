@@ -1,0 +1,50 @@
+{
+  "name": "@pvway/alpha-prime",
+  "version": "18.0.0",
+  "peerDependencies": {
+    "@angular/common": "^18.1.0",
+    "@angular/core": "^18.1.0",
+    "@fortawesome/fontawesome-free": "^6.6.0",
+    "primeflex": "^3.3.1",
+    "primeng": "17.18.4",
+    "uuid": "^10.0.0",
+    "@types/uuid": "^10.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false,
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
+    "jest-preset-angular": "^14.1.1"
+  },
+  "jest": {
+    "preset": "jest-preset-angular",
+    "setupFilesAfterEnv": [
+      "./src/setup.jest.ts"
+    ]
+  },
+  "description": "Alpha Prime by p.v.Way",
+  "main": "index.js",
+  "scripts": {
+    "test": "ng test alpha-prime"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/licheez/ngAlpha.git#develop"
+  },
+  "keywords": [
+    "PrimeNg",
+    "modal-wrapper",
+    "dialog-box",
+    "dialog-service"
+  ],
+  "author": "Pierre Van Wallendael",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/licheez/ngAlpha/issues"
+  },
+  "homepage": "https://github.com/licheez/ngAlpha/tree/develop#readme"
+
+}
