@@ -3,4 +3,3 @@
  */
 
 export * from './lib/alpha-ls.service';
-export * from './lib/alpha-ls.component';
