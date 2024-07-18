@@ -15,6 +15,9 @@
       ],
       "AlphaNs": [
         "./dist/alpha-ns"
+      ],
+      "AlphaOas": [
+        "./dist/alpha-oas"
       ]
     },
     "outDir": "./dist/out-tsc",
