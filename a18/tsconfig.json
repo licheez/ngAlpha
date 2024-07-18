@@ -6,6 +6,9 @@
     "paths": {
       "AlphaCom": [
         "./dist/alpha-com"
+      ],
+      "AlphaLbs": [
+        "./dist/alpha-lbs"
       ]
     },
     "outDir": "./dist/out-tsc",
