@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AlphaPrimePasswordInputComponent } from './alpha-prime-password-input.component';
 import {EventEmitter} from "@angular/core";
+import {jest} from "@jest/globals";
 
 describe('AlphaPrimePasswordInputComponent', () => {
   let component: AlphaPrimePasswordInputComponent;

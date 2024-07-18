@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AlphaPrimeSubmitButtonComponent } from './alpha-prime-submit-button.component';
 import {EventEmitter} from "@angular/core";
 import {AlphaPrimeService} from "../../services/alpha-prime.service";
+import {jest} from "@jest/globals";
 
 describe('AlphaPrimeSubmitButtonComponent', () => {
   let component: AlphaPrimeSubmitButtonComponent;
