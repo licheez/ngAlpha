@@ -62,6 +62,10 @@ export class AlphaPrimeModalService {
           ddc.styleClass = this.modalStyleClass;
         }
 
+        if (ddc.draggable === undefined) {
+          ddc.draggable = true;
+        }
+
         const path =  `${anchor}//${modal}`;
         const title = `modal ${modal} from ${anchor}`;
 
