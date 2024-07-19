@@ -20,6 +20,7 @@ export interface IAlphaPrimeModalConfig {
   closable?: boolean,
   maskStyleClass?: string,
   resizable?: boolean,
+  /** true by default*/
   draggable?: boolean,
   keepInViewport?: boolean,
   minX?: number,
