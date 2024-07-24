@@ -1,6 +1,6 @@
 {
   "name": "@pvway/alpha-prime",
-  "version": "17.2.7",
+  "version": "17.2.10",
   "peerDependencies": {
     "@angular/common": "^17.2.0",
     "@angular/core": "^17.2.0",
@@ -25,7 +25,7 @@
       "./src/setup.jest.ts"
     ]
   },
-  "description": "This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.0.",
+  "description": "Alpha Prime by p.v.Way",
   "main": "index.js",
   "scripts": {
     "test": "ng test alpha-prime"

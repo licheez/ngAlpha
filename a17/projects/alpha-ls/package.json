@@ -20,7 +20,7 @@
       "./src/setup.jest.ts"
     ]
   },
-  "description": "This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.3.",
+  "description": "Alpha Logger Service by p.v.Way",
   "main": "index.js",
   "scripts": {
     "test": "ng test AlphaLs"
