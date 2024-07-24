@@ -129,7 +129,7 @@ https://jestjs.io/docs/code-transformation
 
 in the source dir src add the setup.jest.ts file with the following content
 
-```json lines
+```typescript
 import 'jest-preset-angular/setup-jest.js';
 
 // @ts-ignore
