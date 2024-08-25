@@ -1,12 +1,26 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {AlphaPrimeService} from "../../services/alpha-prime.service";
+import {InputTextModule} from "primeng/inputtext";
+import {KeyFilterModule} from "primeng/keyfilter";
+import {NgClass, NgIf} from "@angular/common";
+import {FormsModule} from "@angular/forms";
+import {ButtonModule} from "primeng/button";
+import {RippleModule} from "primeng/ripple";
 
 @Component({
   selector: 'alpha-prime-number-input',
   standalone: true,
-  imports: [],
+  imports: [
+    InputTextModule,
+    KeyFilterModule,
+    NgClass,
+    FormsModule,
+    ButtonModule,
+    RippleModule,
+    NgIf
+  ],
   templateUrl: './alpha-prime-number-input.component.html',
-  styleUrl: './alpha-prime-number-input.component.css'
+  styleUrls: ['./alpha-prime-number-input.component.css']
 })
 export class AlphaPrimeNumberInputComponent {
 
@@ -73,12 +87,12 @@ export class AlphaPrimeNumberInputComponent {
   constructor(
     private mPs: AlphaPrimeService) { }
 
-  onTextChange(sVal: string) {
+  onTextChange(sVal: string | number | undefined) {
     if (!sVal) {
       this.onClear();
       return;
     }
-
+    sVal = `${sVal}`;
     this.sVal = sVal.replaceAll(',', '.');
     if (this.sVal === '-0'
       || this.sVal === '-.'
