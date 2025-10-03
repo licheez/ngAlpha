@@ -4,10 +4,12 @@ import {AlphaNsService} from './alpha-ns.service';
 import {Router, UrlCreationOptions, UrlTree} from "@angular/router";
 import {IAlphaPage} from "./alpha-page";
 
+import { jest } from "@jest/globals";
+
 describe('AlphaNsService', () => {
   let service: AlphaNsService;
-  let locationSpy: jest.SpyInstance;
-  let openSpy: jest.SpyInstance;
+  let locationSpy: any; //jest.SpyInstance;
+  let openSpy: any; // jest.SpyInstance;
 
   const postNavigationLog = jest.fn();
 
@@ -52,8 +54,7 @@ describe('AlphaNsService', () => {
     locationSpy = jest.spyOn(window, 'location',
       'get').mockReturnValue(locationMock);
 
-    openSpy = jest.spyOn(window, 'open')
-      .mockImplementation(jest.fn());
+    openSpy = jest.spyOn(window, 'open');
   });
 
   beforeEach(() => {
@@ -106,9 +107,19 @@ describe('AlphaNsService', () => {
   });
 
   it('should re-home', () => {
+    const spy =
+      jest.spyOn(service, 'navigate');
     service.init(routerMock, homePage);
     service.reHome();
-    expect(true).toBeTruthy();
+    expect(spy).toHaveBeenCalledWith(homePage);
+  });
+
+  it('should guard', ()=> {
+    const spy =
+      jest.spyOn(service, 'navigate');
+    service.init(routerMock, homePage);
+    service.guard(() => true);
+    expect(spy).toHaveBeenCalledWith(homePage);
   });
 
   it('open url in new tab', () => {

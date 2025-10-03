@@ -1,5 +1,6 @@
 import { AlphaNsUtils } from './alpha-ns-utils';
 import {TextDecoder} from "util";
+import {jest} from "@jest/globals";
 
 describe('AlphaNsUtils', () => {
 

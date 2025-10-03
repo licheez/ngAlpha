@@ -106,9 +106,19 @@ describe('AlphaNsService', () => {
   });
 
   it('should re-home', () => {
+    const spy =
+      jest.spyOn(service, 'navigate');
     service.init(routerMock, homePage);
     service.reHome();
-    expect(true).toBeTruthy();
+    expect(spy).toHaveBeenCalledWith(homePage);
+  });
+
+  it('should guard', ()=> {
+    const spy =
+      jest.spyOn(service, 'navigate');
+    service.init(routerMock, homePage);
+    service.guard(() => true);
+    expect(spy).toHaveBeenCalledWith(homePage);
   });
 
   it('open url in new tab', () => {
