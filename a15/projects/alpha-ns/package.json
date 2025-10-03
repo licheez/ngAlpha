@@ -1,6 +1,6 @@
 {
   "name": "@pvway/alpha-ns",
-  "version": "15.2.0",
+  "version": "15.2.1",
   "peerDependencies": {
     "@angular/common": "^15.2.0",
     "@angular/core": "^15.2.0"
@@ -9,7 +9,7 @@
     "tslib": "^2.3.0"
   },
   "sideEffects": false,
-  "description": "This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.0.",
+  "description": "Alpha Navigation Service by p.v.Way",
   "main": "index.js",
   "scripts": {
     "test": "ng test alpha-ns"

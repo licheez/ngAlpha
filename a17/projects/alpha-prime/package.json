@@ -1,6 +1,6 @@
 {
   "name": "@pvway/alpha-prime",
-  "version": "17.2.10",
+  "version": "17.2.11",
   "peerDependencies": {
     "@angular/common": "^17.2.0",
     "@angular/core": "^17.2.0",

@@ -5,8 +5,6 @@ import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 import {IAlphaPage, AlphaPage} from "./alpha-page";
 import {AlphaNsUtils} from "./alpha-ns-utils";
 
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -73,6 +71,27 @@ export class AlphaNsService {
   reHome(): void {
     console.log('re-homing');
     this.navigate(this._homePage);
+  }
+
+  /**
+   * Redirects to a specified page if a certain condition is met.
+   *
+   * @param {() => boolean} shouldRedirect -
+   * A function that returns a boolean value indicating
+   * whether redirecting should occur.
+   * @param {IAlphaPage} [redirectToPage] -
+   * Optional. The page to redirect to.
+   * If not specified, the default home page will be used.
+   *
+   * @return {void}
+   */
+  guard(
+    shouldRedirect: () => boolean,
+    redirectToPage?: IAlphaPage): void {
+    if (shouldRedirect()) {
+      this.navigate(
+        redirectToPage ?? this._homePage);
+    }
   }
 
   /**

@@ -1,1 +1,27 @@
-<p>alpha-prime-number-input works!</p>
+<div *ngIf="!readonly" class="p-inputgroup">
+  <input type="text"
+         pInputText
+         [pKeyFilter]="realNumber"
+         [placeholder]="placeHolder"
+         [disabled]="disabled"
+         [ngClass]="{'ng-invalid' : invalid}"
+         [ngModel]="sVal"
+         (ngModelChange)="onTextChange($event)"
+  >
+
+  <button type="button"
+          pButton pRipple
+          tabindex="-1"
+          (click)="onClear()"
+          *ngIf="value && showClear"
+          class="p-button-secondary"
+          icon="pi">
+    <i class="fa fa-times"></i>
+  </button>
+
+</div>
+
+<input *ngIf="readonly"
+       pInputText
+       [readOnly]="true"
+       [value]="readonlyCaption">
