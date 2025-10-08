@@ -1,3 +1,12 @@
+/**
+ * Enum representing severity levels for API responses and notifications.
+ * - Ok: Successful operation
+ * - Debug: Debug information
+ * - Info: Informational message
+ * - Warning: Warning message
+ * - Error: Error occurred
+ * - Fatal: Fatal error occurred
+ */
 export enum AlphaSeverityEnum {
   Ok,
   Debug,
@@ -7,6 +16,10 @@ export enum AlphaSeverityEnum {
   Fatal
 }
 
+/**
+ * Utility class for mapping AlphaSeverityEnum values to codes and vice versa.
+ * Provides static methods for code conversion and value lookup.
+ */
 export class AlphaEnumSeverity {
   private static readonly Ok = 'O';
   private static readonly Debug = 'D';
@@ -15,6 +28,12 @@ export class AlphaEnumSeverity {
   private static readonly Error = 'E';
   private static readonly Fatal = 'F';
 
+  /**
+   * Gets the code string for a given AlphaSeverityEnum value.
+   * @param value - The severity enum value.
+   * @returns The corresponding code string.
+   * @throws RangeError if the value is invalid.
+   */
   static getCode (value: AlphaSeverityEnum): string {
     switch (value) {
       case AlphaSeverityEnum.Ok:
@@ -34,6 +53,12 @@ export class AlphaEnumSeverity {
     }
   }
 
+  /**
+   * Gets the AlphaSeverityEnum value for a given code string.
+   * @param code - The code string.
+   * @returns The corresponding AlphaSeverityEnum value.
+   * @throws RangeError if the code is invalid.
+   */
   static getValue (code: string): AlphaSeverityEnum {
     switch (code) {
       case AlphaEnumSeverity.Ok:
