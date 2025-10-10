@@ -79,6 +79,7 @@ export class AlphaUploadApiService{
     }
     return new Observable(
       (subscriber: Subscriber<string>) => {
+        debugger;
         const chunks: string[] = [];
         const json = JSON.stringify(data);
         const len = json.length;
