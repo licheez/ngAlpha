@@ -35,6 +35,22 @@ describe('AlphaYmd', () => {
       const date = new Date('2025-10-08');
       expect(AlphaYmd.format(date, 'DMY', 'Slash')).toBe('08/10/2025');
     });
+    it('should format date with MDY and Slash', () => {
+      const date = new Date('2025-10-08');
+      expect(AlphaYmd.format(date, 'MDY', 'Slash')).toBe('10/08/2025');
+    });
+    it('should format date with MDY and Dash', () => {
+      const date = new Date('2025-10-08');
+      expect(AlphaYmd.format(date, 'MDY', 'Dash')).toBe('10-08-2025');
+    });
+    it('should format date with DM and Slash', () => {
+      const date = new Date('2025-10-08');
+      expect(AlphaYmd.format(date, 'DM', 'Slash')).toBe('08/10');
+    });
+    it('should format date with DM and Dash', () => {
+      const date = new Date('2025-10-08');
+      expect(AlphaYmd.format(date, 'DM', 'Dash')).toBe('08-10');
+    });
   });
 
   describe('formatRange', () => {
@@ -42,6 +58,11 @@ describe('AlphaYmd', () => {
       const start = new Date('2025-10-08');
       const end = new Date('2025-11-08');
       expect(AlphaYmd.formatRange(start, end, ' to ', 'YMD', 'Dash')).toBe('2025-10-08 to 2025-11-08');
+    });
+    it('should format a range of dates with default separator', () => {
+      const start = new Date('2025-10-08');
+      const end = new Date('2025-11-08');
+      expect(AlphaYmd.formatRange(start, end, undefined, 'YMD', 'Dash')).toBe('2025-10-08-2025-11-08');
     });
   });
 
