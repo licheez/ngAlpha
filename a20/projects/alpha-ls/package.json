@@ -1,23 +1,21 @@
 {
-  "name": "@pvway/alpha-lbs",
+  "name": "@pvway/alpha-ls",
   "version": "20.0.1",
-  "description": "Lightweight publish/subscribe local bus for Angular. Enables fast, in-memory message passing between components and services using channels and wildcards.",
+  "description": "Logging and navigation tracking service for Angular apps. Easily post error and navigation logs to remote endpoints, or inject custom logging delegates.",
   "keywords": [
     "angular",
-    "event-bus",
-    "pubsub",
-    "messaging",
-    "local-bus",
-    "communication",
-    "channels",
-    "wildcard",
-    "rxjs",
-    "typescript",
+    "logging",
+    "navigation",
+    "error-log",
+    "event-log",
+    "tracking",
+    "http",
     "service",
-    "in-memory",
-    "scalable",
+    "typescript",
+    "extensible",
+    "custom-logging",
     "alpha",
-    "lbs"
+    "ls"
   ],
   "author": "Pierre Van Wallendael",
   "license": "MIT",
@@ -34,7 +32,7 @@
     "type": "git",
     "url": "git+https://github.com/licheez/ngAlpha.git#main"
   },
-  "homepage": "https://github.com/licheez/ngAlpha/tree/main/a20/projects/alpha-lbs",
+  "homepage": "https://github.com/licheez/ngAlpha/tree/main/a20/projects/alpha-ls",
   "bugs": {
     "url": "https://github.com/licheez/ngAlpha/issues"
   }
