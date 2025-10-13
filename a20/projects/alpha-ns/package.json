@@ -1,0 +1,44 @@
+{
+  "name": "@pvway/alpha-ns",
+  "version": "20.0.1",
+  "description": "Angular 20+ navigation, tab management, and browser utilities for scalable web apps. Includes safe resource handling, data URL/Blob utilities, and testable browser API injection. Designed for standalone Angular apps, signals, and robust state management.",
+  "keywords": [
+    "angular",
+    "angular-library",
+    "navigation",
+    "tab-management",
+    "browser",
+    "browser-api",
+    "signals",
+    "testable",
+    "standalone",
+    "typescript",
+    "resource-url",
+    "blob",
+    "data-url",
+    "logging",
+    "router",
+    "state-management",
+    "scalable",
+    "utility"
+  ],
+  "author": "Pierre Van Wallendael",
+  "license": "MIT",
+  "peerDependencies": {
+    "@angular/common": "^20.3.0",
+    "@angular/core": "^20.3.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false,
+  "readme": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/licheez/ngAlpha.git#main"
+  },
+  "homepage": "https://github.com/licheez/ngAlpha/tree/main/a20/projects/alpha-ns",
+  "bugs": {
+    "url": "https://github.com/licheez/ngAlpha/issues"
+  }
+}
