@@ -9,6 +9,9 @@
       ],
       "AlphaLbs": [
         "./dist/alpha-lbs"
+      ],
+      "AlphaLs": [
+        "./dist/alpha-ls"
       ]
     },
     "strict": true,
@@ -50,6 +53,12 @@
     },
     {
       "path": "./projects/alpha-lbs/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/alpha-ls/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/alpha-ls/tsconfig.spec.json"
     }
   ]
 }
