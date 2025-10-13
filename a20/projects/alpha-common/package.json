@@ -1,6 +1,26 @@
 {
-  "name": "alpha-common",
-  "version": "0.0.1",
+  "name": "@pvway/alpha-common",
+  "version": "20.0.2",
+  "description": "Reusable Angular utilities, API wrappers, and entity management helpers for scalable web apps.",
+  "keywords": [
+    "angular",
+    "utilities",
+    "entity-management",
+    "api",
+    "http",
+    "crud",
+    "typescript",
+    "signals",
+    "standalone-components",
+    "date",
+    "window",
+    "base64",
+    "forms",
+    "ems",
+    "alpha"
+  ],
+  "author": "Pierre Van Wallendael",
+  "license": "MIT",
   "peerDependencies": {
     "@angular/common": "^20.3.0",
     "@angular/core": "^20.3.0"
@@ -8,5 +28,14 @@
   "dependencies": {
     "tslib": "^2.3.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "readme": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/licheez/ngAlpha.git#main"
+  },
+  "homepage": "https://github.com/licheez/ngAlpha/tree/main/a20/projects/alpha-common",
+  "bugs": {
+    "url": "https://github.com/licheez/ngAlpha/issues"
+  }
 }
