@@ -1,5 +1,5 @@
 {
-  "name": "alpha-lbs",
+  "name": "@pvway/alpha-lbs",
   "version": "20.0.1",
   "description": "Lightweight publish/subscribe local bus for Angular. Enables fast, in-memory message passing between components and services using channels and wildcards.",
   "keywords": [
