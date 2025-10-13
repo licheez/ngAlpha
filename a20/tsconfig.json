@@ -6,6 +6,9 @@
     "paths": {
       "AlphaCommon": [
         "./dist/alpha-common"
+      ],
+      "AlphaLbs": [
+        "./dist/alpha-lbs"
       ]
     },
     "strict": true,
@@ -41,6 +44,12 @@
     },
     {
       "path": "./projects/alpha-common/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/alpha-lbs/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/alpha-lbs/tsconfig.spec.json"
     }
   ]
 }

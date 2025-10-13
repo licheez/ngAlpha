@@ -1,0 +1,41 @@
+{
+  "name": "alpha-lbs",
+  "version": "20.0.1",
+  "description": "Lightweight publish/subscribe local bus for Angular. Enables fast, in-memory message passing between components and services using channels and wildcards.",
+  "keywords": [
+    "angular",
+    "event-bus",
+    "pubsub",
+    "messaging",
+    "local-bus",
+    "communication",
+    "channels",
+    "wildcard",
+    "rxjs",
+    "typescript",
+    "service",
+    "in-memory",
+    "scalable",
+    "alpha",
+    "lbs"
+  ],
+  "author": "Pierre Van Wallendael",
+  "license": "MIT",
+  "peerDependencies": {
+    "@angular/common": "^20.3.0",
+    "@angular/core": "^20.3.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false,
+  "readme": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/licheez/ngAlpha.git#main"
+  },
+  "homepage": "https://github.com/licheez/ngAlpha/tree/main/a20/projects/alpha-lbs",
+  "bugs": {
+    "url": "https://github.com/licheez/ngAlpha/issues"
+  }
+}
