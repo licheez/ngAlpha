@@ -1,63 +1,127 @@
-# AlphaOas
+<!-- AlphaOas - OAuth Authentication Library for Angular -->
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.0.
+<h1 align="center">AlphaOas <img src="https://img.shields.io/npm/v/alpha-oas.svg" alt="npm version" height="20"> <img src="https://img.shields.io/bundlephobia/min/alpha-oas.svg" alt="bundle size" height="20"> <img src="https://img.shields.io/github/license/your-org/alpha-oas.svg" alt="license" height="20"> <img src="https://img.shields.io/github/workflow/status/your-org/alpha-oas/CI" alt="build status" height="20"></h1>
 
-## Code scaffolding
+<p align="center">
+  <img src="https://img.shields.io/npm/dm/alpha-oas.svg" alt="npm downloads" height="20">
+  <img src="https://img.shields.io/codecov/c/github/your-org/alpha-oas.svg" alt="coverage" height="20">
+  <img src="https://img.shields.io/badge/angular-20+-dd0031.svg" alt="Angular" height="20">
+</p>
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+---
+
+> <strong>AlphaOas</strong> is a robust, scalable OAuth authentication and authorization library for Angular 20+ applications. It provides a complete solution for managing user sessions, tokens, and secure HTTP communication, following Angular and TypeScript best practices.
+
+---
+
+## ✨ Features
+
+- 🔒 OAuth2 authentication and token management
+- 🧑‍💻 Strongly-typed user and principal models
+- 🛡️ HTTP interceptor for secure API requests
+- 🗝️ Session and refresh token lifecycle management
+- 🧩 Extensible with custom sign-in, refresh, and authorize logic
+- 🏷️ Language and client identification headers
+- 🦾 Designed for standalone Angular libraries
+- 🧪 Full unit test coverage
+
+## 🚀 Installation
 
 ```bash
-ng generate component component-name
+npm install alpha-oas uuid
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+> <img src="https://img.shields.io/npm/v/alpha-oas.svg" alt="npm version" height="16"> Requires Angular 20+ and RxJS 7+.
+
+## 📦 Usage
+
+### 1. Import and Provide the Service
+
+```typescript
+import { AlphaOasService } from 'alpha-oas';
+
+// ProvidedIn: 'root' - no need to add to providers
+```
+
+### 2. Initialize the Service
+
+```typescript
+service.init(
+  httpClient,
+  getMeUrl,
+  refreshUrl,
+  signInUrl,
+  postErrorLog?,
+  onPrincipalUpdated?
+);
+```
+
+### 3. Authenticate and Authorize
+
+```typescript
+service.signIn(username, password, rememberMe).subscribe(...);
+service.refresh().subscribe(...);
+service.getMe().subscribe(...);
+service.authorize(httpRequest).subscribe(...);
+```
+
+### 4. Use the HTTP Interceptor
+
+```typescript
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AlphaOasInterceptor } from 'alpha-oas';
+
+@NgModule({
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AlphaOasInterceptor, multi: true }
+  ]
+})
+```
+
+## 🧑‍🎓 API Overview
+
+- `AlphaOasService`: Main authentication service
+- `AlphaOasInterceptor`: HTTP interceptor for secure requests
+- `AlphaPrincipal`: Tracks authentication state and user
+- `IAlphaUser`, `IAlphaAuthEnvelop`, `IAlphaPrincipal`: Strongly-typed models
+- `AlphaSessionData`, `AlphaRefreshData`: Token lifecycle helpers
+
+## 🧪 Testing
+
+Run unit tests with:
 
 ```bash
-ng generate --help
+ng test AlphaOas
 ```
 
-## Building
+## 🛠️ Building & Publishing
 
-To build the library, run:
+Build the library:
 
 ```bash
 ng build AlphaOas
 ```
 
-This command will compile your project, and the build artifacts will be placed in the `dist/` directory.
-
-### Publishing the Library
-
-Once the project is built, you can publish your library by following these steps:
-
-1. Navigate to the `dist` directory:
-   ```bash
-   cd dist/alpha-oas
-   ```
-
-2. Run the `npm publish` command to publish your library to the npm registry:
-   ```bash
-   npm publish
-   ```
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Publish to npm:
 
 ```bash
-ng test
+cd dist/alpha-oas
+npm publish
 ```
 
-## Running end-to-end tests
+## 📚 Documentation
 
-For end-to-end (e2e) testing, run:
+- [Angular CLI Reference](https://angular.dev/tools/cli)
+- [OAuth 2.0 Overview](https://oauth.net/2/)
+- [RxJS Documentation](https://rxjs.dev/)
 
-```bash
-ng e2e
-```
+## 📝 License
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+This project is licensed under the MIT License.
 
-## Additional Resources
+---
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+<p align="center">
+  <img src="https://img.shields.io/github/stars/your-org/alpha-oas.svg?style=social" alt="GitHub stars" height="20">
+  <img src="https://img.shields.io/github/forks/your-org/alpha-oas.svg?style=social" alt="GitHub forks" height="20">
+</p>
