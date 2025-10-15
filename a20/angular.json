@@ -213,6 +213,36 @@
           }
         }
       }
+    },
+    "AlphaOas": {
+      "projectType": "library",
+      "root": "projects/alpha-oas",
+      "sourceRoot": "projects/alpha-oas/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/alpha-oas/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/alpha-oas/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/alpha-oas/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {
