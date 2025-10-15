@@ -1,22 +1,69 @@
+/**
+ * Represents the session token data for OAuth authentication.
+ *
+ * Responsibilities:
+ * - Stores, retrieves, and clears session token and metadata in browser storage.
+ * - Tracks token reception and expiration timestamps for validity checks.
+ * - Provides static methods for managing session token lifecycle.
+ * - Used by authentication services to persist and access session tokens securely.
+ *
+ * Usage:
+ * - Call `store()` to persist the session token and metadata in storage.
+ * - Use `retrieve()` to get the session token and metadata from storage.
+ * - Use `clear()` to remove the session token and metadata from storage on sign-out.
+ * - Use `isExpiredOrExpiring` to check if the token is near expiration.
+ * - Use `getTimestamps()` to calculate reception and expiration timestamps from expiry duration.
+ */
 export class AlphaSessionData {
-
+  /**
+   * Storage key for the rememberMe flag.
+   */
   private static readonly rememberMeFieldName = 'alphaRememberMe';
+  /**
+   * Storage key for the access token.
+   */
   private static readonly accessTokenFieldName = 'alphaAccessToken';
+  /**
+   * Storage key for the token reception timestamp.
+   */
   private static readonly receptionTsFieldName = 'alphaReceptionTs';
+  /**
+   * Storage key for the token expiration timestamp.
+   */
   private static readonly expirationTsFieldName = 'alphaExpirationTs';
 
+  /**
+   * Indicates if the user chose "remember me" during authentication.
+   */
   rememberMe: boolean;
+  /**
+   * The access token string.
+   */
   accessToken: string;
-  /** timestamp of token reception in ms */
+  /**
+   * Timestamp of token reception in milliseconds.
+   */
   receptionTs: number;
-  /** timestamp of token expiration in ms */
+  /**
+   * Timestamp of token expiration in milliseconds.
+   */
   expirationTs: number;
 
+  /**
+   * Returns true if the token is expired or will expire within 60 seconds.
+   */
   get isExpiredOrExpiring(): boolean {
     const nowTs = new Date().getTime();
     return this.expirationTs - nowTs < 60000;
   }
 
+  /**
+   * Constructs a new AlphaSessionData instance with the given properties.
+   * @param rememberMe - Indicates if "remember me" was selected.
+   * @param accessToken - The access token string.
+   * @param receptionTs - Timestamp of token reception in ms.
+   * @param expirationTs - Timestamp of token expiration in ms.
+   */
   constructor(
     rememberMe: boolean,
     accessToken: string,
@@ -28,7 +75,11 @@ export class AlphaSessionData {
     this.expirationTs = expirationTs;
   }
 
-  // expiresIn is expressed in seconds
+  /**
+   * Calculates reception and expiration timestamps from expiry duration in seconds.
+   * @param expiresIn - Expiry duration in seconds.
+   * @returns Object containing receptionTs and expirationTs in ms.
+   */
   static getTimestamps(expiresIn: number): {
     receptionTs: number,
     expirationTs: number
@@ -41,6 +92,11 @@ export class AlphaSessionData {
     };
   }
 
+  /**
+   * Retrieves the session data from storage and returns an AlphaSessionData instance.
+   * @param mStorage - Storage object to use (default: browser sessionStorage).
+   * @returns AlphaSessionData instance if data exists, otherwise null.
+   */
   static retrieve(mStorage: Storage = sessionStorage): AlphaSessionData | null {
     const rmString = mStorage
       .getItem(AlphaSessionData.rememberMeFieldName);
@@ -62,6 +118,10 @@ export class AlphaSessionData {
     return new AlphaSessionData(rm, at, rTs, xTs);
   }
 
+  /**
+   * Removes the session data from storage.
+   * @param mStorage - Storage object to use (default: browser sessionStorage).
+   */
   static clear(mStorage: Storage = sessionStorage): void {
     mStorage.removeItem(AlphaSessionData.rememberMeFieldName);
     mStorage.removeItem(AlphaSessionData.accessTokenFieldName);
@@ -69,6 +129,10 @@ export class AlphaSessionData {
     mStorage.removeItem(AlphaSessionData.expirationTsFieldName);
   }
 
+  /**
+   * Stores the session data in storage.
+   * @param mStorage - Storage object to use (default: browser sessionStorage).
+   */
   store(mStorage: Storage = sessionStorage): void {
     mStorage.setItem(
       AlphaSessionData.rememberMeFieldName, this.rememberMe.toString());

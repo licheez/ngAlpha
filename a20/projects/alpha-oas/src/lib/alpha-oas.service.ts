@@ -11,62 +11,96 @@ import {
   IAlphaPrincipal, IAlphaUser
 } from "./alpha-oas-abstractions";
 
+/**
+ * AlphaOasService provides authentication and authorization logic for OAuth-based flows.
+ * Handles sign-in, token refresh, user retrieval, and principal state management.
+ *
+ * Key Features:
+ * - Supports custom implementations for sign-in, refresh, and authorize via injection methods.
+ * - Manages session and refresh tokens using browser storage.
+ * - Emits principal updates and error logs via callback functions.
+ * - Designed for use as a singleton service (providedIn: 'root').
+ *
+ * Usage:
+ * - Call `init()` to initialize the service with required URLs, HttpClient, and optional callbacks/storage.
+ * - Use `signIn()`, `refresh()`, and `getMe()` for authentication flows.
+ * - Use `authorize()` to wrap protected HTTP requests.
+ * - Listen for principal updates via the `onPrincipalUpdated` callback.
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class AlphaOasService {
-
+  /**
+   * HttpClient instance for making HTTP requests. Set via init().
+   */
   private mHttp: HttpClient | undefined;
+  /**
+   * Service context string for error logging.
+   */
   private readonly mContext = 'OAuthService';
+  /**
+   * Principal representing the current authenticated user and status.
+   */
   private readonly mPrincipal: AlphaPrincipal;
+  /**
+   * OAuth endpoint URLs. Set via init().
+   */
   private mSignInUrl: string | undefined;
   private mRefreshUrl: string | undefined;
   private mGetMeUrl: string | undefined;
+  /**
+   * Storage objects for session and refresh tokens. Default to browser storage, can be injected.
+   */
   private mSessionStorage: Storage = sessionStorage;
   private mLocalStorage: Storage = localStorage;
+  /**
+   * Callback for principal updates. Set via init().
+   */
+  private mOnPrincipalUpdated: (principal: AlphaPrincipal) => any = () => {};
+  /**
+   * Callback for error logging. Set via init().
+   */
+  private mPostErrorLog: (context: string, method: string, error: string) => any = () => {};
 
-  private mOnPrincipalUpdated:
-    (principal: AlphaPrincipal) => any =
-    () => {
-    };
-
-  private mPostErrorLog:
-    (context: string, method: string, error: string) => any =
-    () => {
-    };
-
+  /**
+   * Returns the current principal (user and status).
+   */
   get principal(): IAlphaPrincipal {
     return this.mPrincipal;
   }
 
+  /**
+   * Constructs the service and initializes the principal.
+   */
   constructor() {
     this.mPrincipal = new AlphaPrincipal();
   }
 
   /**
-   * Initializes the authentication process by retrieving session data, refresh data, or setting authentication to anonymous mode.
+   * Initializes the service with required dependencies and URLs.
+   * Determines authentication state from session/refresh storage, or sets anonymous mode.
    *
-   * @param httpClient - need to inject the httpClient here
-   * @param {string} [getMeUrl] - The URL for retrieving user information.
-   * @param {string} [refreshUrl] - The URL for refreshing authentication.
-   * @param {string} [signInUrl] - The URL for signing in.
-   * @param {function} [postErrorLog] - A function that handles error logging.
-   *   It accepts three parameters: context, method, and error.
-   * @param {function} [onPrincipalUpdated] - A function that will be triggered whenever the principal is updated.
-   *   It accepts one parameter: principal of type IAlphaPrincipal.
-   *
-   * @param sStorage
-   * @param lStorage
-   * @return {Observable} - An Observable that emits the result of the initialization process.
+   * @param httpClient - Angular HttpClient instance.
+   * @param getMeUrl - URL for retrieving user info.
+   * @param refreshUrl - URL for token refresh.
+   * @param signInUrl - URL for sign-in.
+   * @param postErrorLog - Optional error logging callback.
+   * @param onPrincipalUpdated - Optional principal update callback.
+   * @param sStorage - Optional session storage (default: browser sessionStorage).
+   * @param lStorage - Optional local storage (default: browser localStorage).
+   * @returns Observable emitting the result of initialization.
    */
-  init(httpClient: HttpClient,
-       getMeUrl?: string,
-       refreshUrl?: string,
-       signInUrl?: string,
-       postErrorLog?: (context: string, method: string, error: string) => any,
-       onPrincipalUpdated?: (principal: IAlphaPrincipal) => any,
-       sStorage: Storage = sessionStorage,
-       lStorage: Storage = localStorage): Observable<string> {
+  init(
+    httpClient: HttpClient,
+    getMeUrl?: string,
+    refreshUrl?: string,
+    signInUrl?: string,
+    postErrorLog?: (context: string, method: string, error: string) => any,
+    onPrincipalUpdated?: (principal: IAlphaPrincipal) => any,
+    sStorage: Storage = sessionStorage,
+    lStorage: Storage = localStorage
+  ): Observable<string> {
 
     this.mHttp = httpClient;
     this.mSignInUrl = signInUrl;
@@ -97,11 +131,20 @@ export class AlphaOasService {
     return this.initAsAnonymous();
   }
 
+  /**
+   * Sets the session and local storage objects used for token management.
+   * @param sStorage - Session storage.
+   * @param lStorage - Local storage.
+   */
   initStorage(sStorage: Storage, lStorage: Storage): void {
     this.mSessionStorage = sStorage;
     this.mLocalStorage = lStorage;
   }
 
+  /**
+   * Initializes authentication from session data (if present).
+   * @returns Observable emitting result string.
+   */
   private initFromSd(): Observable<string> {
     console.log('Sd found... calling getMe');
     return new Observable(
@@ -113,6 +156,10 @@ export class AlphaOasService {
       });
   }
 
+  /**
+   * Initializes authentication from refresh data (if present).
+   * @returns Observable emitting result string.
+   */
   private initFromRd(): Observable<string> {
     return new Observable(
       (subscriber: Subscriber<string>) => {
@@ -134,6 +181,10 @@ export class AlphaOasService {
       });
   }
 
+  /**
+   * Initializes authentication in anonymous mode (no session/refresh data).
+   * @returns Observable emitting result string.
+   */
   private initAsAnonymous(): Observable<string> {
     return new Observable(
       (subscriber: Subscriber<string>) => {
@@ -143,32 +194,47 @@ export class AlphaOasService {
   }
 
   /**
-   * Inject your own signIn method */
+   * Allows injection of a custom sign-in implementation.
+   * @param signIn - Function implementing sign-in logic.
+   */
   useSignIn(
     signIn: (
       userName: string,
       password: string,
-      rememberMe: boolean) => Observable<IAlphaAuthEnvelop>): void {
+      rememberMe: boolean
+    ) => Observable<IAlphaAuthEnvelop>
+  ): void {
     this.internalSignIn = signIn;
   }
 
   /**
-   * Inject your own refresh method */
-  useRefresh(refresh: (
-    refreshToken: string) => Observable<IAlphaAuthEnvelop>) {
+   * Allows injection of a custom refresh implementation.
+   * @param refresh - Function implementing refresh logic.
+   */
+  useRefresh(refresh: (refreshToken: string) => Observable<IAlphaAuthEnvelop>) {
     this.internalRefresh = refresh;
   }
 
-  /** Inject your own authorize method */
+  /**
+   * Allows injection of a custom authorize implementation.
+   * @param authorize - Function implementing authorization logic.
+   */
   useAuthorize(authorize: (request: Observable<any>) => Observable<any>): void {
     this.internalAuthorize = authorize;
   }
 
+  /**
+   * Default sign-in implementation. Can be overridden via useSignIn().
+   * @param username - User name.
+   * @param password - User password.
+   * @param rememberMe - Whether to persist refresh token.
+   * @returns Observable emitting authentication envelope.
+   */
   internalSignIn: (
     userName: string,
     password: string,
-    rememberMe: boolean) =>
-    Observable<IAlphaAuthEnvelop> =
+    rememberMe: boolean
+  ) => Observable<IAlphaAuthEnvelop> =
     (username: string, password: string) => {
 
       if (this.mHttp === undefined) {
@@ -232,8 +298,9 @@ export class AlphaOasService {
   }
 
   /**
-   * default implementation of refresh
-   * this implementation can be overridden by calling useRefresh
+   * Default refresh implementation. Can be overridden via useRefresh().
+   * @param refreshToken - Refresh token string.
+   * @returns Observable emitting authentication envelope.
    */
   internalRefresh: (refreshToken: string) => Observable<IAlphaAuthEnvelop> =
     (refreshToken: string) => {
@@ -256,8 +323,9 @@ export class AlphaOasService {
     }
 
   /**
-   * refreshes the accessToken from the refreshToken
-   * found in the local storage data
+   * Refreshes the access token using the refresh token from local storage.
+   * Emits true on success, false on authentication error, or errors for other failures.
+   * @returns Observable emitting boolean result.
    */
   refresh(): Observable<boolean> {
 
@@ -317,6 +385,12 @@ export class AlphaOasService {
     return this.authorize(call);
   }
 
+  /**
+   * Edits the principal's user info and emits principal update.
+   * @param firstName - New first name.
+   * @param lastName - New last name.
+   * @param languageCode - New language code.
+   */
   editUserInfo(
     firstName: string,
     lastName: string,
@@ -330,6 +404,9 @@ export class AlphaOasService {
     this.mOnPrincipalUpdated(this.mPrincipal)
   }
 
+  /**
+   * Signs out the user, clears tokens and principal, and emits principal update.
+   */
   signOut(): void {
     AlphaSessionData.clear(this.mSessionStorage);
     AlphaRefreshData.clear(this.mLocalStorage);
@@ -339,10 +416,10 @@ export class AlphaOasService {
   }
 
   /**
-   * checks that the accessToken is not expired or
-   * expiring (expirationTime - 1 minute).
-   * if still valid fires the request directly else inserts a
-   * refresh before firing the request
+   * Default authorization implementation. Can be overridden via useAuthorize().
+   * Checks token validity and refreshes if needed before firing request.
+   * @param httpRequest - Observable HTTP request to authorize.
+   * @returns Observable emitting the result of the request.
    */
   internalAuthorize(
     httpRequest: Observable<any>): Observable<any> {
@@ -364,8 +441,9 @@ export class AlphaOasService {
   }
 
   /**
-   * checks the accessToken and eventually refreshes it
-   * before calling the request
+   * Wraps a protected HTTP request with authorization logic.
+   * @param httpRequest - Observable HTTP request to authorize.
+   * @returns Observable emitting the result of the request.
    */
   authorize(
     httpRequest: Observable<any>): Observable<any> {
@@ -400,6 +478,10 @@ export class AlphaOasService {
     this.populatePrincipal(authEnvelop.user);
   }
 
+  /**
+   * Populates the principal with user info and emits principal update.
+   * @param user - User object.
+   */
   private populatePrincipal(user: IAlphaUser) {
     this.mPrincipal.setUser(user);
     console.log('principal user is set');
