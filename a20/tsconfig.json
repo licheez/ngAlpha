@@ -15,6 +15,12 @@
       ],
       "AlphaNs": [
         "./dist/alpha-ns"
+      ],
+      "AlphaOas": [
+        "./dist/alpha-oas"
+      ],
+      "AlphaTs": [
+        "./dist/alpha-ts"
       ]
     },
     "strict": true,
@@ -68,6 +74,18 @@
     },
     {
       "path": "./projects/alpha-ns/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/alpha-oas/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/alpha-oas/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/alpha-ts/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/alpha-ts/tsconfig.spec.json"
     }
   ]
 }
