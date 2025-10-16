@@ -1,0 +1,52 @@
+{
+  "name": "@pvway/alpha-oas",
+  "version": "20.0.1",
+  "description": "Professional Angular 20+ OAuth2 authentication and authorization library. Provides robust session and refresh token management, secure HTTP interceptors, strongly-typed user and principal models, and full support for standalone components and signals. Designed for scalable, maintainable enterprise applications.",
+  "keywords": [
+    "angular",
+    "oauth2",
+    "authentication",
+    "authorization",
+    "interceptor",
+    "jwt",
+    "token",
+    "session",
+    "refresh",
+    "user",
+    "principal",
+    "standalone",
+    "signals",
+    "typescript",
+    "enterprise",
+    "secure",
+    "openapi",
+    "swagger",
+    "rest",
+    "api",
+    "client",
+    "library"
+  ],
+  "author": "Pierre Van Wallendael",
+  "license": "MIT",
+  "peerDependencies": {
+    "@angular/common": "^20.3.0",
+    "@angular/core": "^20.3.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/uuid": "^9.0.8"
+  },
+  "sideEffects": false,
+  "readme": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/licheez/ngAlpha.git#main"
+  },
+  "homepage": "https://github.com/licheez/ngAlpha/tree/main/a20/projects/alpha-oas",
+  "bugs": {
+    "url": "https://github.com/licheez/ngAlpha/issues"
+  }
+}
