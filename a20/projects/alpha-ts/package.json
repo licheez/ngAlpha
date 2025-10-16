@@ -1,6 +1,27 @@
 {
-  "name": "alpha-ts",
-  "version": "0.0.1",
+  "name": "@pvway/alpha-ts",
+  "version": "20.0.1",
+  "description": "Type-safe, extensible translation and enum utilities for Angular 20+. Provides local and remote translation cache, enum wrappers, and easy integration for multilingual Angular apps.",
+  "keywords": [
+    "angular",
+    "translation",
+    "i18n",
+    "localization",
+    "typescript",
+    "enum",
+    "cache",
+    "multilingual",
+    "standalone",
+    "signal",
+    "localStorage",
+    "sessionStorage",
+    "api",
+    "extensible",
+    "utility",
+    "pvway"
+  ],
+  "author": "Pierre Van Wallendael",
+  "license": "MIT",
   "peerDependencies": {
     "@angular/common": "^20.3.0",
     "@angular/core": "^20.3.0"
@@ -8,5 +29,14 @@
   "dependencies": {
     "tslib": "^2.3.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "readme": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/licheez/ngAlpha.git#main"
+  },
+  "homepage": "https://github.com/licheez/ngAlpha/tree/main/a20/projects/alpha-ts",
+  "bugs": {
+    "url": "https://github.com/licheez/ngAlpha/issues"
+  }
 }
