@@ -243,6 +243,36 @@
           }
         }
       }
+    },
+    "AlphaTs": {
+      "projectType": "library",
+      "root": "projects/alpha-ts",
+      "sourceRoot": "projects/alpha-ts/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/alpha-ts/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/alpha-ts/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/alpha-ts/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {
