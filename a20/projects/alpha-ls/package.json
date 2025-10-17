@@ -1,6 +1,6 @@
 {
   "name": "@pvway/alpha-ls",
-  "version": "20.0.1",
+  "version": "20.0.2",
   "description": "Logging and navigation tracking service for Angular apps. Easily post error and navigation logs to remote endpoints, or inject custom logging delegates.",
   "keywords": [
     "angular",
@@ -20,8 +20,8 @@
   "author": "Pierre Van Wallendael",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/common": "^20.3.0",
-    "@angular/core": "^20.3.0"
+    "@angular/common": "^20.3.6",
+    "@angular/core": "^20.3.6"
   },
   "dependencies": {
     "tslib": "^2.3.0"
