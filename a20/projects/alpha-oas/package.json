@@ -1,6 +1,6 @@
 {
   "name": "@pvway/alpha-oas",
-  "version": "20.0.1",
+  "version": "20.0.2",
   "description": "Professional Angular 20+ OAuth2 authentication and authorization library. Provides robust session and refresh token management, secure HTTP interceptors, strongly-typed user and principal models, and full support for standalone components and signals. Designed for scalable, maintainable enterprise applications.",
   "keywords": [
     "angular",
@@ -29,8 +29,8 @@
   "author": "Pierre Van Wallendael",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/common": "^20.3.0",
-    "@angular/core": "^20.3.0"
+    "@angular/common": "^20.3.6",
+    "@angular/core": "^20.3.6"
   },
   "dependencies": {
     "tslib": "^2.3.0",
