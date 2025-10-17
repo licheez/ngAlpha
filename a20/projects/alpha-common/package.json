@@ -1,6 +1,6 @@
 {
   "name": "@pvway/alpha-common",
-  "version": "20.0.2",
+  "version": "20.0.3",
   "description": "Reusable Angular utilities, API wrappers, and entity management helpers for scalable web apps.",
   "keywords": [
     "angular",
@@ -22,8 +22,8 @@
   "author": "Pierre Van Wallendael",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/common": "^20.3.0",
-    "@angular/core": "^20.3.0"
+    "@angular/common": "^20.3.6",
+    "@angular/core": "^20.3.6"
   },
   "dependencies": {
     "tslib": "^2.3.0"
