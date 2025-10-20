@@ -6,12 +6,12 @@ import {AlphaPrimeService} from '../../services/alpha-prime.service';
 @Component({
   selector: 'alpha-prime-add-button',
   standalone: true,
-  templateUrl: './alpha-prime-add-button.html',
+  templateUrl: './alpha-prime-add-button.component.html',
   imports: [
     ButtonModule,
     TooltipModule
   ],
-  styleUrls: ['./alpha-prime-add-button.css']
+  styleUrls: ['./alpha-prime-add-button.component.css']
 })
 export class AlphaPrimeAddButtonComponent {
 
