@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output, input, signal} from '@angular/core';
+import {Component, EventEmitter, Input, Output, input, signal, OnDestroy} from '@angular/core';
 import {RippleModule} from 'primeng/ripple';
 import {InputTextModule} from 'primeng/inputtext';
 import {ButtonModule} from 'primeng/button';
@@ -47,9 +47,9 @@ In css
     InputGroupAddon
   ],
   templateUrl: './alpha-prime-auto-complete.component.html',
-  styleUrl: './alpha-prime-auto-complete.component.css'
+  styleUrls: ['./alpha-prime-auto-complete.component.css']
 })
-export class AlphaPrimeAutoCompleteComponent {
+export class AlphaPrimeAutoCompleteComponent implements OnDestroy {
   @Input() feeder: (term: string) => Observable<IAlphaPrimeAutoCompleteEntry[]>
     = () => of([]);
 
@@ -76,17 +76,17 @@ export class AlphaPrimeAutoCompleteComponent {
   @Input() clearOnSelect = false;
   @Input() timeout = 500;
 
-  @Output() cleared = new EventEmitter();
+  @Output() cleared = new EventEmitter<void>();
   @Output() selected = new EventEmitter<IAlphaPrimeAutoCompleteEntry>();
   @Output() addClicked = new EventEmitter<string>();
 
-  baseInputStyle = {
+  baseInputStyle: Record<string, string> = {
     'width': '100%',
     'border-top-right-radius': '0',
     'border-bottom-right-radius': '0'
   };
 
-  smInputStyle = {
+  smInputStyle: Record<string, string> = {
     'width': '100%',
     'border-top-right-radius': '0',
     'border-bottom-right-radius': '0',
@@ -104,7 +104,7 @@ export class AlphaPrimeAutoCompleteComponent {
   searching = false;
   searchFailed = false;
   valid = false;
-  feedTimer: any;
+  feedTimer: ReturnType<typeof setTimeout> | undefined;
   feed: Subscription | undefined;
 
   constructor() {
@@ -138,7 +138,7 @@ export class AlphaPrimeAutoCompleteComponent {
               this.searching = false;
             },
             error: (error: any) => {
-              console.error = error;
+              console.error(error);
               this.searchFailed = true;
               this.searching = false;
             }
@@ -153,6 +153,7 @@ export class AlphaPrimeAutoCompleteComponent {
     }
     if (this.feed) {
       this.feed.unsubscribe();
+      this.feed = undefined;
     }
     this.suggestions.set([]);
     this.model = undefined;
@@ -181,6 +182,17 @@ export class AlphaPrimeAutoCompleteComponent {
 
   onAdd(): void {
     this.addClicked.emit(this.term);
+  }
+
+  ngOnDestroy(): void {
+    if (this.feedTimer) {
+      clearTimeout(this.feedTimer);
+      this.feedTimer = undefined;
+    }
+    if (this.feed) {
+      this.feed.unsubscribe();
+      this.feed = undefined;
+    }
   }
 
 }
