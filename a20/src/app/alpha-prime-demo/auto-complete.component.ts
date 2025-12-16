@@ -46,7 +46,6 @@ export class AlphaPrimeAutoCompleteDemoComponent {
     const filtered =
       this.items.filter(i =>
         i.caption.toLowerCase().includes(term.toLowerCase()));
-    console.log(term, filtered);
     return of(filtered);
   }
 
