@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, input, signal} from '@angular/core';
 import {RippleModule} from 'primeng/ripple';
 import {InputTextModule} from 'primeng/inputtext';
 import {ButtonModule} from 'primeng/button';
@@ -8,6 +8,8 @@ import {NgClass} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {IAlphaPrimeAutoCompleteEntry} from './alpha-prime-auto-complete';
 import {Observable, of, Subscription} from 'rxjs';
+import {InputGroup} from 'primeng/inputgroup';
+import {InputGroupAddon} from 'primeng/inputgroupaddon';
 
 /*
 https://github.com/primefaces/primeng/issues/1552
@@ -28,7 +30,7 @@ In css
 */
 
 @Component({
-  selector: 'lib-alpha-prime-auto-complete',
+  selector: 'alpha-prime-auto-complete',
   standalone: true,
   imports: [
     // ANGULAR
@@ -40,7 +42,9 @@ In css
     AutoCompleteModule,
     ButtonModule,
     InputTextModule,
-    RippleModule
+    RippleModule,
+    InputGroup,
+    InputGroupAddon
   ],
   templateUrl: './alpha-prime-auto-complete.component.html',
   styleUrl: './alpha-prime-auto-complete.component.css'
@@ -61,14 +65,17 @@ export class AlphaPrimeAutoCompleteComponent {
     }
   }
 
-  @Input() disabled = false;
-  @Input() placeHolder = '';
-  @Input() emptyMessage = '';
+  disabled = input<boolean>(false);
+  placeHolder = input<string>('');
+  emptyMessage = input<string>('');
+  showAdd = input<boolean>(false);
+  readonly = input<boolean>(false);
+  readonlyCaption = input<string>('');
+  sm = input<boolean>(false);
+
   @Input() clearOnSelect = false;
-  @Input() showAdd = false;
-  @Input() readonly = false;
-  @Input() readonlyCaption = '';
-  @Input() sm = false;
+  @Input() timeout = 500;
+
   @Output() cleared = new EventEmitter();
   @Output() selected = new EventEmitter<IAlphaPrimeAutoCompleteEntry>();
   @Output() addClicked = new EventEmitter<string>();
@@ -87,7 +94,7 @@ export class AlphaPrimeAutoCompleteComponent {
   };
 
   get inputStyle(): any {
-    return this.sm
+    return this.sm()
       ? this.smInputStyle
       : this.baseInputStyle;
   }
@@ -103,7 +110,8 @@ export class AlphaPrimeAutoCompleteComponent {
   constructor() {
   }
 
-  suggestions: IAlphaPrimeAutoCompleteEntry[] = [];
+  suggestions =
+    signal<IAlphaPrimeAutoCompleteEntry[]>([]);
 
   onFeed(event: any) {
     if (this.feedTimer) {
@@ -126,7 +134,7 @@ export class AlphaPrimeAutoCompleteComponent {
         this.feed = this.feeder(this.term)
           .subscribe({
             next: (suggestions: IAlphaPrimeAutoCompleteEntry[]) => {
-              this.suggestions = suggestions;
+              this.suggestions.set(suggestions);
               this.searching = false;
             },
             error: (error: any) => {
@@ -135,7 +143,7 @@ export class AlphaPrimeAutoCompleteComponent {
               this.searching = false;
             }
           });
-      }, 500);
+      }, this.timeout);
   }
 
   clear(emit: boolean): void {
@@ -146,7 +154,7 @@ export class AlphaPrimeAutoCompleteComponent {
     if (this.feed) {
       this.feed.unsubscribe();
     }
-    this.suggestions = [];
+    this.suggestions.set([]);
     this.model = undefined;
     this.valid = false;
     this.term = '';

@@ -5,6 +5,7 @@ import {AlphaPrimeAddButtonComponent} from './alpha-prime-add-button.component';
 import {AlphaPrimeService} from '../../services/alpha-prime.service';
 import {ButtonModule} from 'primeng/button';
 import {TooltipModule} from 'primeng/tooltip';
+import { signal } from '@angular/core';
 
 describe('AlphaPrimeAddButtonComponent', () => {
   let fixture: ComponentFixture<AlphaPrimeAddButtonComponent>;
@@ -35,20 +36,21 @@ describe('AlphaPrimeAddButtonComponent', () => {
   });
 
   it('should set default caption from service when empty', () => {
-//    component.caption = '';
+    // input() returns a signal; effective caption is a computed signal
     fixture.detectChanges();
-    expect(component.caption).toBe('tr:alpha.buttons.add');
+    expect(component.effectiveCaption()).toBe('tr:alpha.buttons.add');
   });
 
   it('should apply small class when sm is true', () => {
-    component.sm = true;
+    // assign a writable signal so tests can change the input value
+    (component as any).sm = signal(true) as any;
     fixture.detectChanges();
-    const btn = fixture.debugElement.query(By.css('button'));
-    expect(btn.nativeElement.classList).toContain('p-button-sm');
+    const pBtn = fixture.debugElement.query(By.css('p-button'));
+    expect(pBtn.nativeElement.classList).toContain('p-button-sm');
   });
 
   it('should set disabled attribute when disabled is true', () => {
-    component.disabled = true;
+    (component as any).disabled = signal(true) as any;
     fixture.detectChanges();
     const btn = fixture.debugElement.query(By.css('button'));
     expect(btn.nativeElement.disabled).toBeTrue();
@@ -58,8 +60,8 @@ describe('AlphaPrimeAddButtonComponent', () => {
     spyOn(component.clicked, 'emit');
     fixture.detectChanges();
 
-    const btn = fixture.debugElement.query(By.css('button'));
-    btn.triggerEventHandler('click', null);
+    const pBtn = fixture.debugElement.query(By.css('p-button'));
+    pBtn.triggerEventHandler('click', null);
 
     expect(component.clicked.emit).toHaveBeenCalled();
   });
