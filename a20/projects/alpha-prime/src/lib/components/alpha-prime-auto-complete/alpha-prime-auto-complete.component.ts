@@ -50,7 +50,7 @@ In css
   styleUrls: ['./alpha-prime-auto-complete.component.css']
 })
 export class AlphaPrimeAutoCompleteComponent implements OnDestroy {
-  @Input() feeder: (term: string) => Observable<IAlphaPrimeAutoCompleteEntry[]>
+  @Input({required: true}) feeder: (term: string) => Observable<IAlphaPrimeAutoCompleteEntry[]>
     = () => of([]);
 
   @Input()
