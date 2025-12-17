@@ -1,7 +1,8 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { AlphaPrimeAutoCompleteComponent } from './alpha-prime-auto-complete.component';
-import { of, Observable } from 'rxjs';
-import { IAlphaPrimeAutoCompleteEntry } from './alpha-prime-auto-complete';
+import {ComponentFixture, TestBed, fakeAsync, tick} from '@angular/core/testing';
+import {AlphaPrimeAutoCompleteComponent} from './alpha-prime-auto-complete.component';
+import {of, Observable, throwError} from 'rxjs';
+import {IAlphaPrimeAutoCompleteEntry} from './alpha-prime-auto-complete';
+import {signal} from '@angular/core';
 
 describe('AlphaPrimeAutoCompleteComponent', () => {
   let component: AlphaPrimeAutoCompleteComponent;
@@ -23,7 +24,7 @@ describe('AlphaPrimeAutoCompleteComponent', () => {
 
   it('debounce empty query and emits cleared after timeout', fakeAsync(() => {
     spyOn(component.cleared, 'emit');
-    component.onFeed({ query: '' });
+    component.onFeed({query: ''});
     expect(component.feedTimer).toBeDefined();
     tick(component.timeout);
     expect(component.cleared.emit).toHaveBeenCalled();
@@ -32,11 +33,11 @@ describe('AlphaPrimeAutoCompleteComponent', () => {
 
   it('converts "*" to "%" and feeds suggestions', fakeAsync(() => {
     const feederSpy = jasmine.createSpy('feeder').and.returnValue(of([
-      { id: '1', caption: 'Apple' } as IAlphaPrimeAutoCompleteEntry
+      {id: '1', caption: 'Apple'} as IAlphaPrimeAutoCompleteEntry
     ]));
     (component as any).feeder = feederSpy;
 
-    component.onFeed({ query: '*' });
+    component.onFeed({query: '*'});
     tick(component.timeout);
 
     expect(feederSpy).toHaveBeenCalledWith('%');
@@ -54,7 +55,7 @@ describe('AlphaPrimeAutoCompleteComponent', () => {
     });
     (component as any).feeder = () => obs;
 
-    component.onFeed({ query: 'a' });
+    component.onFeed({query: 'a'});
     tick(component.timeout);
     expect(component.feed).toBeDefined();
 
@@ -70,9 +71,9 @@ describe('AlphaPrimeAutoCompleteComponent', () => {
     spyOn(component.cleared, 'emit');
 
     component.clearOnSelect = true;
-    const entry = { id: '2', caption: 'Banana' } as IAlphaPrimeAutoCompleteEntry;
+    const entry = {id: '2', caption: 'Banana'} as IAlphaPrimeAutoCompleteEntry;
 
-    component.onSelected({ originalEvent: null, value: entry } as any);
+    component.onSelected({originalEvent: null, value: entry} as any);
 
     expect(component.selected.emit).toHaveBeenCalledWith(entry);
     expect(component.term).toBe('Banana');
@@ -102,7 +103,7 @@ describe('AlphaPrimeAutoCompleteComponent', () => {
     });
     (component as any).feeder = () => obs;
 
-    component.onFeed({ query: 'x' });
+    component.onFeed({query: 'x'});
     // let the timer fire and create the subscription
     tick(component.timeout);
     expect(component.feed).toBeDefined();
@@ -114,5 +115,88 @@ describe('AlphaPrimeAutoCompleteComponent', () => {
     // ensure teardown ran
     expect(unsubscribed).toBeTrue();
   }));
+
+  it('should use the default feeder if none is provided', fakeAsync(() => {
+    component.feeder('').subscribe({
+      next: (entries) => {
+        expect(entries).toEqual([]);
+      },
+      error: () => {
+        fail('Default feeder should not error');
+      }
+    });
+  }));
+
+  it('should set entry correctly', fakeAsync(() => {
+    component.entry = undefined;
+    expect(component.model).toBeUndefined();
+    expect(component.term).toEqual('');
+    expect(component.valid).toBeFalse();
+
+    const entry = {id: '1', caption: 'Apple'} as IAlphaPrimeAutoCompleteEntry;
+    component.entry = entry;
+    expect(component.model).toEqual(entry);
+    expect(component.term).toEqual(entry.caption);
+    expect(component.valid).toBeTrue();
+  }));
+
+  it('should manage sm flag', fakeAsync(() => {
+    (component as any).sm = signal(true);
+    expect(component.inputStyle).toEqual(component.smInputStyle);
+  }));
+
+  it('clears existing feedTimer when onFeed is called', fakeAsync(() => {
+    // arrange: create an existing timer
+    component.feedTimer = setTimeout(() => {
+    }, 1000);
+    const previousTimer = component.feedTimer;
+
+    // spy the global clearTimeout
+    const clearSpy = spyOn(window as any, 'clearTimeout');
+
+    // act: call onFeed which should clear the previous timer synchronously
+    component.onFeed({query: 'x'});
+
+    // assert
+    expect(clearSpy).toHaveBeenCalledWith(previousTimer);
+
+    // cleanup: remove any newly created timer to avoid leaking timers
+    if (component.feedTimer) {
+      clearTimeout(component.feedTimer);
+      component.feedTimer = undefined;
+    }
+  }));
+
+  it('should log feed error', fakeAsync(() => {
+    const spy = spyOn(console, 'error');
+    component.feeder = () => throwError(() => 'Feeder error');
+
+    component.onFeed({ query: 'error' });
+    // timer should be scheduled
+    expect(component.feedTimer).toBeDefined();
+
+    // advance time to fire the timeout and subscribe (which errors)
+    tick(component.timeout);
+
+    expect(spy).toHaveBeenCalledWith('Feeder error');
+    expect(component.searchFailed).toBeTrue();
+    expect(component.searching).toBeFalse();
+
+    // cleanup to avoid leaking timers/subscriptions
+    if (component.feed) {
+      component.feed.unsubscribe();
+      component.feed = undefined;
+    }
+    if (component.feedTimer) {
+      clearTimeout(component.feedTimer);
+      component.feedTimer = undefined;
+    }
+  }));
+
+  it('onClear calls clear(true)', () => {
+    const clearSpy = spyOn(component, 'clear');
+    component.onClear();
+    expect(clearSpy).toHaveBeenCalledWith(true);
+  });
 
 });
