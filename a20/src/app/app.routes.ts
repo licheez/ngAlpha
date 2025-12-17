@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import {Routes} from '@angular/router';
 
 export const routes: Routes = [
   {
@@ -11,16 +11,29 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () => import('./alpha-prime-demo/index.component').then(m => m.AlphaPrimeIndexComponent)
+        loadComponent: () =>
+          import('./alpha-prime-demo/index.component')
+          .then(m => m.AlphaPrimeIndexComponent)
       },
       {
         path: 'add-button',
-        loadComponent: () => import('./alpha-prime-demo/add-button.component').then(m => m.AlphaPrimeAddButtonDemoComponent)
+        loadComponent: () =>
+          import('./alpha-prime-demo/add-button.component')
+          .then(m => m.AlphaPrimeAddButtonDemoComponent)
       },
       {
         path: 'auto-complete',
-        loadComponent: () => import('./alpha-prime-demo/auto-complete.component').then(m => m.AlphaPrimeAutoCompleteDemoComponent)
+        loadComponent: () =>
+          import('./alpha-prime-demo/auto-complete.component')
+          .then(m => m.AlphaPrimeAutoCompleteDemoComponent)
+      },
+      {
+        path: 'cancel-button',
+        loadComponent: () =>
+          import('./alpha-prime-demo/cancel-button.component')
+          .then(m => m.AlphaPrimeAddButtonDemoComponent)
       }
+
     ]
   },
   {

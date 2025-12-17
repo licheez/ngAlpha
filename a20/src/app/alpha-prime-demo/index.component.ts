@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router';
       <ul>
         <li><a [routerLink]="['/alpha-prime', 'add-button']">AddButton</a></li>
         <li><a [routerLink]="['/alpha-prime', 'auto-complete']">AutoComplete</a></li>
+        <li><a [routerLink]="['/alpha-prime', 'cancel-button']">CancelButton</a></li>
       </ul>
     </section>
   `,

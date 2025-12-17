@@ -1,23 +1,24 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
-import { AlphaPrimeAddButtonComponent } from '../../../projects/alpha-prime/src/lib/components/alpha-prime-add-button/alpha-prime-add-button.component';
+import { AlphaPrimeCancelButtonComponent } from '../../../projects/alpha-prime/src/lib/components/alpha-prime-cancel-button/alpha-prime-cancel-button.component';
 import { CommonModule } from '@angular/common';
 
+
 @Component({
-  selector: 'app-alpha-prime-add-button-demo',
+  selector: 'app-alpha-prime-add-cancel-demo',
   standalone: true,
   template: `
     <section>
-      <h2>Alpha Prime - Add Button Demo</h2>
+      <h2>Alpha Prime - Cancel Button Demo</h2>
       <p>Clicked: {{ clicks() }}</p>
-
-      <alpha-prime-add-button
+      <alpha-prime-cancel-button
           (clicked)="onClicked()"
-      ></alpha-prime-add-button>
+      ></alpha-prime-cancel-button>
     </section>
   `,
   imports: [
     CommonModule,
-    AlphaPrimeAddButtonComponent],
+    AlphaPrimeCancelButtonComponent
+    ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AlphaPrimeAddButtonDemoComponent {
