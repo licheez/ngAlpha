@@ -32,6 +32,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./alpha-prime-demo/cancel-button.component')
           .then(m => m.AlphaPrimeAddButtonDemoComponent)
+      },
+      {
+        path: 'confirmation-modal',
+        loadComponent: () =>
+          import('./alpha-prime-demo/confirmation-modal.component')
+            .then(m => m.ConfirmationModalComponent)
       }
 
     ]

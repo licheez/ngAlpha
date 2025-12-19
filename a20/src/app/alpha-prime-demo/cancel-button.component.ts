@@ -2,7 +2,6 @@ import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { AlphaPrimeCancelButtonComponent } from '../../../projects/alpha-prime/src/lib/components/alpha-prime-cancel-button/alpha-prime-cancel-button.component';
 import { CommonModule } from '@angular/common';
 
-
 @Component({
   selector: 'app-alpha-prime-add-cancel-demo',
   standalone: true,

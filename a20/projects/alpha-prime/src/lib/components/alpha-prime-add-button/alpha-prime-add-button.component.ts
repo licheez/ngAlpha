@@ -1,4 +1,10 @@
-import {Component, Input, Output, EventEmitter, input, computed} from '@angular/core';
+import {
+  Component,
+  Output,
+  EventEmitter,
+  input,
+  computed
+} from '@angular/core';
 import {ButtonModule} from 'primeng/button';
 import {TooltipModule} from 'primeng/tooltip';
 import {AlphaPrimeService} from '../../services/alpha-prime.service';
@@ -20,7 +26,7 @@ export class AlphaPrimeAddButtonComponent {
   effectiveCaption = computed(() =>
     this.caption() || this.mPs.getTr('alpha.buttons.add')
   );
-  sm=input<boolean>(false);
+  sm = input<boolean>(false);
   @Output() clicked = new EventEmitter<any>();
 
   constructor(private mPs: AlphaPrimeService) {

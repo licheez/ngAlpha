@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
         <li><a [routerLink]="['/alpha-prime', 'add-button']">AddButton</a></li>
         <li><a [routerLink]="['/alpha-prime', 'auto-complete']">AutoComplete</a></li>
         <li><a [routerLink]="['/alpha-prime', 'cancel-button']">CancelButton</a></li>
+        <li><a [routerLink]="['/alpha-prime', 'confirmation-modal']">ConfirmationModal</a></li>
       </ul>
     </section>
   `,

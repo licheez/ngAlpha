@@ -1,15 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {AlphaPrimeService} from '../../services/alpha-prime.service';
 import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
-import {ButtonDirective, ButtonLabel} from 'primeng/button';
+import {Button} from 'primeng/button';
 import {AlphaPrimeDebugTagComponent} from '../alpha-prime-debug-tag/alpha-prime-debug-tag.component';
 
 @Component({
   selector: 'alpha-prime-confirmation-modal',
   imports: [
-    ButtonDirective,
-    ButtonLabel,
-    AlphaPrimeDebugTagComponent
+    AlphaPrimeDebugTagComponent,
+    Button
   ],
   templateUrl: './alpha-prime-confirmation-modal.component.html',
   styleUrls: ['./alpha-prime-confirmation-modal.component.css']

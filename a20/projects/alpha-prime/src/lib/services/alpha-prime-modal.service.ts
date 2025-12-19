@@ -1,6 +1,9 @@
-import { Injectable, Type } from '@angular/core';
-import { Observable, Subscriber } from 'rxjs';
+import {Injectable, Type} from '@angular/core';
+import {Observable, Subscriber} from 'rxjs';
 import {IAlphaPrimeModalConfig} from "./alpha-prime-modal-abstractions";
+import {
+  AlphaPrimeConfirmationModalComponent
+} from '../components/alpha-prime-confirmation-modal/alpha-prime-confirmation-modal.component';
 
 @Injectable({
   providedIn: 'root'
@@ -8,18 +11,20 @@ import {IAlphaPrimeModalConfig} from "./alpha-prime-modal-abstractions";
 export class AlphaPrimeModalService {
 
   private dsOpen: (component: Type<any>, ddc: IAlphaPrimeModalConfig) => any =
-    () => {};
+    () => {
+    };
   private modalStyleClass: string | undefined;
   private postNavigationLog:
     (path: string, title: string) => any =
-    () => {};
+    () => {
+    };
 
   init(
     dsOpen: (component: Type<any>, ddc: IAlphaPrimeModalConfig) => any,
     postNavigationLog?: (path: string, title: string) => any,
     modalStyleClass?: string) {
     this.dsOpen = dsOpen;
-    if (postNavigationLog){
+    if (postNavigationLog) {
       this.postNavigationLog = postNavigationLog;
     }
     if (modalStyleClass) {
@@ -62,11 +67,11 @@ export class AlphaPrimeModalService {
           ddc.styleClass = this.modalStyleClass;
         }
 
-        if (ddc.draggable === undefined){
+        if (ddc.draggable === undefined) {
           ddc.draggable = true;
         }
 
-        const path =  `${anchor}//${modal}`;
+        const path = `${anchor}//${modal}`;
         const title = `modal ${modal} from ${anchor}`;
 
         ddc.data.setInstance = (instance: T) => {
@@ -79,4 +84,26 @@ export class AlphaPrimeModalService {
       });
   }
 
+  openConfirmationModal(
+    anchor: string,
+    title?: string,
+    message?: string,
+    confirmButtonText?: string,
+    cancelButtonText?: string,
+    ddc?: IAlphaPrimeModalConfig): Observable<boolean> {
+
+    return new Observable(
+      (subscriber: Subscriber<boolean>) => {
+        this.openModal(
+          AlphaPrimeConfirmationModalComponent,
+          anchor, 'AlphaConfirmation', ddc).subscribe(
+          m => m.init(
+            (confirmed: boolean) => {
+              subscriber.next(confirmed);
+              subscriber.complete();
+            },
+            title, message,
+            confirmButtonText, cancelButtonText));
+      });
+  }
 }
