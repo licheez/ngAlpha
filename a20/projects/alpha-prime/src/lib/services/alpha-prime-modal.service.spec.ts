@@ -82,5 +82,58 @@ describe('AlphaPrimeModalService', () => {
     expect(result).toBe(42);
     expect(capturedDdc).toBeDefined();
   });
-});
 
+  it('openConfirmationModal emits true when modal init confirms and forwards init args', async () => {
+    let capturedDdc: IAlphaPrimeModalConfig | undefined;
+    let receivedInitArgs: any = {};
+
+    const mockDsOpen = (component: Type<any>, ddc: IAlphaPrimeModalConfig) => {
+      capturedDdc = ddc;
+      // simulate framework setting the component instance
+      const fakeModal = {
+        init: (callback: (confirmed: boolean) => void, title?: string, message?: string, confirmButtonText?: string, cancelButtonText?: string) => {
+          receivedInitArgs.title = title;
+          receivedInitArgs.message = message;
+          receivedInitArgs.confirmButtonText = confirmButtonText;
+          receivedInitArgs.cancelButtonText = cancelButtonText;
+          // simulate user confirmed
+          callback(true);
+        }
+      } as any;
+      capturedDdc.data.setInstance(fakeModal);
+      return null;
+    };
+
+    service.init(mockDsOpen);
+
+    const result = await firstValueFrom(service.openConfirmationModal('anchorX', 'TheTitle', 'TheMessage', 'Yes', 'No'));
+    expect(result).toBeTrue();
+    expect(capturedDdc).toBeDefined();
+    // ensure init received the same strings
+    expect(receivedInitArgs.title).toBe('TheTitle');
+    expect(receivedInitArgs.message).toBe('TheMessage');
+    expect(receivedInitArgs.confirmButtonText).toBe('Yes');
+    expect(receivedInitArgs.cancelButtonText).toBe('No');
+  });
+
+  it('openConfirmationModal emits false when modal init cancels', async () => {
+    let capturedDdc: IAlphaPrimeModalConfig | undefined;
+
+    const mockDsOpen = (component: Type<any>, ddc: IAlphaPrimeModalConfig) => {
+      capturedDdc = ddc;
+      const fakeModal = {
+        init: (callback: (confirmed: boolean) => void) => {
+          callback(false);
+        }
+      } as any;
+      capturedDdc.data.setInstance(fakeModal);
+      return null;
+    };
+
+    service.init(mockDsOpen);
+
+    const result = await firstValueFrom(service.openConfirmationModal('anchorY'));
+    expect(result).toBeFalse();
+  });
+
+});

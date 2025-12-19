@@ -7,7 +7,7 @@ describe('AlphaPrimeDebugTag', () => {
   let component: AlphaPrimeDebugTagComponent;
   let fixture: ComponentFixture<AlphaPrimeDebugTagComponent>;
 
-  const mockService: Partial<AlphaPrimeService> = {
+  const mockPs: Partial<AlphaPrimeService> = {
     isProduction: false
   };
 
@@ -15,7 +15,7 @@ describe('AlphaPrimeDebugTag', () => {
     await TestBed.configureTestingModule({
       imports: [AlphaPrimeDebugTagComponent],
       providers: [
-        { provide: AlphaPrimeService, useValue: mockService }
+        { provide: AlphaPrimeService, useValue: mockPs }
       ]
     })
     .compileComponents();

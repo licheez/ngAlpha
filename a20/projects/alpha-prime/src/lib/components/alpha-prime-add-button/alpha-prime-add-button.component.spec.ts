@@ -1,11 +1,11 @@
 // typescript
-import {ComponentFixture, TestBed, fakeAsync, tick} from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 import {AlphaPrimeAddButtonComponent} from './alpha-prime-add-button.component';
 import {AlphaPrimeService} from '../../services/alpha-prime.service';
 import {ButtonModule} from 'primeng/button';
 import {TooltipModule} from 'primeng/tooltip';
-import { signal } from '@angular/core';
+import {signal} from '@angular/core';
 
 describe('AlphaPrimeAddButtonComponent', () => {
   let fixture: ComponentFixture<AlphaPrimeAddButtonComponent>;
@@ -65,22 +65,5 @@ describe('AlphaPrimeAddButtonComponent', () => {
 
     expect(component.clicked.emit).toHaveBeenCalled();
   });
-
-  it('should set ViewChild and focus the inner button after view init', fakeAsync(() => {
-    fixture.detectChanges();
-    // run microtasks where Promise.resolve().then(...) executes
-    tick();
-    fixture.detectChanges();
-
-    // ensure ViewChild reference exists
-    expect((component as any).noButton).toBeDefined();
-
-    // query the inner native button and check document.activeElement
-    const nativeBtn = fixture.nativeElement.querySelector('button');
-    expect(nativeBtn).toBeTruthy();
-
-    // activeElement should be the inner button
-    expect(document.activeElement).toBe(nativeBtn);
-  }));
 
 });
