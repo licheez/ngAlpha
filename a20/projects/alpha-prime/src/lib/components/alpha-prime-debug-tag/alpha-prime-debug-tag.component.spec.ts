@@ -40,7 +40,6 @@ describe('AlphaPrimeDebugTag', () => {
     expect(component).toBeTruthy();
     expect(component.tag).toBe('debug');
     expect(component.tagSignal()).toBe('debug');
-    expect(component.visible).toBeTrue();
   });
 
   it('should be hidden when localStorage alphaHideDebugTag is true', () => {

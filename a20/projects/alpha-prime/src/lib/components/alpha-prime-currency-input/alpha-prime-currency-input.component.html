@@ -1,0 +1,41 @@
+@if (!readonly) {
+
+  <p-input-group>
+
+    <p-inputgroup-addon>
+      {{ currencySymbol }}
+    </p-inputgroup-addon>
+
+    <input type="text"
+           pInputText
+           [name]="name"
+           [pKeyFilter]="realNumber"
+           [placeholder]="placeHolder"
+           [disabled]="disabled"
+           [ngStyle]="inputStyle"
+           [ngClass]="{'ng-invalid' : invalid}"
+           [ngModel]="sVal"
+           (ngModelChange)="onTextChange($event)"
+           (blur)="onBlur()"
+    >
+
+    @if (sVal && showClear) {
+      <p-inputgroup-addon>
+        <p-button
+          pRipple
+          tabindex="-1"
+          [disabled]="disabled"
+          (click)="onClear()"
+          severity="secondary"
+          icon="fa fa-times"
+        ></p-button>
+      </p-inputgroup-addon>
+    }
+
+  </p-input-group>
+} @else {
+  <input
+    pInputText
+    [readonly]="true"
+    [value]="readonlyCaption">
+}
