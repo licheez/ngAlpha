@@ -11,7 +11,6 @@ import {
       <h2>Alpha Prime - Currency Input Demo</h2>
       <alpha-prime-currency-input
         [(value)]="value"
-        [sm]="true"
       ></alpha-prime-currency-input>
     </section>
     <p>Value: {{value}}</p>

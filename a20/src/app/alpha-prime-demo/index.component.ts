@@ -13,6 +13,7 @@ import { RouterModule } from '@angular/router';
         <li><a [routerLink]="['/alpha-prime', 'cancel-button']">CancelButton</a></li>
         <li><a [routerLink]="['/alpha-prime', 'confirmation-modal']">ConfirmationModal</a></li>
         <li><a [routerLink]="['/alpha-prime', 'currency-input']">CurrencyInput</a></li>
+        <li><a [routerLink]="['/alpha-prime', 'date-picker']">DatePicker</a></li>
       </ul>
     </section>
   `,

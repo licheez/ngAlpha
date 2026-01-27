@@ -44,6 +44,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./alpha-prime-demo/currency-input.component')
             .then(m => m.CurrencyInputComponent)
+      },
+      {
+        path: 'date-picker',
+        loadComponent: () =>
+          import('./alpha-prime-demo/date-picker.component')
+            .then(m => m.DatePickerComponent)
       }
     ]
   },
