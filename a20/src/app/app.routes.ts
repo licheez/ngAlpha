@@ -56,6 +56,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./alpha-prime-demo/date-range-picker.component')
             .then(m => m.DateRangePickerComponent)
+      },
+      {
+        path:'delete-button',
+        loadComponent: () =>
+          import('./alpha-prime-demo/delete-button.component')
+            .then(m => m.DeleteButtonComponent)
       }
     ]
   },

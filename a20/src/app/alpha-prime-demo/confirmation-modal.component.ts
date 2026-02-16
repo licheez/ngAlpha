@@ -1,8 +1,6 @@
-import {Component, Type} from '@angular/core';
+import {Component} from '@angular/core';
 import {Button} from 'primeng/button';
 import {AlphaPrimeModalService} from '../../../projects/alpha-prime/src/lib/services/alpha-prime-modal.service';
-import {DialogService} from 'primeng/dynamicdialog';
-import {IAlphaPrimeModalConfig} from '../../../projects/alpha-prime/src/lib/services/alpha-prime-modal-abstractions';
 
 @Component({
   selector: 'app-confirmation-modal',
@@ -16,21 +14,12 @@ import {IAlphaPrimeModalConfig} from '../../../projects/alpha-prime/src/lib/serv
   `,
   imports: [
     Button
-  ],
-  styles: [],
-  providers: [DialogService],
+  ]
 })
 export class ConfirmationModalComponent {
 
   constructor(
-    ds: DialogService,
-    private mMs: AlphaPrimeModalService) {
-    const dsOpen:
-      (component: Type<any>, ddc: IAlphaPrimeModalConfig) => any =
-      (component: Type<any>, ddc: IAlphaPrimeModalConfig) =>
-        ds.open(component, ddc);
-    this.mMs.init(dsOpen);
-  }
+    private mMs: AlphaPrimeModalService) {}
 
   onClicked(): void {
     this.mMs.openConfirmationModal(

@@ -16,6 +16,7 @@ import {AlphaPrimeDebugTagComponent} from '../alpha-prime-debug-tag/alpha-prime-
 export class AlphaPrimeConfirmationModalComponent implements OnInit {
   onClose: (confirmed: boolean) => any = () => { };
 
+  title: string;
   message: string;
   yes: string;
   no: string;
@@ -24,6 +25,7 @@ export class AlphaPrimeConfirmationModalComponent implements OnInit {
     private mPs: AlphaPrimeService,
     private mDdr: DynamicDialogRef,
     private mDdc: DynamicDialogConfig) {
+    this.title = this.mPs.getTr('alpha.confirmationModal.title');
     this.message = this.mPs.getTr('alpha.confirmationModal.message');
     this.yes = this.mPs.getTr('alpha.confirmationModal.yes');
     this.no = this.mPs.getTr('alpha.confirmationModal.no');

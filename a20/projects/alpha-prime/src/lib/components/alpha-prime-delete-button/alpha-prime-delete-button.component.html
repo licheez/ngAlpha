@@ -1,0 +1,19 @@
+@if (!busy()) {
+  <p-button
+          severity="danger"
+          [class]="sm() ? 'p-button-sm' : ''"
+          [disabled]="disabled()"
+          [pTooltip]="effectiveCaption()"
+          icon="fa fa-trash-alt"
+          (click)="onClicked()">
+  </p-button>
+} @else {
+  <p-button
+    class="p-button-danger"
+    [class]="sm() ? 'p-button-sm' : ''"
+    type="button"
+    [disabled]="true"
+    [pTooltip]="effectiveCaption()"
+    icon="fa fa-spinner fa-spin">
+  </p-button>
+}

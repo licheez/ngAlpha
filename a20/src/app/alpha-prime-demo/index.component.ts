@@ -1,5 +1,8 @@
-import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import {Component, ChangeDetectionStrategy, signal, Type} from '@angular/core';
 import { RouterModule } from '@angular/router';
+import {DialogService} from 'primeng/dynamicdialog';
+import {AlphaPrimeModalService} from '../../../projects/alpha-prime/src/lib/services/alpha-prime-modal.service';
+import {IAlphaPrimeModalConfig} from '../../../projects/alpha-prime/src/lib/services/alpha-prime-modal-abstractions';
 
 @Component({
   selector: 'app-alpha-prime-index',
@@ -15,12 +18,25 @@ import { RouterModule } from '@angular/router';
         <li><a [routerLink]="['/alpha-prime', 'currency-input']">CurrencyInput</a></li>
         <li><a [routerLink]="['/alpha-prime', 'date-picker']">DatePicker</a></li>
         <li><a [routerLink]="['/alpha-prime', 'date-range-picker']">DateRangePicker</a></li>
+        <li><a [routerLink]="['/alpha-prime', 'delete-button']">DeleteButton</a></li>
       </ul>
     </section>
   `,
   imports: [RouterModule],
+  providers: [DialogService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AlphaPrimeIndexComponent {
   protected readonly title = signal('Alpha Prime');
+
+  constructor(
+    ds: DialogService,
+    private mMs: AlphaPrimeModalService) {
+    const dsOpen:
+      (component: Type<any>, ddc: IAlphaPrimeModalConfig) => any =
+      (component: Type<any>, ddc: IAlphaPrimeModalConfig) =>
+        ds.open(component, ddc);
+    this.mMs.init(dsOpen);
+  }
+
 }
