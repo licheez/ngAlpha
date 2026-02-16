@@ -15,7 +15,7 @@ describe('AlphaPrimeDeleteButtonComponent', () => {
 
   beforeEach(async () => {
     mockPrimeService = jasmine.createSpyObj('AlphaPrimeService', ['getTr']);
-    mockPrimeService.getTr.and.returnValue('tr:alpha.buttons.add');
+    mockPrimeService.getTr.and.returnValue('tr:alpha.buttons.delete');
 
     mockModalService = jasmine.createSpyObj('AlphaPrimeModalService', ['openModal']);
 
@@ -58,8 +58,8 @@ describe('AlphaPrimeDeleteButtonComponent', () => {
   describe('effectiveCaption computed signal', () => {
     it('should return translation when caption is empty', () => {
       fixture.detectChanges();
-      expect(component.effectiveCaption()).toBe('tr:alpha.buttons.add');
-      expect(mockPrimeService.getTr).toHaveBeenCalledWith('alpha.buttons.add');
+      expect(component.effectiveCaption()).toBe('tr:alpha.buttons.delete');
+      expect(mockPrimeService.getTr).toHaveBeenCalledWith('alpha.buttons.delete');
     });
 
     it('should return custom caption when provided', () => {

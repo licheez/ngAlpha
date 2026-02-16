@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
-import { AlphaPrimeAddButtonComponent } from '../../../projects/alpha-prime/src/lib/components/alpha-prime-add-button/alpha-prime-add-button.component';
+import { AlphaPrimeAddButtonComponent }
+  from '../../../projects/alpha-prime/src/lib/components/alpha-prime-add-button/alpha-prime-add-button.component';
 import { CommonModule } from '@angular/common';
 
 @Component({

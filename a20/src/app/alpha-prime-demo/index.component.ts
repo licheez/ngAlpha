@@ -19,6 +19,7 @@ import {IAlphaPrimeModalConfig} from '../../../projects/alpha-prime/src/lib/serv
         <li><a [routerLink]="['/alpha-prime', 'date-picker']">DatePicker</a></li>
         <li><a [routerLink]="['/alpha-prime', 'date-range-picker']">DateRangePicker</a></li>
         <li><a [routerLink]="['/alpha-prime', 'delete-button']">DeleteButton</a></li>
+        <li><a [routerLink]="['/alpha-prime', 'edit-button']">EditButton</a></li>
       </ul>
     </section>
   `,

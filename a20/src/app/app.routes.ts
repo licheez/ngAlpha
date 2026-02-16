@@ -62,6 +62,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./alpha-prime-demo/delete-button.component')
             .then(m => m.DeleteButtonComponent)
+      },
+      {
+        path: 'edit-button',
+        loadComponent: () =>
+          import('./alpha-prime-demo/edit-button.component')
+            .then(m => m.EditButtonComponent)
       }
     ]
   },

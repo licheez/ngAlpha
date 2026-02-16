@@ -23,7 +23,7 @@ export class AlphaPrimeDeleteButtonComponent {
   disabled = input<boolean>(false);
   caption = input<string>('');
   effectiveCaption = computed(() =>
-    this.caption() || this.mPs.getTr('alpha.buttons.add')
+    this.caption() || this.mPs.getTr('alpha.buttons.delete')
   );
   sm = input<boolean>(false);
   busy = input<boolean>(false);
