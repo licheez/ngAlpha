@@ -68,6 +68,18 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./alpha-prime-demo/edit-button.component')
             .then(m => m.EditButtonComponent)
+      },
+      {
+        path: 'file-upload',
+        loadComponent: () =>
+          import('./alpha-prime-demo/file-upload.component')
+            .then(m => m.FileUploadComponent)
+      },
+      {
+        path: 'progress-bar',
+        loadComponent: () =>
+          import('./alpha-prime-demo/progress-bar.component')
+            .then(m => m.ProgressBarComponent)
       }
     ]
   },

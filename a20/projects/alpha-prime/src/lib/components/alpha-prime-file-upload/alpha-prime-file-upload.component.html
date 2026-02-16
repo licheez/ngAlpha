@@ -1,0 +1,79 @@
+@if (readonly()) {
+  <input
+         name="fileName"
+         pInputText
+         style="width: 100%;"
+         type="text"
+         [ngModel]="readonlyCaption()"
+         [readOnly]="true" >
+} @else {
+  <p-inputgroup>
+
+    <input
+           name="fileName"
+           pInputText
+           placeholder="{{fileLit}} {{accept()}}"
+           style="width: 100%;"
+           type="text"
+           [(ngModel)]="fm.fileName"
+           [readOnly]="true" >
+
+    @if(!fm.hasData) {
+      <p-button
+          pRipple
+          tabindex="-1"
+          (click)="onBrowse()"
+          [disabled]="disabled() || busy"
+          severity="warn"
+          icon="fa fa-folder-open"
+      ></p-button>
+    }
+
+    @if(fm.hasData) {
+      <p-button
+          pRipple
+          tabindex="-1"
+          [disabled]="disabled() || busy"
+          icon="fa fa-trash-alt"
+          severity="danger"
+          (click)="onClear()"
+      ></p-button>
+    }
+
+    @if (fm.hasData && !fu) {
+      @if (busy) {
+        <p-button
+            pRipple
+            tabindex="-1"
+            [disabled]="true"
+            icon="fa fa-spin fa-spinner"
+            severity="info"
+        ></p-button>
+      } @else {
+        <p-button
+            pRipple
+            tabindex="-1"
+            [disabled]="disabled() || busy"
+            icon="fa fa-upload"
+            severity="info"
+            (click)="onSave()"
+        ></p-button>
+      }
+    }
+
+  </p-inputgroup>
+}
+
+<alpha-prime-progress-bar
+  [busy]="uploading"
+  mode="tiny"
+  [value]="progress"
+></alpha-prime-progress-bar>
+
+<input #fileInput
+       name="fileInput"
+       type="file"
+       [accept]="normalizedAccept()"
+       style="display: none;"
+       (change)="onFileInputChanged($event)">
+
