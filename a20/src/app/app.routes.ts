@@ -50,6 +50,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./alpha-prime-demo/date-picker.component')
             .then(m => m.DatePickerComponent)
+      },
+      {
+        path: 'date-range-picker',
+        loadComponent: () =>
+          import('./alpha-prime-demo/date-range-picker.component')
+            .then(m => m.DateRangePickerComponent)
       }
     ]
   },

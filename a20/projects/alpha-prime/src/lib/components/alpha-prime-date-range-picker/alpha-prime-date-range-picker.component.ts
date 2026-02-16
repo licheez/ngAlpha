@@ -1,9 +1,26 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {InputText} from 'primeng/inputtext';
+import {DatePicker} from 'primeng/datepicker';
+import {FormsModule} from '@angular/forms';
+import {InputGroup} from 'primeng/inputgroup';
+import {InputGroupAddon} from 'primeng/inputgroupaddon';
+import {Button} from 'primeng/button';
+import {Ripple} from 'primeng/ripple';
+import {NgClass} from '@angular/common';
 
 @Component({
   selector: 'alpha-prime-date-range-picker',
   standalone: true,
-  imports: [],
+  imports: [
+    InputText,
+    DatePicker,
+    FormsModule,
+    InputGroup,
+    InputGroupAddon,
+    Button,
+    Ripple,
+    NgClass
+  ],
   templateUrl: './alpha-prime-date-range-picker.component.html',
   styleUrl: './alpha-prime-date-range-picker.component.css'
 })
