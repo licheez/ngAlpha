@@ -58,7 +58,7 @@ export const routes: Routes = [
             .then(m => m.DateRangePickerComponent)
       },
       {
-        path:'delete-button',
+        path: 'delete-button',
         loadComponent: () =>
           import('./alpha-prime-demo/delete-button.component')
             .then(m => m.DeleteButtonComponent)
@@ -74,6 +74,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./alpha-prime-demo/file-upload.component')
             .then(m => m.FileUploadComponent)
+      },
+      {
+        path: 'filter-box',
+        loadComponent: () =>
+          import('./alpha-prime-demo/filter-box.component')
+            .then(m => m.FilterBoxComponent)
       },
       {
         path: 'progress-bar',
