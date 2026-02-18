@@ -14,6 +14,7 @@ import {
         <alpha-prime-file-upload
           [accept]="'.pdf'"
           [autoUpload]="false"
+          [deleteOnClear]="true"
           (fileUploaded)="onFileUploaded($event)"
           (fileDeleted)="onFileDeleted($event)"
         ></alpha-prime-file-upload>

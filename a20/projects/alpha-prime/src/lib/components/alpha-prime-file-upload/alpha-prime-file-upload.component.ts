@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, computed, ElementRef, EventEmitter, input, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, computed, ElementRef, EventEmitter, input, Output, ViewChild} from '@angular/core';
 import {IAlphaPrimeFileUpload} from './alpha-prime-file-upload';
 import {AlphaPrimeService} from '../../services/alpha-prime.service';
 import {InputText} from 'primeng/inputtext';
@@ -97,7 +97,8 @@ export class AlphaPrimeFileUploadComponent implements AfterViewInit {
   fileLit: string;
 
   constructor(
-    private mPs: AlphaPrimeService) {
+    private mPs: AlphaPrimeService,
+    private cdr: ChangeDetectorRef) {
     this.fileLit = mPs.getTr('alpha.common.file');
   }
 
@@ -162,7 +163,7 @@ export class AlphaPrimeFileUploadComponent implements AfterViewInit {
       let reader: FileReader | undefined = new FileReader();
 
       reader.onload = (loadEvent: ProgressEvent) => {
-        console.log('reader.onload', loadEvent);
+        // console.log('reader.onload', loadEvent);
 
         const target = loadEvent.target! as FileReader;
         // if (target == null) {
@@ -172,6 +173,9 @@ export class AlphaPrimeFileUploadComponent implements AfterViewInit {
         // dispose the reader
         setTimeout(() => reader = undefined, 10);
         this.busy = false;
+
+        // Manually trigger change detection since FileReader runs outside Angular's zone
+        this.cdr.detectChanges();
 
         if (this.autoUpload()) {
           this.upload();

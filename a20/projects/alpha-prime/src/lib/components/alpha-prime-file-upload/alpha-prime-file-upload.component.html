@@ -1,6 +1,6 @@
 @if (readonly()) {
   <input
-         name="fileName"
+         [name]="effectiveName()"
          pInputText
          style="width: 100%;"
          type="text"
@@ -10,7 +10,7 @@
   <p-inputgroup>
 
     <input
-           name="fileName"
+           [name]="effectiveName()"
            pInputText
            placeholder="{{fileLit}} {{accept()}}"
            style="width: 100%;"
@@ -71,7 +71,7 @@
 ></alpha-prime-progress-bar>
 
 <input #fileInput
-       name="fileInput"
+       [name]="effectiveName() + '_fileInput'"
        type="file"
        [accept]="normalizedAccept()"
        style="display: none;"
