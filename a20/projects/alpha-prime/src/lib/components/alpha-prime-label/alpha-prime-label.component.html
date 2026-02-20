@@ -1,9 +1,14 @@
-<span style="display: inline-block">{{caption()}}</span>
-@if (!showMessage() && (isEmpty() || invalid())) {
+<span style="display: inline-block">
+  <ng-content></ng-content>
+  @if (caption()) {
+    {{caption()}}
+  }
+</span>
+@if (!effectiveShowMessage() && isEmptyOrInvalid()) {
   <span style="display: inline-block; color:red; font-weight: bold"
         class="p-invalid ml-1">*</span>
 }
-@if (showMessage() && (isEmpty() || invalid())) {
+@if (effectiveShowMessage() && isEmptyOrInvalid()) {
   <span style="display: inline-block; color: red;"
-        class="ml-1 font-bold">{{ requiredOrInvalidMessage }}</span>
+        class="ml-1 font-bold">{{ effectiveInvalidMessage() }}</span>
 }

@@ -15,15 +15,46 @@ import {InputText} from 'primeng/inputtext';
 
         <div class="p-field col-12">
           <alpha-prime-label
-            [caption]="'Required Value'"
-            [value]="dynamicValue()"></alpha-prime-label>
+            [caption]="'Required Value (using [caption])'"
+            [value]="dynamicValue1()"></alpha-prime-label>
           <input
             name="field1"
             class="form-control"
             pInputText
             placeholder="Enter value"
             type="text"
-            [(ngModel)]="dynamicValue"
+            [(ngModel)]="dynamicValue1"
+          />
+        </div>
+
+        <div class="p-field col-12">
+          <alpha-prime-label [value]="dynamicValue2()">
+            Required Value (using ng-content)
+          </alpha-prime-label>
+          <input
+            name="field2"
+            class="form-control"
+            pInputText
+            placeholder="Enter value"
+            type="text"
+            [(ngModel)]="dynamicValue2"
+          />
+        </div>
+
+        <div class="p-field col-12">
+          <alpha-prime-label
+            [value]="dynamicValue3()"
+            [showMessage]="true"
+            [invalidMessage]="'This field is mandatory!'">
+            Field with Custom Error Message
+          </alpha-prime-label>
+          <input
+            name="field3"
+            class="form-control"
+            pInputText
+            placeholder="Enter value"
+            type="text"
+            [(ngModel)]="dynamicValue3"
           />
         </div>
 
@@ -41,5 +72,10 @@ import {InputText} from 'primeng/inputtext';
 export class LabelComponent {
 
   // Interactive demo signals
-  dynamicValue = model (''); // This will be bound to the input field
+  // This will be bound to the input field with [caption]
+  dynamicValue1 = model ('');
+  // This will be bound to the input field with ng-content
+  dynamicValue2 = model('');
+  // This will be bound to the input field with custom error message
+  dynamicValue3 = model('');
 }
