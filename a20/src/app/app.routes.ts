@@ -82,6 +82,12 @@ export const routes: Routes = [
             .then(m => m.FilterBoxComponent)
       },
       {
+        path: 'label',
+        loadComponent: () =>
+          import('./alpha-prime-demo/label.component')
+            .then(m => m.LabelComponent)
+      },
+      {
         path: 'progress-bar',
         loadComponent: () =>
           import('./alpha-prime-demo/progress-bar.component')
