@@ -1,0 +1,17 @@
+<alpha-prime-debug-tag tag="alphaLoginForm" xmlns="http://www.w3.org/1999/html"></alpha-prime-debug-tag>
+@if(fm) {
+  <!-- USERNAME-->
+  <div class="p-field">
+    <label for="username">
+      <alpha-prime-label
+        [caption]="usernameLit" >{{fm.username}}</alpha-prime-label>
+    </label>
+    <input id="username"
+           style="width: 100%;"
+           pInputText
+           type="text"
+           maxlength="256"
+           [disabled]="busy()"
+           [(ngModel)]="fm.username">
+  </div>
+}
