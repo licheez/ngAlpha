@@ -1,24 +1,28 @@
-import {ChangeDetectionStrategy, Component, inject, output, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject, output, signal} from '@angular/core';
 import {AlphaPrimeService} from '../../services/alpha-prime.service';
 import {AlphaPrimeDebugTagComponent} from '../alpha-prime-debug-tag/alpha-prime-debug-tag.component';
 import {AlphaPrimeLabelComponent} from '../alpha-prime-label/alpha-prime-label.component';
+import {AlphaPrimePasswordInputComponent} from '../alpha-prime-password-input/alpha-prime-password-input.component';
+import {AlphaPrimeProgressBarComponent} from '../alpha-prime-progress-bar/alpha-prime-progress-bar.component';
+import {AlphaPrimeCancelButtonComponent} from '../alpha-prime-cancel-button/alpha-prime-cancel-button.component';
 import {InputText} from 'primeng/inputtext';
+import {Button} from 'primeng/button';
+import {Ripple} from 'primeng/ripple';
 import {FormsModule} from '@angular/forms';
 
-
 class FormModel {
-  username = '';
-  password = '';
+  username = signal('');
+  password =
+    signal<string | undefined>(undefined);
 
-  eon(value: string | undefined): boolean {
-    return value === undefined
-      || value.trim() === '';
+  private isEmpty(value: string | undefined): boolean {
+    return value === undefined || value.trim() === '';
   }
 
-  get invalid(): boolean {
-    return this.eon(this.username)
-      || this.eon(this.password);
-  }
+  invalid = computed(() => {
+    return this.isEmpty(this.username())
+      || this.isEmpty(this.password());
+  });
 }
 
 @Component({
@@ -27,7 +31,12 @@ class FormModel {
   imports: [
     AlphaPrimeDebugTagComponent,
     AlphaPrimeLabelComponent,
+    AlphaPrimePasswordInputComponent,
+    AlphaPrimeProgressBarComponent,
+    AlphaPrimeCancelButtonComponent,
     InputText,
+    Button,
+    Ripple,
     FormsModule
   ],
   templateUrl: './alpha-prime-login-form.component.html',
@@ -59,7 +68,7 @@ export class AlphaPrimeLoginFormComponent {
     this.busy.set(true);
     this.errorMessage.set(undefined);
     this.mPs.signIn(
-      this.fm.username, this.fm.password, true)
+      this.fm.username(), this.fm.password() ?? '', true)
       .subscribe({
         next: ok => {
           if (ok) {
