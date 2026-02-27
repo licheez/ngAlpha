@@ -88,6 +88,12 @@ export const routes: Routes = [
             .then(m => m.LabelComponent)
       },
       {
+        path: 'password-input',
+        loadComponent: () =>
+          import('./alpha-prime-demo/password-input.component')
+            .then(m => m.PasswordInputComponent)
+      },
+      {
         path: 'progress-bar',
         loadComponent: () =>
           import('./alpha-prime-demo/progress-bar.component')

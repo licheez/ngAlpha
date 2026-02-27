@@ -25,6 +25,7 @@ import {of} from 'rxjs';
         <li><a [routerLink]="['/alpha-prime', 'file-upload']">FileUpload</a></li>
         <li><a [routerLink]="['/alpha-prime', 'filter-box']">FilterBox</a></li>
         <li><a [routerLink]="['/alpha-prime', 'label']">Label</a></li>
+        <li><a [routerLink]="['/alpha-prime', 'password-input']">PasswordInput</a></li>
         <li><a [routerLink]="['/alpha-prime', 'progress-bar']">ProgressBar</a></li>
       </ul>
     </section>

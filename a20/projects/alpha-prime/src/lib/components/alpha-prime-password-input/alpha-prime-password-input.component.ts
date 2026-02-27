@@ -1,10 +1,21 @@
 import {ChangeDetectionStrategy, Component, computed, inject, input, model, signal} from '@angular/core';
 import {AlphaPrimeService} from '../../services/alpha-prime.service';
+import {InputGroup} from 'primeng/inputgroup';
+import {Button} from 'primeng/button';
+import {Ripple} from 'primeng/ripple';
+import {FormsModule} from '@angular/forms';
+import {InputText} from 'primeng/inputtext';
 
 @Component({
   selector: 'alpha-prime-password-input',
   standalone: true,
-  imports: [],
+  imports: [
+    InputGroup,
+    Button,
+    Ripple,
+    FormsModule,
+    InputText
+  ],
   templateUrl: './alpha-prime-password-input.component.html',
   styleUrl: './alpha-prime-password-input.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
