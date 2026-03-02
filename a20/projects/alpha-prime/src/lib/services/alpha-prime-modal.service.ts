@@ -4,6 +4,9 @@ import {IAlphaPrimeModalConfig} from "./alpha-prime-modal-abstractions";
 import {
   AlphaPrimeConfirmationModalComponent
 } from '../components/alpha-prime-confirmation-modal/alpha-prime-confirmation-modal.component';
+import {
+  AlphaPrimeLoginModalComponent
+} from '../components/alpha-prime-login-modal/alpha-prime-login-modal.component';
 
 @Injectable({
   providedIn: 'root'
@@ -104,6 +107,40 @@ export class AlphaPrimeModalService {
             },
             title, message,
             confirmButtonText, cancelButtonText));
+      });
+  }
+
+  openLoginModal(
+    anchor: string,
+    title?: string,
+    usernameLabel?: string,
+    passwordLabel?: string,
+    connectLabel?: string,
+    failureMessage?: string,
+    invalidCredentialMessage?: string,
+    showCancelButton = false,
+    ddc?: IAlphaPrimeModalConfig): Observable<boolean> {
+
+    if (title) {
+      if (!ddc) {
+        ddc = {};
+      }
+      ddc.header = title;
+    }
+
+    return new Observable(
+      (subscriber: Subscriber<boolean>) => {
+        this.openModal(
+          AlphaPrimeLoginModalComponent,
+          anchor, 'AlphaLogin', ddc).subscribe(
+          m => m.init(
+            (loggedIn: boolean) => {
+              subscriber.next(loggedIn);
+              subscriber.complete();
+            },
+            usernameLabel, passwordLabel, connectLabel,
+            failureMessage, invalidCredentialMessage,
+            showCancelButton));
       });
   }
 }
