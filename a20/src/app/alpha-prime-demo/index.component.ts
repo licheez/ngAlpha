@@ -28,6 +28,7 @@ import {FakeOasService} from './fake-oas-service';
         <li><a [routerLink]="['/alpha-prime', 'label']">Label</a></li>
         <li><a [routerLink]="['/alpha-prime', 'login-form']">LoginForm</a></li>
         <li><a [routerLink]="['/alpha-prime', 'login-modal']">LoginModal</a></li>
+        <li><a [routerLink]="['/alpha-prime', 'number-input']">NumberInput</a></li>
         <li><a [routerLink]="['/alpha-prime', 'password-input']">PasswordInput</a></li>
         <li><a [routerLink]="['/alpha-prime', 'progress-bar']">ProgressBar</a></li>
       </ul>

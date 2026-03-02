@@ -100,6 +100,12 @@ export const routes: Routes = [
             .then(m => m.LoginModalComponent)
       },
       {
+        path: 'number-input',
+        loadComponent: () =>
+          import('./alpha-prime-demo/number-input.component')
+            .then(m => m.NumberInputComponent)
+      },
+      {
         path: 'password-input',
         loadComponent: () =>
           import('./alpha-prime-demo/password-input.component')

@@ -1,0 +1,25 @@
+@if (!readonly()) {
+  <p-input-group>
+    <input type="text"
+           pInputText
+           [pKeyFilter]="realNumber"
+           [placeholder]="placeHolder"
+           [disabled]="disabled()"
+           [ngClass]="{'ng-invalid' : invalid}"
+           [ngModel]="sVal"
+           (ngModelChange)="onTextChange($event)" />
+    @if (value() && showClear()) {
+      <p-button
+        severity="secondary"
+        icon="fa fa-times"
+        tabindex="-1"
+        (click)="onClear()"
+      ></p-button>
+    }
+
+  </p-input-group>
+} @else {
+  <input pInputText
+         [readOnly]="true"
+         [value]="readonlyCaption()">
+}
