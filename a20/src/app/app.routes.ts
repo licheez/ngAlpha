@@ -88,6 +88,12 @@ export const routes: Routes = [
             .then(m => m.LabelComponent)
       },
       {
+        path: 'login-form',
+        loadComponent: () =>
+          import('./alpha-prime-demo/login-form.component')
+            .then(m => m.LoginFormComponent)
+      },
+      {
         path: 'password-input',
         loadComponent: () =>
           import('./alpha-prime-demo/password-input.component')

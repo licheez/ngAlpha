@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, computed, inject, output, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, input, inject, output, signal} from '@angular/core';
 import {AlphaPrimeService} from '../../services/alpha-prime.service';
 import {AlphaPrimeDebugTagComponent} from '../alpha-prime-debug-tag/alpha-prime-debug-tag.component';
 import {AlphaPrimeLabelComponent} from '../alpha-prime-label/alpha-prime-label.component';
@@ -47,23 +47,48 @@ export class AlphaPrimeLoginFormComponent {
 
   private readonly mPs = inject(AlphaPrimeService);
 
-  showCancelButton = signal(false);
+  // Input signals for configuration
+  showCancelButton = input(false);
+  usernameLabel = input<string | undefined>(undefined);
+  passwordLabel = input<string | undefined>(undefined);
+  failureMessage = input<string | undefined>(undefined);
+  invalidCredentialsMessage = input<string | undefined>(undefined);
+  connectLabel = input<string | undefined>(undefined);
+
+  // Internal state
   fm: FormModel = new FormModel();
   busy = signal(false);
   errorMessage = signal<string | undefined>(undefined);
 
+  // Output events
   loggedIn = output();
   cancelled = output();
 
-  usernameLit = this.mPs.getTr('alpha.common.username');
-  passwordLit = this.mPs.getTr('alpha.common.password');
-  failureLit = this.mPs.getTr('alpha.common.failure');
-  invalidCredentialsLit = this.mPs.getTr('alpha.common.invalidCredentials');
-  connectLabelLit = this.mPs.getTr('alpha.loginForm.connect');
+  // Computed label values with defaults from service
+  usernameLit = computed(
+    () => this.usernameLabel() ?? this.mPs.getTr('alpha.common.username')
+  );
+
+  passwordLit = computed(
+    () => this.passwordLabel() ?? this.mPs.getTr('alpha.common.password')
+  );
+
+  failureLit = computed(
+    () => this.failureMessage() ?? this.mPs.getTr('alpha.common.failure')
+  );
+
+  invalidCredentialsLit = computed(
+    () => this.invalidCredentialsMessage() ?? this.mPs.getTr('alpha.common.invalidCredentials')
+  );
+
+  connectLabelLit = computed(
+    () => this.connectLabel() ?? this.mPs.getTr('alpha.loginForm.connect')
+  );
 
   onCancel() {
     this.cancelled.emit();
   }
+
   onSubmit() {
     this.busy.set(true);
     this.errorMessage.set(undefined);
@@ -74,12 +99,12 @@ export class AlphaPrimeLoginFormComponent {
           if (ok) {
             this.loggedIn.emit();
           } else {
-            this.errorMessage.set(this.invalidCredentialsLit);
+            this.errorMessage.set(this.invalidCredentialsLit());
           }
           this.busy.set(false);
         },
         error: () => {
-          this.errorMessage.set(this.failureLit);
+          this.errorMessage.set(this.failureLit());
           this.busy.set(false);
         }
       });

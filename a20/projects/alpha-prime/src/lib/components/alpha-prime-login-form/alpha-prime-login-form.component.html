@@ -4,7 +4,7 @@
   <div class="p-field">
     <label for="username">
       <alpha-prime-label
-        [caption]="usernameLit">{{ fm.username() }}
+        [caption]="usernameLit()">{{ fm.username() }}
       </alpha-prime-label>
     </label>
     <input id="username"
@@ -19,7 +19,7 @@
   <!-- PASSWORD -->
   <div class="p-field">
     <label for="password">
-      <alpha-prime-label [caption]="passwordLit">{{ fm.password() }}</alpha-prime-label>
+      <alpha-prime-label [caption]="passwordLit()">{{ fm.password() }}</alpha-prime-label>
     </label>
     <alpha-prime-password-input
       [name]="'password'"
@@ -29,14 +29,14 @@
 
   <!-- ERROR -->
   @if (errorMessage()) {
-    <div class="p-error">{{ errorMessage() }}</div>
+    <div class="p-error" style="color:red;">{{ errorMessage() }}</div>
   }
 
   <!-- PROGRESS -->
   <alpha-prime-progress-bar [busy]="busy()"></alpha-prime-progress-bar>
 
   <!-- BUTTONS -->
-  <div class="text-right">
+  <div class="text-right mt-4">
     @if (showCancelButton()) {
       <alpha-prime-cancel-button class="mr-4"
                                  (clicked)="onCancel()"
@@ -44,7 +44,7 @@
     }
     <p-button severity="success"
               pRipple
-              [label]="connectLabelLit"
+              [label]="connectLabelLit()"
               (click)="onSubmit()"
               [disabled]="busy() || fm.invalid()"></p-button>
   </div>

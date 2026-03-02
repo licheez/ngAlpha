@@ -5,6 +5,7 @@ import {AlphaPrimeModalService} from '../../../projects/alpha-prime/src/lib/serv
 import {IAlphaPrimeModalConfig} from '../../../projects/alpha-prime/src/lib/services/alpha-prime-modal-abstractions';
 import {AlphaPrimeService} from '../../../projects/alpha-prime/src/lib/services/alpha-prime.service';
 import {of} from 'rxjs';
+import {FakeOasService} from './fake-oas-service';
 
 @Component({
   selector: 'app-alpha-prime-index',
@@ -25,6 +26,7 @@ import {of} from 'rxjs';
         <li><a [routerLink]="['/alpha-prime', 'file-upload']">FileUpload</a></li>
         <li><a [routerLink]="['/alpha-prime', 'filter-box']">FilterBox</a></li>
         <li><a [routerLink]="['/alpha-prime', 'label']">Label</a></li>
+        <li><a [routerLink]="['/alpha-prime', 'login-form']">LoginForm</a></li>
         <li><a [routerLink]="['/alpha-prime', 'password-input']">PasswordInput</a></li>
         <li><a [routerLink]="['/alpha-prime', 'progress-bar']">ProgressBar</a></li>
       </ul>
@@ -35,12 +37,14 @@ import {of} from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AlphaPrimeIndexComponent {
+
   protected readonly title = signal('Alpha Prime');
 
   constructor(
     ds: DialogService,
     private mMs: AlphaPrimeModalService,
-    private mPs: AlphaPrimeService) {
+    private mPs: AlphaPrimeService,
+    private mOas: FakeOasService) {
     const dsOpen:
       (component: Type<any>, ddc: IAlphaPrimeModalConfig) => any =
       (component: Type<any>, ddc: IAlphaPrimeModalConfig) =>
@@ -66,14 +70,6 @@ export class AlphaPrimeIndexComponent {
       }
     };
 
-    // OAuthService
-    const oas = {
-      signIn: (username: string, password: string, rememberMe: boolean) => {
-        console.log(`Signing in with username: ${username}, rememberMe: ${rememberMe}`);
-        return of(true);
-      }
-    };
-
     // UploadService
     const us = {
       upload: (data: any, notifyProgress: (value: number) => any) => {
@@ -87,6 +83,25 @@ export class AlphaPrimeIndexComponent {
       }
     };
 
+    const oas = {
+      signIn: (username: string, password: string, rememberMe: boolean) => {
+        console.log(`OAuthService.signIn called with username: ${username}, rememberMe: ${rememberMe}`);
+        return this.mOas.signIn(username, password, rememberMe); // Simulate successful sign-in
+      }
+    };
+
+    // uses mOas (fake class) so that we can test whether
+    // the singIn method should succeed
     this.mPs.init(false, ts, ls, oas, us);
+
+    this.mPs.signIn('testUser', 'password', true)
+      .subscribe({
+        next: (success) => {
+          console.log('Sign in via mPs success:', success);
+        },
+        error: (err) => {
+          console.error('Sign in error:', err);
+        }
+      });
   }
 }
