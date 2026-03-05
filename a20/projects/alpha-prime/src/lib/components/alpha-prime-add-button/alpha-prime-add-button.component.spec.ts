@@ -41,12 +41,11 @@ describe('AlphaPrimeAddButtonComponent', () => {
     expect(component.effectiveCaption()).toBe('tr:alpha.buttons.add');
   });
 
-  it('should apply small class when sm is true', () => {
-    // assign a writable signal so tests can change the input value
-    (component as any).sm = signal(true) as any;
+  it('should apply small size when sm is true', () => {
+    fixture.componentRef.setInput('sm', true);
     fixture.detectChanges();
     const pBtn = fixture.debugElement.query(By.css('p-button'));
-    expect(pBtn.nativeElement.classList).toContain('p-button-sm');
+    expect(pBtn.componentInstance.size).toBe('small');
   });
 
   it('should set disabled attribute when disabled is true', () => {

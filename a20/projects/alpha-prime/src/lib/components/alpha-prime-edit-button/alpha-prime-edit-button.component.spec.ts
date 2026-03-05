@@ -161,18 +161,18 @@ describe('AlphaPrimeEditButtonComponent', () => {
   });
 
   describe('Template Integration', () => {
-    it('should apply small class when sm is true', () => {
+    it('should apply small size when sm is true', () => {
       fixture.componentRef.setInput('sm', true);
       fixture.detectChanges();
       const pBtn = fixture.debugElement.query(By.css('p-button'));
-      expect(pBtn.nativeElement.classList).toContain('p-button-sm');
+      expect(pBtn.componentInstance.size).toBe('small');
     });
 
-    it('should not apply small class when sm is false', () => {
+    it('should not apply small size when sm is false', () => {
       fixture.componentRef.setInput('sm', false);
       fixture.detectChanges();
       const pBtn = fixture.debugElement.query(By.css('p-button'));
-      expect(pBtn.nativeElement.classList).not.toContain('p-button-sm');
+      expect(pBtn.componentInstance.size).toBe('large');
     });
 
     it('should set disabled attribute when disabled is true', () => {
