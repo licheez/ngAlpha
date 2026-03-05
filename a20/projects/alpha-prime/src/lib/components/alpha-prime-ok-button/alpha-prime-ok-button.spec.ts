@@ -168,8 +168,9 @@ describe('AlphaPrimeOkButton', () => {
       expect(component.caption()).toBe('Confirm');
     });
 
-    it('should bind caption to p-button label', () => {
+    it('should bind caption to p-button label when showLabel is true', () => {
       fixture.componentRef.setInput('caption', 'Accept');
+      fixture.componentRef.setInput('showLabel', true);
       fixture.detectChanges();
       const button = compiled.query(By.css('p-button'));
       expect(button.componentInstance.label).toBe('Accept');
@@ -177,6 +178,7 @@ describe('AlphaPrimeOkButton', () => {
 
     it('should update caption dynamically', () => {
       fixture.componentRef.setInput('caption', 'OK');
+      fixture.componentRef.setInput('showLabel', true);
       fixture.detectChanges();
       let button = compiled.query(By.css('p-button'));
       expect(button.componentInstance.label).toBe('OK');
@@ -190,6 +192,62 @@ describe('AlphaPrimeOkButton', () => {
     it('should use default caption from service when not provided', () => {
       fixture.detectChanges();
       expect(component.caption()).toBe('OK');
+    });
+  });
+
+  describe('showLabel Functionality', () => {
+    it('should have default showLabel as false', () => {
+      fixture.detectChanges();
+      expect(component.showLabel()).toBe(false);
+    });
+
+    it('should show empty label when showLabel is false (compact mode)', () => {
+      fixture.componentRef.setInput('caption', 'Test Caption');
+      fixture.componentRef.setInput('showLabel', false);
+      fixture.detectChanges();
+      const button = compiled.query(By.css('p-button'));
+      expect(button.componentInstance.label).toBe('');
+    });
+
+    it('should show caption as label when showLabel is true', () => {
+      fixture.componentRef.setInput('caption', 'Test Caption');
+      fixture.componentRef.setInput('showLabel', true);
+      fixture.detectChanges();
+      const button = compiled.query(By.css('p-button'));
+      expect(button.componentInstance.label).toBe('Test Caption');
+    });
+
+    it('should show tooltip when showLabel is false', () => {
+      fixture.componentRef.setInput('caption', 'Tooltip Text');
+      fixture.componentRef.setInput('showLabel', false);
+      fixture.detectChanges();
+      const button = compiled.query(By.css('p-button'));
+      expect(button.componentInstance.pTooltip).toBe('Tooltip Text');
+    });
+
+    it('should not show tooltip when showLabel is true', () => {
+      fixture.componentRef.setInput('caption', 'Label Text');
+      fixture.componentRef.setInput('showLabel', true);
+      fixture.detectChanges();
+      const button = compiled.query(By.css('p-button'));
+      expect(button.componentInstance.pTooltip).toBeFalsy();
+    });
+
+    it('should toggle between label and tooltip modes', () => {
+      fixture.componentRef.setInput('caption', 'Dynamic Text');
+      fixture.componentRef.setInput('showLabel', false);
+      fixture.detectChanges();
+
+      let button = compiled.query(By.css('p-button'));
+      expect(button.componentInstance.label).toBe('');
+      expect(button.componentInstance.pTooltip).toBe('Dynamic Text');
+
+      fixture.componentRef.setInput('showLabel', true);
+      fixture.detectChanges();
+
+      button = compiled.query(By.css('p-button'));
+      expect(button.componentInstance.label).toBe('Dynamic Text');
+      expect(button.componentInstance.pTooltip).toBeFalsy();
     });
   });
 
@@ -229,6 +287,7 @@ describe('AlphaPrimeOkButton', () => {
       fixture.componentRef.setInput('caption', 'Accept');
       fixture.componentRef.setInput('disabled', false);
       fixture.componentRef.setInput('sm', false);
+      fixture.componentRef.setInput('showLabel', true);
       fixture.detectChanges();
 
       const button = compiled.query(By.css('p-button'));
@@ -298,6 +357,7 @@ describe('AlphaPrimeOkButton', () => {
       fixture.componentRef.setInput('caption', 'Save');
       fixture.componentRef.setInput('disabled', false);
       fixture.componentRef.setInput('sm', false);
+      fixture.componentRef.setInput('showLabel', true);
       fixture.detectChanges();
 
       // Change all inputs
@@ -332,6 +392,7 @@ describe('AlphaPrimeOkButton', () => {
     it('should maintain functionality with large caption', () => {
       const longCaption = 'This is a very long caption for the OK button';
       fixture.componentRef.setInput('caption', longCaption);
+      fixture.componentRef.setInput('showLabel', true);
       fixture.detectChanges();
 
       const button = compiled.query(By.css('p-button'));
@@ -340,6 +401,7 @@ describe('AlphaPrimeOkButton', () => {
 
     it('should work with empty caption', () => {
       fixture.componentRef.setInput('caption', '');
+      fixture.componentRef.setInput('showLabel', true);
       fixture.detectChanges();
 
       const button = compiled.query(By.css('p-button'));

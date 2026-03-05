@@ -27,6 +27,7 @@ export class AlphaPrimeDeleteButtonComponent {
   );
   sm = input<boolean>(false);
   busy = input<boolean>(false);
+  showLabel = input<boolean>(false);
 
   showConfirmationModal = input<boolean>(true);
   modalTitle = input<string | undefined>();

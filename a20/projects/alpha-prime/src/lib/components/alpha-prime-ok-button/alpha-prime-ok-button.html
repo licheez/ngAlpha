@@ -1,10 +1,11 @@
 <p-button
-  [label]="caption()"
+  [label]="showLabel() ? caption() : ''"
+  [pTooltip]="!showLabel() ? caption() : ''"
   severity="success"
   [icon]="'fa fa-check'"
   [disabled]="disabled()"
   [size]="sm() ? 'small' : 'large'"
   (click)="onClicked()"
   [attr.aria-label]="caption()"
-  class="alpha-prime-ok-button"
+  [class]="'alpha-prime-button' + (!showLabel() ? ' p-button-icon-only' : '')"
 ></p-button>

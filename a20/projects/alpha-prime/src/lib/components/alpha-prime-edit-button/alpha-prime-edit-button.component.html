@@ -1,8 +1,11 @@
 <p-button
+  [label]="showLabel() ? effectiveCaption() : ''"
+  [pTooltip]="!showLabel() ? effectiveCaption() : ''"
   severity="info"
-  [class.p-button-sm]="sm()"
+  [icon]="'fa fa-pencil-alt'"
   [disabled]="disabled()"
-  [pTooltip]="effectiveCaption()"
+  [size]="sm() ? 'small' : 'large'"
   (click)="onClicked()"
-  icon="fa fa-pencil-alt">
-</p-button>
+  [attr.aria-label]="effectiveCaption()"
+  [class]="'alpha-prime-button' + (!showLabel() ? ' p-button-icon-only' : '')"
+></p-button>

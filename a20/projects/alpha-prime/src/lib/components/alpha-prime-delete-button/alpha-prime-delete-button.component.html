@@ -1,19 +1,24 @@
 @if (!busy()) {
   <p-button
-          severity="danger"
-          [class]="sm() ? 'p-button-sm' : ''"
-          [disabled]="disabled()"
-          [pTooltip]="effectiveCaption()"
-          icon="fa fa-trash-alt"
-          (click)="onClicked()">
-  </p-button>
+    [label]="showLabel() ? effectiveCaption() : ''"
+    [pTooltip]="!showLabel() ? effectiveCaption() : ''"
+    severity="danger"
+    [icon]="'fa fa-trash-alt'"
+    [disabled]="disabled()"
+    [size]="sm() ? 'small' : 'large'"
+    (click)="onClicked()"
+    [attr.aria-label]="effectiveCaption()"
+    [class]="'alpha-prime-button' + (!showLabel() ? ' p-button-icon-only' : '')"
+  ></p-button>
 } @else {
   <p-button
-    class="p-button-danger"
-    [class]="sm() ? 'p-button-sm' : ''"
-    type="button"
+    [label]="showLabel() ? effectiveCaption() : ''"
+    [pTooltip]="!showLabel() ? effectiveCaption() : ''"
+    severity="danger"
+    [icon]="'fa fa-spinner fa-spin'"
     [disabled]="true"
-    [pTooltip]="effectiveCaption()"
-    icon="fa fa-spinner fa-spin">
-  </p-button>
+    [size]="sm() ? 'small' : 'large'"
+    [attr.aria-label]="effectiveCaption()"
+    [class]="'alpha-prime-button' + (!showLabel() ? ' p-button-icon-only' : '')"
+  ></p-button>
 }

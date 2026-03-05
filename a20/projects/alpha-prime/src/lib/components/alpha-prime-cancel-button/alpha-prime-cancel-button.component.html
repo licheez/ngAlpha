@@ -1,8 +1,11 @@
 <p-button
+  [label]="showLabel() ? effectiveCaption() : ''"
+  [pTooltip]="!showLabel() ? effectiveCaption() : ''"
   severity="secondary"
-  [class.p-button-sm]="sm()"
+  [icon]="'fa fa-ban'"
   [disabled]="disabled()"
-  [pTooltip]="effectiveCaption()"
+  [size]="sm() ? 'small' : 'large'"
   (click)="onClicked()"
-  icon="fa fa-ban">
-</p-button>
+  [attr.aria-label]="effectiveCaption()"
+  [class]="'alpha-prime-button' + (!showLabel() ? ' p-button-icon-only' : '')"
+></p-button>

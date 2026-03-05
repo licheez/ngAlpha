@@ -21,6 +21,7 @@ export class AlphaPrimeCancelButtonComponent {
     this.caption() || this.mPs.getTr('alpha.buttons.add')
   );
   sm=input<boolean>(false);
+  showLabel = input<boolean>(false);
   @Output() clicked = new EventEmitter<any>();
 
   constructor(private mPs: AlphaPrimeService) {

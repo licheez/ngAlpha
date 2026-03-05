@@ -21,6 +21,7 @@ export class AlphaPrimeEditButtonComponent {
     this.caption() || this.mPs.getTr('alpha.buttons.edit')
   );
   sm = input<boolean>(false);
+  showLabel = input<boolean>(false);
   @Output() clicked = new EventEmitter<any>();
 
   constructor(private mPs: AlphaPrimeService) {
