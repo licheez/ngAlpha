@@ -106,6 +106,12 @@ export const routes: Routes = [
             .then(m => m.NumberInputComponent)
       },
       {
+        path: 'ok-button',
+        loadComponent: () =>
+          import('./alpha-prime-demo/ok-button.component')
+            .then(m => m.OkButtonComponent)
+      },
+      {
         path: 'password-input',
         loadComponent: () =>
           import('./alpha-prime-demo/password-input.component')

@@ -1,0 +1,59 @@
+/* Alpha Prime OK Button Styling */
+
+:host {
+  display: inline-block;
+}
+
+.alpha-prime-ok-button {
+  --p-button-border-radius: 0.25rem;
+  --p-button-padding-x: 1rem;
+  --p-button-padding-y: 0.5rem;
+  --p-button-font-size: 0.95rem;
+  --p-button-font-weight: 500;
+}
+
+/* Success severity (green) styling */
+:host ::ng-deep .alpha-prime-ok-button.p-button-success {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+:host ::ng-deep .alpha-prime-ok-button.p-button-success:hover {
+  background-color: #218838;
+  border-color: #218838;
+}
+
+:host ::ng-deep .alpha-prime-ok-button.p-button-success:active {
+  background-color: #1e7e34;
+  border-color: #1e7e34;
+}
+
+:host ::ng-deep .alpha-prime-ok-button.p-button-success:disabled {
+  background-color: #c3e6cb;
+  border-color: #c3e6cb;
+  opacity: 0.65;
+}
+
+/* Icon styling */
+:host ::ng-deep .alpha-prime-ok-button .p-button-icon {
+  margin-right: 0.5rem;
+}
+
+/* Small size adjustments */
+:host ::ng-deep .alpha-prime-ok-button.p-button-sm {
+  --p-button-padding-x: 0.75rem;
+  --p-button-padding-y: 0.375rem;
+  --p-button-font-size: 0.875rem;
+}
+
+/* Focus state for accessibility */
+:host ::ng-deep .alpha-prime-ok-button:focus {
+  outline: 2px solid #28a745;
+  outline-offset: 2px;
+}
+
+/* Smooth transitions */
+:host ::ng-deep .alpha-prime-ok-button {
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+

@@ -1,0 +1,10 @@
+<p-button
+  [label]="caption()"
+  severity="success"
+  [icon]="'fa fa-check'"
+  [disabled]="disabled()"
+  [size]="sm() ? 'small' : 'large'"
+  (click)="onClicked()"
+  [attr.aria-label]="caption()"
+  class="alpha-prime-ok-button"
+></p-button>
