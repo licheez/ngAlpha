@@ -23,9 +23,14 @@ export class AlphaPrimeAddButtonComponent {
 
   disabled = input<boolean>(false);
   caption = input<string>('');
-  effectiveCaption = computed(() =>
-    this.caption() || this.mPs.getTr('alpha.buttons.add')
-  );
+  effectiveCaption = computed(() => {
+    const customCaption = this.caption();
+    if (customCaption) return customCaption;
+
+    const translated = this.mPs.getTr('alpha.buttons.add');
+    // Fallback to 'Add' if translation returns undefined or the key itself
+    return (translated && !translated.includes('undefined')) ? translated : 'Add';
+  });
   sm = input<boolean>(false);
   showLabel = input<boolean>(false);
   @Output() clicked = new EventEmitter<any>();

@@ -160,6 +160,12 @@
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
+  font-size: 1.6rem !important; /* ~80% of button surface */
+}
+
+/* Small icon-only button - proportional icon size */
+:host ::ng-deep .alpha-prime-button.p-button-sm.p-button-icon-only .p-button-icon {
+  font-size: 1.2rem !important; /* ~80% of small button surface */
 }
 
 /* Spinner animation for busy state (Delete button) */
