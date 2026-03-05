@@ -1,6 +1,5 @@
-import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+﻿import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { AlphaPrimeOkButton } from '../../../projects/alpha-prime/src/lib/components/alpha-prime-ok-button/alpha-prime-ok-button';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-alpha-prime-ok-button-demo',
@@ -9,170 +8,184 @@ import { CommonModule } from '@angular/common';
     <section>
       <h2>Alpha Prime - OK Button Demo</h2>
 
-      <div class="demo-section">
-        <h3>Basic OK Button</h3>
-        <p>Clicks: <strong>{{ clicks() }}</strong></p>
-        <alpha-prime-ok-button
-          (clicked)="onClicked()"
-        ></alpha-prime-ok-button>
+      <div class="demo-grid">
+        <!-- Icon-only (Compact Mode - Default) -->
+        <div class="demo-card">
+          <h3>Icon-Only (Default)</h3>
+          <p>Clicks: <strong>{{ iconOnlyClicks() }}</strong></p>
+          <alpha-prime-ok-button
+            (clicked)="onIconOnlyClicked()"
+          ></alpha-prime-ok-button>
+        </div>
+
+        <!-- With Label -->
+        <div class="demo-card">
+          <h3>With Label</h3>
+          <p>Clicks: <strong>{{ withLabelClicks() }}</strong></p>
+          <alpha-prime-ok-button
+            [showLabel]="true"
+            (clicked)="onWithLabelClicked()"
+          ></alpha-prime-ok-button>
+        </div>
+
+        <!-- Custom Caption -->
+        <div class="demo-card">
+          <h3>Custom Caption</h3>
+          <p>Clicks: <strong>{{ customClicks() }}</strong></p>
+          <alpha-prime-ok-button
+            [showLabel]="true"
+            [caption]="'Confirm Action'"
+            (clicked)="onCustomClicked()"
+          ></alpha-prime-ok-button>
+        </div>
+
+        <!-- Small Size (Icon-only) -->
+        <div class="demo-card">
+          <h3>Small (Icon-only)</h3>
+          <p>Clicks: <strong>{{ smallClicks() }}</strong></p>
+          <alpha-prime-ok-button
+            [sm]="true"
+            (clicked)="onSmallClicked()"
+          ></alpha-prime-ok-button>
+        </div>
+
+        <!-- Small Size with Label -->
+        <div class="demo-card">
+          <h3>Small with Label</h3>
+          <p>Clicks: <strong>{{ smallLabelClicks() }}</strong></p>
+          <alpha-prime-ok-button
+            [sm]="true"
+            [showLabel]="true"
+            (clicked)="onSmallLabelClicked()"
+          ></alpha-prime-ok-button>
+        </div>
+
+        <!-- Disabled -->
+        <div class="demo-card">
+          <h3>Disabled</h3>
+          <p>Clicks: <strong>{{ disabledClicks() }}</strong></p>
+          <alpha-prime-ok-button
+            [disabled]="true"
+            [showLabel]="true"
+            (clicked)="onDisabledClicked()"
+          ></alpha-prime-ok-button>
+        </div>
+
+        <!-- Toggle Demo -->
+        <div class="demo-card">
+          <h3>Toggle showLabel</h3>
+          <p>Mode: <strong>{{ toggleMode() ? 'With Label' : 'Icon-only' }}</strong></p>
+          <p>Clicks: <strong>{{ toggleClicks() }}</strong></p>
+          <button class="toggle-btn" (click)="toggleShowLabel()">
+            Toggle Label
+          </button>
+          <br><br>
+          <alpha-prime-ok-button
+            [showLabel]="toggleMode()"
+            (clicked)="onToggleClicked()"
+          ></alpha-prime-ok-button>
+        </div>
+
+        <!-- All Options Combined -->
+        <div class="demo-card highlight">
+          <h3>All Options Demo</h3>
+          <p>Clicks: <strong>{{ allOptionsClicks() }}</strong></p>
+          <div class="controls">
+            <label>
+              <input type="checkbox" [checked]="showLabelOption()"
+                     (change)="toggleShowLabelOption()">
+              Show Label
+            </label>
+            <label>
+              <input type="checkbox" [checked]="smallOption()"
+                     (change)="toggleSmallOption()">
+              Small Size
+            </label>
+            <label>
+              <input type="checkbox" [checked]="disabledOption()"
+                     (change)="toggleDisabledOption()">
+              Disabled
+            </label>
+          </div>
+          <alpha-prime-ok-button
+            [showLabel]="showLabelOption()"
+            [sm]="smallOption()"
+            [disabled]="disabledOption()"
+            [caption]="'Interactive Demo'"
+            (clicked)="onAllOptionsClicked()"
+          ></alpha-prime-ok-button>
+        </div>
       </div>
 
-      <div class="demo-section">
-        <h3>OK Button with Custom Caption</h3>
-        <p>Clicks: <strong>{{ customCaptionClicks() }}</strong></p>
-        <alpha-prime-ok-button
-          [caption]="'Confirm'"
-          (clicked)="onCustomCaptionClicked()"
-        ></alpha-prime-ok-button>
-      </div>
-
-      <div class="demo-section">
-        <h3>Small OK Button</h3>
-        <p>Clicks: <strong>{{ smallClicks() }}</strong></p>
-        <alpha-prime-ok-button
-          [sm]="true"
-          (clicked)="onSmallClicked()"
-        ></alpha-prime-ok-button>
-      </div>
-
-      <div class="demo-section">
-        <h3>Small OK Button with Custom Caption</h3>
-        <p>Clicks: <strong>{{ smallCustomClicks() }}</strong></p>
-        <alpha-prime-ok-button
-          [caption]="'Accept'"
-          [sm]="true"
-          (clicked)="onSmallCustomClicked()"
-        ></alpha-prime-ok-button>
-      </div>
-
-      <div class="demo-section">
-        <h3>Disabled OK Button</h3>
-        <p>Clicks: <strong>{{ disabledClicks() }}</strong></p>
-        <alpha-prime-ok-button
-          [disabled]="true"
-          (clicked)="onDisabledClicked()"
-        ></alpha-prime-ok-button>
-      </div>
-
-      <div class="demo-section">
-        <h3>Toggle Disabled State</h3>
-        <p>Clicks: <strong>{{ toggleClicks() }}</strong></p>
-        <button (click)="toggleDisabled()" style="margin-bottom: 0.5rem;">
-          Toggle Disabled ({{ isDisabled() ? 'Currently Disabled' : 'Currently Enabled' }})
-        </button>
-        <alpha-prime-ok-button
-          [disabled]="isDisabled()"
-          (clicked)="onToggleClicked()"
-        ></alpha-prime-ok-button>
-      </div>
-
-      <div class="demo-section">
-        <h3>Demo Summary</h3>
+      <!-- Summary -->
+      <div class="summary">
+        <h3>Click Summary</h3>
         <ul>
-          <li>Basic Button Clicks: <strong>{{ clicks() }}</strong></li>
-          <li>Custom Caption Clicks: <strong>{{ customCaptionClicks() }}</strong></li>
-          <li>Small Button Clicks: <strong>{{ smallClicks() }}</strong></li>
-          <li>Small Custom Clicks: <strong>{{ smallCustomClicks() }}</strong></li>
-          <li>Disabled Button Clicks: <strong>{{ disabledClicks() }}</strong></li>
-          <li>Toggle Button Clicks: <strong>{{ toggleClicks() }}</strong></li>
-          <li>Total Clicks: <strong>{{ totalClicks() }}</strong></li>
+          <li>Icon-only: <strong>{{ iconOnlyClicks() }}</strong></li>
+          <li>With Label: <strong>{{ withLabelClicks() }}</strong></li>
+          <li>Custom Caption: <strong>{{ customClicks() }}</strong></li>
+          <li>Small: <strong>{{ smallClicks() }}</strong></li>
+          <li>Small with Label: <strong>{{ smallLabelClicks() }}</strong></li>
+          <li>Disabled: <strong>{{ disabledClicks() }}</strong></li>
+          <li>Toggle: <strong>{{ toggleClicks() }}</strong></li>
+          <li>All Options: <strong>{{ allOptionsClicks() }}</strong></li>
+          <li><strong>Total: {{ totalClicks() }}</strong></li>
         </ul>
       </div>
     </section>
   `,
-  styles: [`
-    h2 {
-      margin-bottom: 2rem;
-    }
-
-    h3 {
-      margin-top: 1.5rem;
-      margin-bottom: 1rem;
-      font-size: 1.1rem;
-    }
-
-    .demo-section {
-      margin-bottom: 2rem;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      background-color: rgba(0, 0, 0, 0.02);
-    }
-
-    p {
-      margin: 0.5rem 0;
-      font-size: 0.95rem;
-    }
-
-    button {
-      padding: 0.5rem 1rem;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 0.25rem;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    button:disabled {
-      background-color: #6c757d;
-      cursor: not-allowed;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    li {
-      padding: 0.25rem 0;
-      font-size: 0.95rem;
-    }
-  `],
-  imports: [
-    CommonModule,
-    AlphaPrimeOkButton
-  ],
+  styleUrl: './styles/button-demo-common.css',
+  imports: [AlphaPrimeOkButton],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OkButtonComponent {
-  // Click counters for different button variations
-  clicks = signal(0);
-  customCaptionClicks = signal(0);
+  // Click counters
+  iconOnlyClicks = signal(0);
+  withLabelClicks = signal(0);
+  customClicks = signal(0);
   smallClicks = signal(0);
-  smallCustomClicks = signal(0);
+  smallLabelClicks = signal(0);
   disabledClicks = signal(0);
   toggleClicks = signal(0);
+  allOptionsClicks = signal(0);
 
-  // Disabled state toggle
-  isDisabled = signal(false);
+  // Toggle state
+  toggleMode = signal(false);
 
-  // Computed total clicks
+  // Interactive options
+  showLabelOption = signal(false);
+  smallOption = signal(false);
+  disabledOption = signal(false);
+
+  // Computed total
   totalClicks = () =>
-    this.clicks() +
-    this.customCaptionClicks() +
+    this.iconOnlyClicks() +
+    this.withLabelClicks() +
+    this.customClicks() +
     this.smallClicks() +
-    this.smallCustomClicks() +
+    this.smallLabelClicks() +
     this.disabledClicks() +
-    this.toggleClicks();
+    this.toggleClicks() +
+    this.allOptionsClicks();
 
-  onClicked(): void {
-    this.clicks.update(c => c + 1);
+  onIconOnlyClicked(): void {
+    this.iconOnlyClicks.update(c => c + 1);
   }
 
-  onCustomCaptionClicked(): void {
-    this.customCaptionClicks.update(c => c + 1);
+  onWithLabelClicked(): void {
+    this.withLabelClicks.update(c => c + 1);
+  }
+
+  onCustomClicked(): void {
+    this.customClicks.update(c => c + 1);
   }
 
   onSmallClicked(): void {
     this.smallClicks.update(c => c + 1);
   }
 
-  onSmallCustomClicked(): void {
-    this.smallCustomClicks.update(c => c + 1);
+  onSmallLabelClicked(): void {
+    this.smallLabelClicks.update(c => c + 1);
   }
 
   onDisabledClicked(): void {
@@ -183,7 +196,24 @@ export class OkButtonComponent {
     this.toggleClicks.update(c => c + 1);
   }
 
-  toggleDisabled(): void {
-    this.isDisabled.update(d => !d);
+  onAllOptionsClicked(): void {
+    this.allOptionsClicks.update(c => c + 1);
+  }
+
+  toggleShowLabel(): void {
+    this.toggleMode.update(v => !v);
+  }
+
+  toggleShowLabelOption(): void {
+    this.showLabelOption.update(v => !v);
+  }
+
+  toggleSmallOption(): void {
+    this.smallOption.update(v => !v);
+  }
+
+  toggleDisabledOption(): void {
+    this.disabledOption.update(v => !v);
   }
 }
+
