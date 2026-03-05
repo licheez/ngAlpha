@@ -1,8 +1,7 @@
-import {ChangeDetectionStrategy, Component, model} from '@angular/core';
+import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
 import {
   AlphaPrimeNumberInputComponent
 } from '../../../projects/alpha-prime/src/lib/components/alpha-prime-number-input/alpha-prime-number-input.component';
-import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-number-input',
@@ -11,18 +10,17 @@ import {FormsModule} from '@angular/forms';
     <section>
       <h2>Alpha Prime - Number Input Demo</h2>
 
-      <form novalidate autocomplete="off"
-            class="p-fluid p-formgrid grid">
+      <form class="p-fluid p-formgrid grid">
 
         <!-- Basic Number Input -->
         <div class="p-field col-12 md:col-6">
           <label for="basic-number">Basic Number Input</label>
           <alpha-prime-number-input
             id="basic-number"
-            [(ngModel)]="basicValue"
-            placeHolder="Enter a number"
-            locale="en-US"
-            name="basic">
+            [value]="basicValue()"
+            (valueChange)="basicValue.set($event)"
+            [placeHolder]="'Enter a number'"
+            [locale]="'en-US'">
           </alpha-prime-number-input>
           <p class="text-sm text-gray-600 mt-2">Current value: <strong>{{ basicValue() }}</strong></p>
         </div>
@@ -32,11 +30,11 @@ import {FormsModule} from '@angular/forms';
           <label for="range-number">Number Input (Min: 0, Max: 100)</label>
           <alpha-prime-number-input
             id="range-number"
-            [(ngModel)]="rangeValue"
-            placeHolder="Enter 0-100"
+            [value]="rangeValue()"
+            (valueChange)="rangeValue.set($event)"
+            [placeHolder]="'Enter 0-100'"
             [min]="0"
-            [max]="100"
-            name="range">
+            [max]="100">
           </alpha-prime-number-input>
           <p class="text-sm text-gray-600 mt-2">Current value: <strong>{{ rangeValue() }}</strong></p>
         </div>
@@ -46,13 +44,13 @@ import {FormsModule} from '@angular/forms';
           <label for="prefix-number">Number with Currency Prefix ($)</label>
           <alpha-prime-number-input
             id="prefix-number"
-            [(ngModel)]="currencyValue"
-            prefix="$"
-            placeHolder="0.00"
-            [decimals]="2"
-            name="currency">
+            [value]="currencyValue()"
+            (valueChange)="currencyValue.set($event)"
+            [prefix]="'€'"
+            [placeHolder]="'0.00'"
+            [decimals]="2">
           </alpha-prime-number-input>
-          <p class="text-sm text-gray-600 mt-2">Current value: <strong>{{ currencyValue() }}</strong></p>
+          <p class="text-sm text-gray-600 mt-2">Current value: <strong>€ {{ currencyValue() }}</strong></p>
         </div>
 
         <!-- Number Input with Suffix -->
@@ -60,12 +58,12 @@ import {FormsModule} from '@angular/forms';
           <label for="suffix-number">Number with Percentage Suffix (%)</label>
           <alpha-prime-number-input
             id="suffix-number"
-            [(ngModel)]="percentageValue"
-            suffix="%"
+            [value]="percentageValue()"
+            (valueChange)="percentageValue.set($event)"
+            [suffix]="'%'"
             [min]="0"
             [max]="100"
-            placeHolder="0"
-            name="percentage">
+            [placeHolder]="'0'">
           </alpha-prime-number-input>
           <p class="text-sm text-gray-600 mt-2">Current value: <strong>{{ percentageValue() }}%</strong></p>
         </div>
@@ -75,10 +73,10 @@ import {FormsModule} from '@angular/forms';
           <label for="small-number">Small Size Number Input</label>
           <alpha-prime-number-input
             id="small-number"
-            [(ngModel)]="smallValue"
+            [value]="smallValue()"
+            (valueChange)="smallValue.set($event)"
             [sm]="true"
-            placeHolder="Small input"
-            name="small">
+            [placeHolder]="'Small input'">
           </alpha-prime-number-input>
           <p class="text-sm text-gray-600 mt-2">Current value: <strong>{{ smallValue() }}</strong></p>
         </div>
@@ -88,10 +86,10 @@ import {FormsModule} from '@angular/forms';
           <label for="disabled-number">Disabled Number Input</label>
           <alpha-prime-number-input
             id="disabled-number"
-            [(ngModel)]="disabledValue"
+            [value]="disabledValue()"
+            (valueChange)="disabledValue.set($event)"
             [disabled]="true"
-            placeHolder="This is disabled"
-            name="disabled">
+            [placeHolder]="'This is disabled'">
           </alpha-prime-number-input>
           <p class="text-sm text-gray-600 mt-2">Current value: <strong>{{ disabledValue() }}</strong></p>
         </div>
@@ -101,10 +99,10 @@ import {FormsModule} from '@angular/forms';
           <label for="readonly-number">Readonly Number Input</label>
           <alpha-prime-number-input
             id="readonly-number"
-            [(ngModel)]="readonlyValue"
+            [value]="readonlyValue()"
+            (valueChange)="readonlyValue.set($event)"
             [readonly]="true"
-            [readonlyCaption]="'Read-only'"
-            name="readonly">
+            [readonlyCaption]="readonlyCaption()">
           </alpha-prime-number-input>
           <p class="text-sm text-gray-600 mt-2">Current value: <strong>{{ readonlyValue() }}</strong></p>
         </div>
@@ -114,10 +112,10 @@ import {FormsModule} from '@angular/forms';
           <label for="decimal-number">Decimal Number Input (2 decimals)</label>
           <alpha-prime-number-input
             id="decimal-number"
-            [(ngModel)]="decimalValue"
+            [value]="decimalValue()"
+            (valueChange)="decimalValue.set($event)"
             [decimals]="2"
-            placeHolder="0.00"
-            name="decimal">
+            [placeHolder]="'0.00'">
           </alpha-prime-number-input>
           <p class="text-sm text-gray-600 mt-2">Current value: <strong>{{ decimalValue() }}</strong></p>
         </div>
@@ -127,11 +125,11 @@ import {FormsModule} from '@angular/forms';
           <label for="negative-number">Number Input with Negatives (-50 to 50)</label>
           <alpha-prime-number-input
             id="negative-number"
-            [(ngModel)]="negativeValue"
+            [value]="negativeValue()"
+            (valueChange)="negativeValue.set($event)"
             [min]="-50"
             [max]="50"
-            placeHolder="Can be negative"
-            name="negative">
+            [placeHolder]="'Can be negative'">
           </alpha-prime-number-input>
           <p class="text-sm text-gray-600 mt-2">Current value: <strong>{{ negativeValue() }}</strong></p>
         </div>
@@ -202,21 +200,21 @@ import {FormsModule} from '@angular/forms';
     }
   `],
   imports: [
-    AlphaPrimeNumberInputComponent,
-    FormsModule
+    AlphaPrimeNumberInputComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NumberInputComponent {
 
-  // Interactive demo signals using model() for two-way binding
-  basicValue = model<number | undefined>(undefined);
-  rangeValue = model<number | undefined>(undefined);
-  currencyValue = model<number | undefined>(undefined);
-  percentageValue = model<number | undefined>(undefined);
-  smallValue = model<number | undefined>(undefined);
-  disabledValue = model<number | undefined>(42);
-  readonlyValue = model<number | undefined>(99);
-  decimalValue = model<number | undefined>(undefined);
-  negativeValue = model<number | undefined>(undefined);
+  // Interactive demo signals using signal() for state management
+  basicValue = signal<number | undefined>(undefined);
+  rangeValue = signal<number | undefined>(undefined);
+  currencyValue = signal<number | undefined>(undefined);
+  percentageValue = signal<number | undefined>(undefined);
+  smallValue = signal<number | undefined>(undefined);
+  disabledValue = signal<number | undefined>(42);
+  readonlyValue = signal<number | undefined>(99);
+  readonlyCaption = signal<string | undefined>('99');
+  decimalValue = signal<number | undefined>(undefined);
+  negativeValue = signal<number | undefined>(undefined);
 }

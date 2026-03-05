@@ -3,10 +3,10 @@
     <input type="text"
            pInputText
            [pKeyFilter]="realNumber"
-           [placeholder]="placeHolder"
+           [placeholder]="placeHolder()"
            [disabled]="disabled()"
-           [ngClass]="{'ng-invalid' : invalid}"
-           [ngModel]="sVal"
+           [ngClass]="{'ng-invalid' : invalid()}"
+           [ngModel]="sVal()"
            (ngModelChange)="onTextChange($event)" />
     @if (value() && showClear()) {
       <p-button
