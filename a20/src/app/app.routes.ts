@@ -122,6 +122,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./alpha-prime-demo/progress-bar.component')
             .then(m => m.ProgressBarComponent)
+      },{
+        path: 'save-button',
+        loadComponent: () =>
+          import('./alpha-prime-demo/save-button.component')
+            .then(m => m.SaveButtonComponent)
       }
     ]
   },

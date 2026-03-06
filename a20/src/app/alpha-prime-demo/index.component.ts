@@ -1,9 +1,10 @@
-import {Component, ChangeDetectionStrategy, signal, Type} from '@angular/core';
+import {Component, ChangeDetectionStrategy, signal, Type, OnInit} from '@angular/core';
 import {RouterModule} from '@angular/router';
 import {DialogService} from 'primeng/dynamicdialog';
 import {AlphaPrimeModalService} from '../../../projects/alpha-prime/src/lib/services/alpha-prime-modal.service';
 import {IAlphaPrimeModalConfig} from '../../../projects/alpha-prime/src/lib/services/alpha-prime-modal-abstractions';
 import {AlphaPrimeService} from '../../../projects/alpha-prime/src/lib/services/alpha-prime.service';
+import {AlphaLbsService} from '../../../projects/alpha-lbs/src/lib/alpha-lbs.service';
 import {of} from 'rxjs';
 import {FakeOasService} from './fake-oas-service';
 
@@ -32,6 +33,7 @@ import {FakeOasService} from './fake-oas-service';
         <li><a [routerLink]="['/alpha-prime', 'ok-button']">OkButton</a></li>
         <li><a [routerLink]="['/alpha-prime', 'password-input']">PasswordInput</a></li>
         <li><a [routerLink]="['/alpha-prime', 'progress-bar']">ProgressBar</a></li>
+        <li><a [routerLink]="['/alpha-prime', 'save-button']">SaveButton</a></li>
       </ul>
     </section>
   `,
@@ -39,19 +41,27 @@ import {FakeOasService} from './fake-oas-service';
   providers: [DialogService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AlphaPrimeIndexComponent {
+export class AlphaPrimeIndexComponent implements OnInit {
 
   protected readonly title = signal('Alpha Prime');
 
   constructor(
-    ds: DialogService,
+    private mDs: DialogService,
+    private mLbs: AlphaLbsService,
     private mMs: AlphaPrimeModalService,
     private mPs: AlphaPrimeService,
     private mOas: FakeOasService) {
+  }
+
+  ngOnInit() {
+
+    console.log('initializing AlphaPrimeIndexComponent');
+
+    // ModalService
     const dsOpen:
       (component: Type<any>, ddc: IAlphaPrimeModalConfig) => any =
       (component: Type<any>, ddc: IAlphaPrimeModalConfig) =>
-        ds.open(component, ddc);
+        this.mDs.open(component, ddc);
     this.mMs.init(dsOpen);
 
     // TranslationService
@@ -86,6 +96,7 @@ export class AlphaPrimeIndexComponent {
       }
     };
 
+    // OAuthService
     const oas = {
       signIn: (username: string, password: string, rememberMe: boolean) => {
         console.log(`OAuthService.signIn called with username: ${username}, rememberMe: ${rememberMe}`);
@@ -93,9 +104,26 @@ export class AlphaPrimeIndexComponent {
       }
     };
 
+    // LocalBusService
+    const lbs = {
+      publish: (payload: any, channel: string): number => {
+        console.log(`Published to LBS with payload: ${payload}, channel: ${channel}`);
+        this.mLbs.publish(payload, channel);
+        return 0;
+      },
+      subscribe: (callback: (payload: any) => number) => {
+        console.log(`Subscribed to LBS with callback: ${callback}`);
+        return this.mLbs.subscribe(callback);
+      },
+      unsubscribe: (subId: number) => {
+        console.log(`Unsubscribed from LBS with subscription ID: ${subId}`);
+        this.mLbs.unsubscribe(subId);
+      }
+    };
+
     // uses mOas (fake class) so that we can test whether
     // the singIn method should succeed
-    this.mPs.init(false, ts, ls, oas, us);
+    this.mPs.init(false, ts, ls, oas, us, lbs);
 
     this.mPs.signIn('testUser', 'password', true)
       .subscribe({
@@ -106,5 +134,10 @@ export class AlphaPrimeIndexComponent {
           console.error('Sign in error:', err);
         }
       });
+
+    console.log('AlphaPrimeIndexComponent initialized');
+
   }
+
+
 }
