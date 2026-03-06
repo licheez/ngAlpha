@@ -1,0 +1,15 @@
+<alpha-prime-debug-tag tag="alphaScroller"></alpha-prime-debug-tag>
+<alpha-prime-progress-bar
+  [delay]="10"
+  [busy]="busy()">
+</alpha-prime-progress-bar>
+
+<div
+  [class]="'forwardScrollPanel'"
+  #scrollPanel>
+  <!-- TOP FILLER -->
+  <div [style.height.px]="paddingTop()"></div>
+  <ng-content></ng-content>
+  <!-- BOTTOM FILLER -->
+  <div [style.height.px]="paddingBottom()"></div>
+</div>
