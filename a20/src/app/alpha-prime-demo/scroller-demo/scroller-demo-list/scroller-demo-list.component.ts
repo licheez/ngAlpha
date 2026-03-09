@@ -30,6 +30,8 @@ export class ScrollerDemoList implements OnInit {
 
   model = signal<ScrollerDemoModel | undefined>(undefined);
   selectedItem = signal<IScrollerDemoCardData | undefined>(undefined);
+  logs = signal<string[]>([]);
+  showLogs = signal(false);
 
   loaded =
     output<IScrollerDemoCardData | undefined>();
@@ -37,7 +39,52 @@ export class ScrollerDemoList implements OnInit {
     output<IScrollerDemoCardData | undefined>();
 
   ngOnInit(): void {
+    this.captureConsoleLogs();
     this.loadFirstPage();
+  }
+
+  private captureConsoleLogs(): void {
+    const originalLog = console.log;
+    const maxLogs = 100; // Keep last 100 log entries
+
+    console.log = (...args: any[]) => {
+      // Call original console.log
+      originalLog.apply(console, args);
+
+      // Capture for display
+      const logMessage = args.map(arg => {
+        if (typeof arg === 'object') {
+          return JSON.stringify(arg, null, 2);
+        }
+        return String(arg);
+      }).join(' ');
+
+      const currentLogs = this.logs();
+      const newLogs = [...currentLogs, `[${new Date().toLocaleTimeString()}] ${logMessage}`];
+
+      // Keep only last maxLogs entries
+      if (newLogs.length > maxLogs) {
+        newLogs.splice(0, newLogs.length - maxLogs);
+      }
+
+      this.logs.set(newLogs);
+      this.cdr.markForCheck();
+    };
+  }
+
+  toggleLogs(): void {
+    this.showLogs.set(!this.showLogs());
+  }
+
+  clearLogs(): void {
+    this.logs.set([]);
+  }
+
+  copyLogs(): void {
+    const logsText = this.logs().join('\n');
+    navigator.clipboard.writeText(logsText).then(() => {
+      alert('Logs copied to clipboard!');
+    });
   }
 
   private loadFirstPage(): void {

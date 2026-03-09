@@ -1,0 +1,24 @@
+<div class="demo-header text-center mb-3">
+  <h4>CSS Virtual Scroller Demo (V2 - True Virtual Scrolling)</h4>
+  <div class="info-text">
+    <small>Total Items: {{items().length}} | Selected: {{selectedItem()?.title || 'None'}}</small>
+  </div>
+</div>
+
+<div class="scroller-container">
+  <alpha-prime-css-scroller
+    #scroller
+    [itemHeight]="180"
+    [bufferSize]="5"
+    (loadMore)="onLoadMore($event)">
+
+    @for (row of scroller.visibleRows(); track row.index) {
+      <app-css-scroller-card
+        [item]="row.data"
+        [selected]="row.data.id === selectedItem()?.id"
+        (clicked)="onSelectItem($event)"
+      ></app-css-scroller-card>
+    }
+  </alpha-prime-css-scroller>
+</div>
+

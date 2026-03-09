@@ -25,6 +25,24 @@
         </div>
       }
     </alpha-prime-scroller>
+  </div>
 
+  <!-- Log Viewer -->
+  <div class="log-viewer-container">
+    <div class="log-controls">
+      <button (click)="toggleLogs()" class="btn btn-sm btn-primary me-2">
+        {{ showLogs() ? 'Hide' : 'Show' }} Logs ({{logs().length}})
+      </button>
+      <button (click)="clearLogs()" class="btn btn-sm btn-warning me-2">Clear</button>
+      <button (click)="copyLogs()" class="btn btn-sm btn-success">Copy to Clipboard</button>
+    </div>
+
+    @if(showLogs()) {
+      <div class="log-panel">
+        <pre class="log-content">@for(log of logs(); track $index) {
+{{log}}
+}</pre>
+      </div>
+    }
   </div>
 }

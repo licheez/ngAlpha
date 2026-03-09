@@ -17,3 +17,38 @@
     font-weight: 600;
   }
 }
+
+.log-viewer-container {
+  max-width: 800px;
+  margin: 2rem auto 0;
+
+  .log-controls {
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+    border-radius: 8px 8px 0 0;
+    border-bottom: 1px solid #dee2e6;
+
+    .btn {
+      font-size: 0.875rem;
+    }
+  }
+
+  .log-panel {
+    background-color: #1e1e1e;
+    border-radius: 0 0 8px 8px;
+    max-height: 400px;
+    overflow-y: auto;
+
+    .log-content {
+      margin: 0;
+      padding: 1rem;
+      color: #d4d4d4;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.75rem;
+      line-height: 1.4;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+  }
+}
+

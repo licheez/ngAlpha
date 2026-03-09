@@ -48,6 +48,7 @@ export class AlphaPrimeScroller implements AfterViewInit, OnDestroy {
   private _allItemsFetched = signal(false);
   private _scrollListener: ((event: Event) => void) | null = null;
   private cdr = inject(ChangeDetectorRef);
+  private _justSlidUp = false; // Track if we just slid up
 
   // Exposed signals for template
   paddingTop = signal(0);
@@ -197,19 +198,68 @@ export class AlphaPrimeScroller implements AfterViewInit, OnDestroy {
     console.log('spaceBellow=', this.modelData.spaceBellow, 'paddingBottom=', this.paddingBottom());
 
     // Check if we need to slide up
-    if (
-      this.paddingTop() > 0 &&
-      this.modelData.spaceAbove <= this.paddingTop() &&
-      this.modelData.visibleFrom !== 0
-    ) {
-      console.log('>>> DECISION: SLIDE UP <<<');
+    // Trigger when we have significant padding above AND viewing items in upper part of visible range
+    const shouldSlideUp = this.paddingTop() > 200 &&
+                         sb.firstVisibleRow >= 0 &&
+                         sb.firstVisibleRow < this.modelData.visibleFrom + 10;
+
+    if (shouldSlideUp) {
+      console.log('>>> DECISION: SLIDE UP <<<', {
+        visibleFrom: this.modelData.visibleFrom,
+        visibleTo: this.modelData.visibleTo,
+        firstVisibleRow: sb.firstVisibleRow,
+        paddingTop: this.paddingTop()
+      });
+      this._justSlidUp = true;
       this.slideUp(sb);
       return;
     }
 
-    // Check if we need to load more data or slide down
-    if (this.modelData.spaceBellow <= this.paddingBottom() + 5) {
-      console.log('>>> At bottom threshold: spaceBellow=', this.modelData.spaceBellow, '<=', this.paddingBottom() + 5);
+    // Check if we need to slide down (viewing items near end of visible range)
+    // Trigger when viewing items in the LOWER part of visible range
+    const shouldSlideDown = this.modelData.visibleTo < this.modelData.nbRows &&
+                           sb.lastVisibleRow >= 0 &&
+                           sb.lastVisibleRow >= this.modelData.visibleTo - 10; // Within last 10 items
+
+    if (shouldSlideDown) {
+      console.log('>>> DECISION: SLIDE DOWN (viewing near end of visible range) <<<', {
+        visibleTo: this.modelData.visibleTo,
+        nbRows: this.modelData.nbRows,
+        lastVisibleRow: sb.lastVisibleRow
+      });
+      this.slideDown(sb);
+      return;
+    }
+
+    // Check if we need to load more data
+    // Only trigger when:
+    // 1. We're physically near the bottom (spaceBellow is small) AND
+    // 2. We're at the end of visible range
+    // This prevents loading too early when just viewing items near the end
+    const isPhysicallyNearBottom = this.modelData.spaceBellow <= Math.max(200, this.paddingBottom() + 5);
+    const isAtEndOfVisible = this.modelData.visibleTo >= this.modelData.nbRows;
+    const needsAction = !this._justSlidUp && isPhysicallyNearBottom && isAtEndOfVisible;
+
+    // Clear the flag for next scroll event
+    if (this._justSlidUp) {
+      console.log('>>> Skipping bottom check - just slid up <<<');
+      this._justSlidUp = false;
+      this.updatePaddings(
+        sb.totalHeightOfInvisibleRowsAbove,
+        sb.totalHeightOfInvisibleRowsBellow
+      );
+      return;
+    }
+
+    if (needsAction) {
+      console.log('>>> At bottom threshold:', {
+        spaceBellow: this.modelData.spaceBellow,
+        paddingBottom: this.paddingBottom(),
+        isPhysicallyNearBottom,
+        isAtEndOfVisible,
+        visibleTo: this.modelData.visibleTo,
+        nbRows: this.modelData.nbRows
+      });
 
       if (this.modelData.visibleTo < this.modelData.nbRows) {
         console.log('>>> DECISION: SLIDE DOWN (more items available) <<<');
@@ -240,7 +290,6 @@ export class AlphaPrimeScroller implements AfterViewInit, OnDestroy {
 
         this.stopListening();
         this.busy.set(true);
-        const curPos = spDiv.scrollTop;
 
         this.modelData.loadNextItems(fromRow)
           .subscribe({
@@ -249,8 +298,7 @@ export class AlphaPrimeScroller implements AfterViewInit, OnDestroy {
               console.log('Load result:', {
                 hasItems,
                 newTotal: this.modelData.nbRows,
-                newVisibleRange: `${this.modelData.visibleFrom}-${this.modelData.visibleTo}`,
-                scrollTop: curPos
+                newVisibleRange: `${this.modelData.visibleFrom}-${this.modelData.visibleTo}`
               });
 
               this.busy.set(false);
@@ -258,7 +306,9 @@ export class AlphaPrimeScroller implements AfterViewInit, OnDestroy {
                 sb.totalHeightOfInvisibleRowsAbove,
                 sb.totalHeightOfInvisibleRowsBellow
               );
-              spDiv.scrollTop = curPos;
+
+              // Don't reset scrollTop - let browser maintain natural position
+              // Resetting causes scroll handle to jump and triggers unwanted scroll events
 
               this.cdr.markForCheck();
 
@@ -298,21 +348,26 @@ export class AlphaPrimeScroller implements AfterViewInit, OnDestroy {
   }
 
   private slideUp(sb: AlphaPrimeScrollerBag): void {
-    const fromRow = sb.firstVisibleRow >= 0 ? sb.firstVisibleRow : 0;
-    const toRow = sb.lastVisibleRow >= 0 ? sb.lastVisibleRow + 1 : this.modelData.visibleTo;
+    // When sliding up, maintain the window size and move it upward
+    const windowSize = this.modelData.take * 3; // 30 items
+
+    // Calculate new window position - move up by one page
+    const newFrom = Math.max(0, this.modelData.visibleFrom - this.modelData.take);
+    const newTo = Math.min(newFrom + windowSize, this.modelData.nbRows);
 
     console.log('>>> slideUp BEFORE <<<', {
       bagFirstVisible: sb.firstVisibleRow,
       bagLastVisible: sb.lastVisibleRow,
-      calculatedFrom: fromRow,
-      calculatedTo: toRow,
       currentVisibleRange: `${this.modelData.visibleFrom}-${this.modelData.visibleTo}`,
+      calculatedNewFrom: newFrom,
+      calculatedNewTo: newTo,
+      windowSize: windowSize,
       totalRows: this.modelData.nbRows,
       invisibleAbove: sb.totalHeightOfInvisibleRowsAbove,
       invisibleBelow: sb.totalHeightOfInvisibleRowsBellow
     });
 
-    this.modelData.slideItems(fromRow, toRow);
+    this.modelData.slideItems(newFrom, newTo);
 
     console.log('>>> slideUp AFTER slideItems <<<', {
       newVisibleRange: `${this.modelData.visibleFrom}-${this.modelData.visibleTo}`
@@ -333,26 +388,30 @@ export class AlphaPrimeScroller implements AfterViewInit, OnDestroy {
   }
 
   private slideDown(sb: AlphaPrimeScrollerBag): void {
-    const fromRow = sb.firstVisibleRow >= 0 ? sb.firstVisibleRow : this.modelData.visibleFrom;
-    const toRow = sb.lastVisibleRow >= 0 ? sb.lastVisibleRow + 1 : this.modelData.visibleTo;
+    // When sliding down, we want to show the next batch of items
+    // Not expand the window to show everything
 
-    // Slide the window to show more items below
-    const newTo = Math.min(toRow + this.modelData.take, this.modelData.nbRows);
+    // Calculate the new window position
+    const windowSize = this.modelData.take * 3; // Show 3 pages
+
+    // Move the window forward by 'take' amount (one page)
+    const newFrom = this.modelData.visibleFrom + this.modelData.take;
+    const newTo = Math.min(newFrom + windowSize, this.modelData.nbRows);
 
     console.log('>>> slideDown BEFORE <<<', {
       bagFirstVisible: sb.firstVisibleRow,
       bagLastVisible: sb.lastVisibleRow,
-      calculatedFrom: fromRow,
-      calculatedToRow: toRow,
-      calculatedNewTo: newTo,
-      take: this.modelData.take,
       currentVisibleRange: `${this.modelData.visibleFrom}-${this.modelData.visibleTo}`,
+      calculatedNewFrom: newFrom,
+      calculatedNewTo: newTo,
+      windowSize: windowSize,
+      take: this.modelData.take,
       totalRows: this.modelData.nbRows,
       invisibleAbove: sb.totalHeightOfInvisibleRowsAbove,
       invisibleBelow: sb.totalHeightOfInvisibleRowsBellow
     });
 
-    this.modelData.slideItems(fromRow, newTo);
+    this.modelData.slideItems(newFrom, newTo);
 
     console.log('>>> slideDown AFTER slideItems <<<', {
       newVisibleRange: `${this.modelData.visibleFrom}-${this.modelData.visibleTo}`

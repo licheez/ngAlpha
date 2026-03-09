@@ -1,0 +1,25 @@
+.css-scroller-container {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.css-scroller-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.css-scroller-item {
+  /* CSS containment for performance */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 200px;
+}
+
+.css-scroller-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
