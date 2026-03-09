@@ -1,0 +1,39 @@
+.card {
+  background-color: #ffffff !important;
+  border: 1px solid #dee2e6 !important;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    border-color: #adb5bd !important;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &.selected {
+    border-color: #007bff !important;
+    border-width: 2px !important;
+    background-color: #e7f3ff !important;
+  }
+}
+
+:host {
+  display: block;
+}
+
+.card-title {
+  color: #212529 !important;
+  font-weight: 600 !important;
+  margin-bottom: 0.5rem;
+}
+
+.card-text {
+  color: #212529 !important;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+

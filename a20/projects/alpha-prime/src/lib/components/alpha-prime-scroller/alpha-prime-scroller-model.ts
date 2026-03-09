@@ -91,18 +91,22 @@ export class AlphaPrimeScrollerModel<T> {
     return new Observable(
       (subscriber: Subscriber<any>) => {
         this.busy = true;
+        console.log(`loadNextItems: requesting items from ${this.nbRows}, take ${this.take}`);
         this.feed(this.nbRows, this.take)
           .subscribe({
             next: (items: T[]) => {
+              console.log(`loadNextItems: received ${items.length} items`);
               this.appendItems(items, from);
               this.busy = false;
-              this.endReached = items.length === 0;
+              this.endReached = items.length === 0 || items.length < this.take;
               subscriber.next(!this.endReached);
+              subscriber.complete();
             },
             error: (error) => {
               console.error('loadNextItems failed with', error);
               this.busy = false;
               subscriber.error(error);
+              subscriber.complete();
             }
           });
       });
@@ -194,9 +198,21 @@ export class AlphaPrimeScrollerModel<T> {
       (item: T) => {
         return new AlphaPrimeScrollerRow<T>(item);
       });
+
+    const oldRowCount = this.rows.length;
     this.rows = this.rows.concat(rows);
-    this.visibleFrom = from;
+
+    const windowSize = this.take * 3; // Show 3 pages worth of items
+
+    // When appending items at the end, keep the window showing the NEW items
+    // not reset back to the beginning
+
+    // We want to keep showing items near where we are scrolling
+    // Since we're at the bottom (that's why we loaded more), show the last window
     this.visibleTo = this.rows.length;
+    this.visibleFrom = Math.max(0, this.visibleTo - windowSize);
+
+    console.log(`appendItems: added ${items.length} items, from=${from}, oldRows=${oldRowCount}, newVisibleRange=${this.visibleFrom}-${this.visibleTo}, totalRows=${this.rows.length}`);
   }
 
   slideItems(from: number, to: number) {

@@ -1,0 +1,9 @@
+<alpha-prime-debug-tag tag="ScrollerDemoCard"></alpha-prime-debug-tag>
+@if(item()){
+  <div class="card border rounded p-3 shadow-sm"
+       [class.selected]="selected()"
+       (click)="onClick()">
+    <h5 class="card-title mb-2">{{item()!.title}}</h5>
+    <p class="card-text">{{item()!.description}}</p>
+  </div>
+}

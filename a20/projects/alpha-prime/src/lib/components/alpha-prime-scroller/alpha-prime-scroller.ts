@@ -1,15 +1,16 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
-  computed,
   effect,
   input,
   output,
   signal,
   viewChild,
-  OnDestroy
+  OnDestroy,
+  inject
 } from '@angular/core';
 import { AlphaPrimeScrollerModel } from './alpha-prime-scroller-model';
 import { AlphaPrimeScrollerRow } from './alpha-prime-scroller-row';
@@ -46,10 +47,12 @@ export class AlphaPrimeScroller implements AfterViewInit, OnDestroy {
   // Internal state
   private _allItemsFetched = signal(false);
   private _scrollListener: ((event: Event) => void) | null = null;
+  private cdr = inject(ChangeDetectorRef);
 
   // Exposed signals for template
   paddingTop = signal(0);
   paddingBottom = signal(0);
+  busy = signal(false);
 
   private scrollPanelRef = viewChild<ElementRef<HTMLDivElement>>('scrollPanel');
 
@@ -102,7 +105,6 @@ export class AlphaPrimeScroller implements AfterViewInit, OnDestroy {
     return this.modelData.rows;
   }
 
-  busy = computed(() => this.modelData.busy);
 
   private get scrollPanel(): HTMLDivElement {
     const ref = this.scrollPanelRef();
@@ -157,6 +159,16 @@ export class AlphaPrimeScroller implements AfterViewInit, OnDestroy {
     this.modelData.panelBottom = this.modelData.spaceAbove + this.modelData.panelHeight;
     this.modelData.contentHeight = spDiv.scrollHeight;
 
+    console.log('=== SCROLL EVENT ===');
+    console.log('Scroll position:', {
+      scrollTop: spDiv.scrollTop,
+      scrollHeight: spDiv.scrollHeight,
+      clientHeight: spDiv.clientHeight,
+      spaceAbove: this.modelData.spaceAbove,
+      panelBottom: this.modelData.panelBottom,
+      contentHeight: this.modelData.contentHeight
+    });
+
     const sb = new AlphaPrimeScrollerBag(this.rows);
 
     sb.analyseRows(
@@ -166,11 +178,23 @@ export class AlphaPrimeScroller implements AfterViewInit, OnDestroy {
       this.modelData.panelBottom
     );
 
+    console.log('Analyzed rows:', {
+      totalRows: this.rows.length,
+      firstVisibleRow: sb.firstVisibleRow,
+      lastVisibleRow: sb.lastVisibleRow,
+      invisibleAbove: sb.totalHeightOfInvisibleRowsAbove,
+      invisibleBelow: sb.totalHeightOfInvisibleRowsBellow,
+      currentVisible: `${this.modelData.visibleFrom}-${this.modelData.visibleTo}`,
+      currentPadding: `top=${this.paddingTop()}, bottom=${this.paddingBottom()}`
+    });
+
     this.modelData.spaceBellow = Math.round(
       this.modelData.contentHeight -
       this.modelData.spaceAbove -
       this.modelData.panelHeight
     );
+
+    console.log('spaceBellow=', this.modelData.spaceBellow, 'paddingBottom=', this.paddingBottom());
 
     // Check if we need to slide up
     if (
@@ -178,19 +202,25 @@ export class AlphaPrimeScroller implements AfterViewInit, OnDestroy {
       this.modelData.spaceAbove <= this.paddingTop() &&
       this.modelData.visibleFrom !== 0
     ) {
+      console.log('>>> DECISION: SLIDE UP <<<');
       this.slideUp(sb);
       return;
     }
 
     // Check if we need to load more data or slide down
     if (this.modelData.spaceBellow <= this.paddingBottom() + 5) {
+      console.log('>>> At bottom threshold: spaceBellow=', this.modelData.spaceBellow, '<=', this.paddingBottom() + 5);
 
       if (this.modelData.visibleTo < this.modelData.nbRows) {
+        console.log('>>> DECISION: SLIDE DOWN (more items available) <<<');
         this.slideDown(sb);
         return;
       } else {
+        console.log('>>> At end of loaded items, visibleTo=', this.modelData.visibleTo, 'nbRows=', this.modelData.nbRows);
+
         // Need to get more data from server
-        if (this.modelData.busy || this._allItemsFetched()) {
+        if (this.busy() || this._allItemsFetched()) {
+          console.log('>>> DECISION: SKIP (busy=', this.busy(), 'allFetched=', this._allItemsFetched(), ') <<<');
           this.updatePaddings(
             sb.totalHeightOfInvisibleRowsAbove,
             sb.totalHeightOfInvisibleRowsBellow
@@ -199,54 +229,146 @@ export class AlphaPrimeScroller implements AfterViewInit, OnDestroy {
         }
 
         // Load more data
+        const fromRow = sb.firstVisibleRow >= 0 ? sb.firstVisibleRow : this.modelData.visibleFrom;
+        console.log('>>> DECISION: LOAD MORE DATA <<<');
+        console.log('Loading params:', {
+          currentRows: this.modelData.nbRows,
+          firstVisibleRow: sb.firstVisibleRow,
+          usingFromRow: fromRow,
+          currentVisibleRange: `${this.modelData.visibleFrom}-${this.modelData.visibleTo}`
+        });
+
         this.stopListening();
+        this.busy.set(true);
         const curPos = spDiv.scrollTop;
 
-        this.modelData.loadNextItems(sb.firstVisibleRow)
+        this.modelData.loadNextItems(fromRow)
           .subscribe({
             next: (hasItems) => {
+              console.log('>>> LOAD COMPLETE <<<');
+              console.log('Load result:', {
+                hasItems,
+                newTotal: this.modelData.nbRows,
+                newVisibleRange: `${this.modelData.visibleFrom}-${this.modelData.visibleTo}`,
+                scrollTop: curPos
+              });
+
+              this.busy.set(false);
               this.updatePaddings(
                 sb.totalHeightOfInvisibleRowsAbove,
                 sb.totalHeightOfInvisibleRowsBellow
               );
               spDiv.scrollTop = curPos;
+
+              this.cdr.markForCheck();
+
               if (hasItems) {
-                this.startListening();
+                setTimeout(() => {
+                  console.log('>>> RESTARTING SCROLL LISTENER <<<');
+                  this.startListening();
+                }, 100);
               } else {
+                console.log('>>> ALL ITEMS FETCHED <<<');
                 this._allItemsFetched.set(true);
                 this.allItemsFetched.emit(true);
               }
             },
             error: (error) => {
-              console.error('Scroll load error:', error);
+              console.error('>>> LOAD ERROR <<<', error);
+              this.busy.set(false);
               this.updatePaddings(
                 sb.totalHeightOfInvisibleRowsAbove,
                 sb.totalHeightOfInvisibleRowsBellow
               );
-              this.startListening();
+              this.cdr.markForCheck();
+              setTimeout(() => {
+                this.startListening();
+              }, 100);
             }
           });
       }
       return;
     }
+
+    console.log('>>> DECISION: UPDATE PADDINGS ONLY <<<');
+    this.updatePaddings(
+      sb.totalHeightOfInvisibleRowsAbove,
+      sb.totalHeightOfInvisibleRowsBellow
+    );
   }
 
   private slideUp(sb: AlphaPrimeScrollerBag): void {
-    this.modelData.slideItems(sb.firstVisibleRow, sb.lastVisibleRow);
+    const fromRow = sb.firstVisibleRow >= 0 ? sb.firstVisibleRow : 0;
+    const toRow = sb.lastVisibleRow >= 0 ? sb.lastVisibleRow + 1 : this.modelData.visibleTo;
+
+    console.log('>>> slideUp BEFORE <<<', {
+      bagFirstVisible: sb.firstVisibleRow,
+      bagLastVisible: sb.lastVisibleRow,
+      calculatedFrom: fromRow,
+      calculatedTo: toRow,
+      currentVisibleRange: `${this.modelData.visibleFrom}-${this.modelData.visibleTo}`,
+      totalRows: this.modelData.nbRows,
+      invisibleAbove: sb.totalHeightOfInvisibleRowsAbove,
+      invisibleBelow: sb.totalHeightOfInvisibleRowsBellow
+    });
+
+    this.modelData.slideItems(fromRow, toRow);
+
+    console.log('>>> slideUp AFTER slideItems <<<', {
+      newVisibleRange: `${this.modelData.visibleFrom}-${this.modelData.visibleTo}`
+    });
+
     this.updatePaddings(
       sb.totalHeightOfInvisibleRowsAbove,
       sb.totalHeightOfInvisibleRowsBellow
     );
+
+    console.log('>>> slideUp AFTER updatePaddings <<<', {
+      paddingTop: this.paddingTop(),
+      paddingBottom: this.paddingBottom()
+    });
+
+    // Trigger change detection after sliding
+    this.cdr.markForCheck();
   }
 
   private slideDown(sb: AlphaPrimeScrollerBag): void {
-    this.modelData.slideItems(
-      sb.firstVisibleRow,
-      this.modelData.visibleTo + this.modelData.take
-    );
+    const fromRow = sb.firstVisibleRow >= 0 ? sb.firstVisibleRow : this.modelData.visibleFrom;
+    const toRow = sb.lastVisibleRow >= 0 ? sb.lastVisibleRow + 1 : this.modelData.visibleTo;
+
+    // Slide the window to show more items below
+    const newTo = Math.min(toRow + this.modelData.take, this.modelData.nbRows);
+
+    console.log('>>> slideDown BEFORE <<<', {
+      bagFirstVisible: sb.firstVisibleRow,
+      bagLastVisible: sb.lastVisibleRow,
+      calculatedFrom: fromRow,
+      calculatedToRow: toRow,
+      calculatedNewTo: newTo,
+      take: this.modelData.take,
+      currentVisibleRange: `${this.modelData.visibleFrom}-${this.modelData.visibleTo}`,
+      totalRows: this.modelData.nbRows,
+      invisibleAbove: sb.totalHeightOfInvisibleRowsAbove,
+      invisibleBelow: sb.totalHeightOfInvisibleRowsBellow
+    });
+
+    this.modelData.slideItems(fromRow, newTo);
+
+    console.log('>>> slideDown AFTER slideItems <<<', {
+      newVisibleRange: `${this.modelData.visibleFrom}-${this.modelData.visibleTo}`
+    });
+
     this.updatePaddings(
       sb.totalHeightOfInvisibleRowsAbove,
       sb.totalHeightOfInvisibleRowsBellow
     );
+
+    console.log('>>> slideDown AFTER updatePaddings <<<', {
+      paddingTop: this.paddingTop(),
+      paddingBottom: this.paddingBottom()
+    });
+
+    // Trigger change detection after sliding
+    this.cdr.markForCheck();
   }
 }

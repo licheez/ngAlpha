@@ -1,0 +1,19 @@
+.scroller-container {
+  height: 600px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.demo-header {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+
+  h4 {
+    margin-bottom: 0.5rem;
+    color: #212529;
+    font-weight: 600;
+  }
+}
