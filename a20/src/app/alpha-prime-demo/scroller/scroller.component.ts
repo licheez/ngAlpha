@@ -2,7 +2,7 @@ import {Component, OnInit, signal, viewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
   AlphaPrimeScroller
-} from '../../../projects/alpha-prime/src/lib/components/alpha-prime-scroller/alpha-prime-scroller';
+} from '../../../../projects/alpha-prime/src/lib/components/alpha-prime-scroller/alpha-prime-scroller';
 
 interface DemoItem {
   id: string;

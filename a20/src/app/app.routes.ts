@@ -132,7 +132,7 @@ export const routes: Routes = [
       {
         path: 'scroller',
         loadComponent: () =>
-          import('./alpha-prime-demo/scroller.component')
+          import('./alpha-prime-demo/scroller/scroller.component')
             .then(m => m.ScrollerComponent)
       }
     ]
