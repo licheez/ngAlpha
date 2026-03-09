@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { AlphaPrimeSaveButton } from './alpha-prime-save-button';
+import { AlphaPrimeSaveButtonComponent } from './alpha-prime-save-button.component';
 import { AlphaPrimeService } from '../../services/alpha-prime.service';
 import { AlphaPrimeLabelComponent } from '../alpha-prime-label/alpha-prime-label.component';
 
 describe('AlphaPrimeSaveButton', () => {
-  let component: AlphaPrimeSaveButton;
-  let fixture: ComponentFixture<AlphaPrimeSaveButton>;
+  let component: AlphaPrimeSaveButtonComponent;
+  let fixture: ComponentFixture<AlphaPrimeSaveButtonComponent>;
   let primeService: jasmine.SpyObj<AlphaPrimeService>;
 
   beforeEach(async () => {
@@ -16,11 +16,11 @@ describe('AlphaPrimeSaveButton', () => {
     primeService.publish.and.returnValue(1);
 
     await TestBed.configureTestingModule({
-      imports: [AlphaPrimeSaveButton],
+      imports: [AlphaPrimeSaveButtonComponent],
       providers: [{ provide: AlphaPrimeService, useValue: primeService }]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AlphaPrimeSaveButton);
+    fixture = TestBed.createComponent(AlphaPrimeSaveButtonComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,8 +1,8 @@
 import {Component, OnInit, signal, viewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
-  AlphaPrimeScroller
-} from '../../../../projects/alpha-prime/src/lib/components/alpha-prime-scroller/alpha-prime-scroller';
+  AlphaPrimeScrollerComponent
+} from '../../../../projects/alpha-prime/src/lib/components/alpha-prime-scroller/alpha-prime-scroller.component';
 
 interface DemoItem {
   id: string;
@@ -15,14 +15,14 @@ interface DemoItem {
 @Component({
   selector: 'app-scroller-demo',
   standalone: true,
-  imports: [CommonModule, AlphaPrimeScroller],
+  imports: [CommonModule, AlphaPrimeScrollerComponent],
   templateUrl: './scroller.component.html',
   styleUrl: './scroller.component.css'
 })
 export class ScrollerComponent implements OnInit {
 
   // Reference to scroller
-  scroller = viewChild<AlphaPrimeScroller<DemoItem>>('scroller');
+  scroller = viewChild<AlphaPrimeScrollerComponent<DemoItem>>('scroller');
 
   // State signals
   items = signal<DemoItem[]>([]);

@@ -11,14 +11,14 @@ import {AlphaPrimeLabelComponent} from '../alpha-prime-label/alpha-prime-label.c
     Tooltip,
     ButtonDirective
   ],
-  templateUrl: './alpha-prime-save-button.html',
-  styleUrl: './alpha-prime-save-button.css',
+  templateUrl: './alpha-prime-save-button.component.html',
+  styleUrl: './alpha-prime-save-button.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'alpha-prime-save-button'
   }
 })
-export class AlphaPrimeSaveButton {
+export class AlphaPrimeSaveButtonComponent {
 
   private readonly mPs = inject(AlphaPrimeService);
 

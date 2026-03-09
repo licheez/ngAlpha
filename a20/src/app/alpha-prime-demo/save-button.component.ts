@@ -1,5 +1,5 @@
 import {Component, ChangeDetectionStrategy, signal, OnInit, inject, OnDestroy} from '@angular/core';
-import { AlphaPrimeSaveButton } from '../../../projects/alpha-prime/src/lib/components/alpha-prime-save-button/alpha-prime-save-button';
+import { AlphaPrimeSaveButtonComponent } from '../../../projects/alpha-prime/src/lib/components/alpha-prime-save-button/alpha-prime-save-button.component';
 import {AlphaPrimeService} from '../../../projects/alpha-prime/src/lib/services/alpha-prime.service';
 import {AlphaPrimeLabelComponent} from '../../../projects/alpha-prime/src/lib/components/alpha-prime-label/alpha-prime-label.component';
 
@@ -164,7 +164,7 @@ import {AlphaPrimeLabelComponent} from '../../../projects/alpha-prime/src/lib/co
     </section>
   `,
   styleUrl: './styles/button-demo-common.css',
-  imports: [AlphaPrimeSaveButton],
+  imports: [AlphaPrimeSaveButtonComponent],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SaveButtonComponent implements OnInit, OnDestroy {

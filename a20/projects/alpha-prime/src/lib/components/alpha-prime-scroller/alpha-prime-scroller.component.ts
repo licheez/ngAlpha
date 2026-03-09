@@ -19,11 +19,12 @@ export interface VirtualRow<T> {
 
 @Component({
   selector: 'alpha-prime-scroller',
-  templateUrl: './alpha-prime-scroller.html',
-  styleUrl: './alpha-prime-scroller.scss',
+  standalone: true,
+  templateUrl: './alpha-prime-scroller.component.html',
+  styleUrl: './alpha-prime-scroller.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AlphaPrimeScroller<T = any> implements AfterViewInit {
+export class AlphaPrimeScrollerComponent<T = any> implements AfterViewInit {
   private readonly alphaPrimeService = inject(AlphaPrimeService);
 
   // Inputs
@@ -109,16 +110,6 @@ export class AlphaPrimeScroller<T = any> implements AfterViewInit {
     this.allItems.set([...current, ...newItems]);
   }
 
-  // Public method to clear items
-  clearItems() {
-    this.allItems.set([]);
-    this.scrollTop.set(0);
-  }
-
-  // Public method to get current item count
-  getItemCount(): number {
-    return this.allItems().length;
-  }
 
   onScroll() {
     this.checkScroll();
