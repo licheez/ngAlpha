@@ -119,7 +119,6 @@
 
 /* Scroller Wrapper */
 .scroller-wrapper {
-  flex: 1;
   overflow: hidden;
   background: white;
   margin: 16px 24px;
@@ -232,7 +231,7 @@
 .status-panel {
   padding: 16px 24px;
   background: white;
-  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .status-grid {

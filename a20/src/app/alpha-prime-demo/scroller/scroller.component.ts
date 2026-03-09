@@ -3,6 +3,9 @@ import {CommonModule} from '@angular/common';
 import {
   AlphaPrimeScrollerComponent
 } from '../../../../projects/alpha-prime/src/lib/components/alpha-prime-scroller/alpha-prime-scroller.component';
+import {
+  AlphaPrimeRemainingHeightDirective
+} from '../../../../projects/alpha-prime/src/lib/directives/alpha-prime-remaining-height.directive';
 
 interface DemoItem {
   id: string;
@@ -15,7 +18,7 @@ interface DemoItem {
 @Component({
   selector: 'app-scroller-demo',
   standalone: true,
-  imports: [CommonModule, AlphaPrimeScrollerComponent],
+  imports: [CommonModule, AlphaPrimeScrollerComponent, AlphaPrimeRemainingHeightDirective],
   templateUrl: './scroller.component.html',
   styleUrl: './scroller.component.css'
 })

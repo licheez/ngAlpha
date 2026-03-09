@@ -4,7 +4,26 @@
      <p class="subtitle">Virtual scrolling with variable-height items and dynamic loading</p>
   </div>
 
-  <div class="scroller-wrapper">
+  <!-- Status Panel - Moved to top for remaining height calculation -->
+  <div class="status-panel">
+    <div class="status-grid">
+      <div class="status-item">
+        <span class="status-label">Total Items:</span>
+        <span class="status-value">{{ items().length }}</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Scroll Position:</span>
+        <span class="status-value">{{ lastScrollPosition() }}px</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">All Fetched:</span>
+        <span class="status-value">{{ allItemsFetched() ? 'Yes' : 'No' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroller-wrapper"
+       alphaPrimeRemainingHeight [bottomMarginInPx]="16">
     <alpha-prime-scroller
       #scroller
       class="scroll-panel"
@@ -30,23 +49,6 @@
         </div>
       }
     </alpha-prime-scroller>
-  </div>
-
-  <div class="status-panel">
-    <div class="status-grid">
-      <div class="status-item">
-        <span class="status-label">Total Items:</span>
-        <span class="status-value">{{ items().length }}</span>
-      </div>
-      <div class="status-item">
-        <span class="status-label">Scroll Position:</span>
-        <span class="status-value">{{ lastScrollPosition() }}px</span>
-      </div>
-      <div class="status-item">
-        <span class="status-label">All Fetched:</span>
-        <span class="status-value">{{ allItemsFetched() ? 'Yes' : 'No' }}</span>
-      </div>
-    </div>
   </div>
 </div>
 
