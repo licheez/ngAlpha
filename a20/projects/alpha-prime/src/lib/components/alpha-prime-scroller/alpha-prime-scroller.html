@@ -1,15 +1,17 @@
-<alpha-prime-debug-tag tag="alphaScroller"></alpha-prime-debug-tag>
-<alpha-prime-progress-bar
-  [delay]="10"
-  [busy]="busy()">
-</alpha-prime-progress-bar>
+<div #scrollContainer
+     class="scroller-container" (scroll)="onScroll()">
+  <div class="scroller-content"
+       [style.padding-top.px]="paddingTop()"
+       [style.padding-bottom.px]="paddingBottom()">
 
-<div
-  [class]="'forwardScrollPanel'"
-  #scrollPanel>
-  <!-- TOP FILLER -->
-  <div [style.height.px]="paddingTop()"></div>
-  <ng-content></ng-content>
-  <!-- BOTTOM FILLER -->
-  <div [style.height.px]="paddingBottom()"></div>
+    <ng-content></ng-content>
+  </div>
+
+  @if (loading()) {
+    <div class="scroller-loading">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  }
 </div>

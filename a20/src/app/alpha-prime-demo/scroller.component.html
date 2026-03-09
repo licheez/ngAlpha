@@ -1,141 +1,51 @@
-﻿<div class="scroller-demo-container">
-  <!-- Header with Title and Controls -->
+<div class="scroller-demo-container">
   <div class="demo-header">
     <h1>AlphaPrimeScroller Demo</h1>
-    <p class="subtitle">Infinite scroll with dynamic loading and variable height rows</p>
+    <p class="subtitle">Virtual scrolling with variable-height items and dynamic loading</p>
   </div>
 
-  <!-- Configuration Panel -->
-  <div class="config-panel">
-    <div class="config-group">
-      <label>
-        <input type="checkbox" [checked]="useFixedHeight()"
-               (change)="useFixedHeight.set($any($event.target).checked)">
-        Use Fixed Height
-      </label>
-      @if (useFixedHeight()) {
-        <input type="range" min="40" max="150" [value]="fixedHeightValue()"
-               (change)="fixedHeightValue.set(+$any($event.target).value)">
-        <span class="value-display">{{ fixedHeightValue() }}px</span>
-      }
-    </div>
-
-    <div class="config-group">
-      <label>
-        <input type="checkbox" [checked]="showProgressBar()"
-               (change)="showProgressBar.set($any($event.target).checked)">
-        Show Progress Bar
-      </label>
-    </div>
-
-    <div class="config-group">
-      <label for="pageSize">Page Size:</label>
-      <input type="number" id="pageSize" min="5" max="100" [value]="pageSize()"
-             (change)="pageSize.set(+$any($event.target).value)">
-    </div>
-
-    <div class="action-buttons">
-      <button (click)="refreshList()" class="btn-primary">
-        🔄 Refresh List
-      </button>
-      <button (click)="scrollToTop()" class="btn-secondary">
-        ⬆️ Scroll to Top
-      </button>
-    </div>
-  </div>
-
-  <!-- Main Scroller Area -->
   <div class="scroller-wrapper">
-    @if (scrollerModel()) {
-      <alpha-prime-scroller
-        class="scroll-panel"
-        [model]="scrollerModel()"
-        [fixedHeight]="getDisplayHeight()"
-        [showProgressBar]="showProgressBar()"
-        (scrolled)="onScroll($event)"
-        (allItemsFetched)="onAllItemsFetched()">
+    <alpha-prime-scroller
+      #scroller
+      class="scroll-panel"
+      [itemHeight]="200"
+      [bufferSize]="5"
+      (loadMore)="onLoadMore($event)"
+      (scrolled)="onScroll($event)">
 
-        <!-- Item Template -->
-        @for (row of scrollerModel()!.vRows; track trackByFn($index, row)) {
-          <div class="item-row">
-            <div class="item-header">
-              <div class="item-id">{{ row.data.id }}</div>
-              <span [class]="'badge ' + getCategoryClass(row.data.category)">
-                {{ row.data.category }}
-              </span>
-              <div class="item-timestamp">{{ row.data.timestamp }}</div>
-            </div>
-            <div class="item-content">
-              <h3>{{ row.data.title }}</h3>
-              <p>{{ row.data.description }}</p>
-            </div>
+      @for (row of scroller.visibleRows(); track row.index) {
+        <div class="item-row">
+          <div class="item-header">
+            <div class="item-id">{{ row.data.id }}</div>
+            <span [class]="'badge ' + getCategoryClass(row.data.category)">
+              {{ row.data.category }}
+            </span>
+            <div class="item-timestamp">{{ row.data.timestamp }}</div>
           </div>
-        } @empty {
-          <div class="empty-state">
-            <p>No items to display</p>
+          <div class="item-content">
+            <h3>{{ row.data.title }}</h3>
+            <p>{{ row.data.description }}</p>
           </div>
-        }
-      </alpha-prime-scroller>
-    } @else {
-      <div class="loading-state">
-        <p>Initializing scroller...</p>
-      </div>
-    }
+        </div>
+      }
+    </alpha-prime-scroller>
   </div>
 
-  <!-- Status Panel -->
   <div class="status-panel">
     <div class="status-grid">
       <div class="status-item">
         <span class="status-label">Total Items:</span>
-        <span class="status-value">{{ totalItems() }}</span>
-      </div>
-      <div class="status-item">
-        <span class="status-label">Visible:</span>
-        <span class="status-value">{{ visibleRange() }}</span>
+        <span class="status-value">{{ items().length }}</span>
       </div>
       <div class="status-item">
         <span class="status-label">Scroll Position:</span>
         <span class="status-value">{{ lastScrollPosition() }}px</span>
       </div>
       <div class="status-item">
-        <span class="status-label">Loading:</span>
-        <span class="status-value" [class.loading]="scrollerModel()?.busy">
-          {{ scrollerModel()?.busy ? '⏳ Yes' : '✓ No' }}
-        </span>
-      </div>
-      <div class="status-item">
         <span class="status-label">All Fetched:</span>
-        <span class="status-value" [class.complete]="allItemsFetched()">
-          {{ allItemsFetched() ? '✓ Yes' : '⏳ No' }}
-        </span>
-      </div>
-      <div class="status-item">
-        <span class="status-label">Page Size:</span>
-        <span class="status-value">{{ pageSize() }}</span>
+        <span class="status-value">{{ allItemsFetched() ? 'Yes' : 'No' }}</span>
       </div>
     </div>
-  </div>
-
-  <!-- Information Panel -->
-  <div class="info-panel">
-    <h3>About This Demo</h3>
-    <p>
-      This demo showcases the <strong>AlphaPrimeScroller</strong> component with:
-    </p>
-    <ul>
-      <li>✅ Infinite scrolling with dynamic data loading</li>
-      <li>✅ Variable-height rows with automatic padding</li>
-      <li>✅ Progress bar during data loads</li>
-      <li>✅ Optional fixed row heights</li>
-      <li>✅ Real-time status updates using signals</li>
-      <li>✅ 500 sample items with pagination</li>
-      <li>✅ Configurable page size</li>
-    </ul>
-    <p>
-      Try scrolling to the bottom to load more items, adjusting the configuration options,
-      or refreshing the list to see the scroller in action!
-    </p>
   </div>
 </div>
 

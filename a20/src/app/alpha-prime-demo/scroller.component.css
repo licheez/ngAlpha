@@ -198,13 +198,16 @@
   font-size: 16px;
   color: #333;
   font-weight: 600;
+  line-height: 1.4;
 }
 
 .item-content p {
   margin: 0;
   font-size: 14px;
   color: #666;
-  line-height: 1.4;
+  line-height: 1.6;
+  word-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 .empty-state {

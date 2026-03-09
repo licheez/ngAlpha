@@ -1,22 +1,22 @@
-.css-scroller-container {
+.scroller-container {
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
   position: relative;
 }
 
-.css-scroller-content {
+.scroller-content {
   display: flex;
   flex-direction: column;
 }
 
-.css-scroller-item {
+.scroller-item {
   /* CSS containment for performance */
   content-visibility: auto;
   contain-intrinsic-size: auto 200px;
 }
 
-.css-scroller-loading {
+.scroller-loading {
   display: flex;
   justify-content: center;
   align-items: center;

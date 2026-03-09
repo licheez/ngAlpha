@@ -1,25 +1,17 @@
-# CSS-Based Virtual Scroller - Simple & Reliable Approach
+# AlphaPrimeScroller - Virtual Scrolling Implementation
 
 ## 📋 Overview
 
-This is a completely new, simplified virtual scrolling implementation that uses **modern CSS** features instead of complex JavaScript logic.
+This is a simplified virtual scrolling implementation that uses **modern CSS** features combined with computed signals for optimal performance.
 
-## 🎯 Key Differences from Old Scroller
+## 🎯 Key Features
 
-### Old Scroller (`alpha-prime-scroller`):
-- ❌ Complex sliding window logic with `vRows`
-- ❌ Manual padding calculations
-- ❌ Buggy slideUp/slideDown conditions
-- ❌ Change detection issues
-- ❌ Difficult to debug
-- ❌ ~400 lines of complex code
-
-### New CSS Scroller (`alpha-prime-css-scroller`):
+### **Simple & Reliable:**
 - ✅ **Simple**: All items in DOM, CSS handles optimization
 - ✅ **Reliable**: Uses browser's built-in optimizations
 - ✅ **Fast**: `content-visibility: auto` only renders visible items
-- ✅ **Clean**: ~100 lines of straightforward code
-- ✅ **No bugs**: No complex sliding window logic
+- ✅ **Clean**: ~140 lines of straightforward code
+- ✅ **Maintainable**: Clear separation of concerns
 
 ## 🚀 How It Works
 
@@ -101,17 +93,16 @@ private checkScroll() {
 
 ## 🌐 Access
 
-- **Old Scroller**: http://localhost:4200/alpha-prime/scroller
-- **New CSS Scroller**: http://localhost:4200/alpha-prime/css-scroller
+**Demo**: http://localhost:4200/alpha-prime/scroller
 
-## 🎯 Recommendation
+## ✨ Features
 
-**Use the CSS Scroller** unless you have a specific reason to use the old one. It's:
-- Simpler to understand
-- Easier to maintain
+This scroller provides:
+- Simple to understand
+- Easy to maintain
 - More reliable
 - Leverages modern browser capabilities
-- Actually works! 😄
+- Production ready! 😄
 
 ## 🔮 Future Improvements
 
