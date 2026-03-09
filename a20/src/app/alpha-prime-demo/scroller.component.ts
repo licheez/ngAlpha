@@ -1,6 +1,8 @@
-import { Component, OnInit, signal, viewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { AlphaPrimeScroller } from '../../../projects/alpha-prime/src/lib/components/alpha-prime-scroller/alpha-prime-scroller';
+import {Component, OnInit, signal, viewChild} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {
+  AlphaPrimeScroller
+} from '../../../projects/alpha-prime/src/lib/components/alpha-prime-scroller/alpha-prime-scroller';
 
 interface DemoItem {
   id: string;
@@ -57,7 +59,7 @@ export class ScrollerComponent implements OnInit {
       scrollerInstance.loading.set(true);
     }
 
-    // Simulate network delay
+    // Simulate network delay (increased to show loading indicator)
     setTimeout(() => {
       const pageSize = 20;
       const newItems = this.allItems.slice(skip, skip + pageSize);
@@ -76,7 +78,7 @@ export class ScrollerComponent implements OnInit {
       if (scrollerInstance) {
         scrollerInstance.loading.set(false);
       }
-    }, 300);
+    }, 800);
   }
 
   /**

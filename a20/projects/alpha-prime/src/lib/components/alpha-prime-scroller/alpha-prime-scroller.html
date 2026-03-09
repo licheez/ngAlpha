@@ -7,10 +7,11 @@
     <ng-content></ng-content>
   </div>
 
-  @if (loading()) {
+  @if (loading() && showLoadingIndicator()) {
     <div class="scroller-loading">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <span class="loading-text">{{ effectiveLoadingMessage() }}</span>
       </div>
     </div>
   }

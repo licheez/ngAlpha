@@ -7,8 +7,10 @@ import {
   ElementRef,
   AfterViewInit,
   computed,
-  input
+  input,
+  inject
 } from '@angular/core';
+import { AlphaPrimeService } from '../../services/alpha-prime.service';
 
 export interface VirtualRow<T> {
   index: number;
@@ -22,10 +24,20 @@ export interface VirtualRow<T> {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AlphaPrimeScroller<T = any> implements AfterViewInit {
+  private readonly alphaPrimeService = inject(AlphaPrimeService);
+
   // Inputs
   loadMoreThreshold = input(200); // pixels from bottom to trigger load
   itemHeight = input(150); // estimated height per item
   bufferSize = input(10); // extra items to render above/below viewport
+  showLoadingIndicator = input(true); // show spinner when loading
+  loadingMessage = input<string | undefined>(undefined); // custom loading message
+
+  // Computed loading text
+  effectiveLoadingMessage = computed(() => {
+    const custom = this.loadingMessage();
+    return custom ?? this.alphaPrimeService.getTr('alpha.scroller.loading');
+  });
 
   // Outputs
   loadMore = output<number>(); // Emits current item count

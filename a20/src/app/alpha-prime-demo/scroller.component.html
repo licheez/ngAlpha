@@ -1,7 +1,7 @@
 <div class="scroller-demo-container">
   <div class="demo-header">
     <h1>AlphaPrimeScroller Demo</h1>
-    <p class="subtitle">Virtual scrolling with variable-height items and dynamic loading</p>
+     <p class="subtitle">Virtual scrolling with variable-height items and dynamic loading</p>
   </div>
 
   <div class="scroller-wrapper">
@@ -10,6 +10,7 @@
       class="scroll-panel"
       [itemHeight]="200"
       [bufferSize]="5"
+L    [showLoadingIndicator]="true"
       (loadMore)="onLoadMore($event)"
       (scrolled)="onScroll($event)">
 
