@@ -13,13 +13,18 @@ export class AlphaPrimeRemainingHeightDirective
   constructor(private elementRef: ElementRef<HTMLDivElement>) { }
 
   interval: any;
+  private lastHeight = 0;
 
   private setElementHeight() {
     const native = this.elementRef.nativeElement;
     const rect = native.getBoundingClientRect();
     const spaceFromTop = window.innerHeight - rect.top - this.bottomMarginInPx;
-    // console.log(`innerHeight: ${this._innerHeight} rectTop: ${rect.top}`);
-    native.style.height = `${spaceFromTop}px`;
+
+    // Only update if height changed significantly (more than 1px difference)
+    if (Math.abs(spaceFromTop - this.lastHeight) > 1) {
+      native.style.height = `${spaceFromTop}px`;
+      this.lastHeight = spaceFromTop;
+    }
   }
 
   ngOnInit(): void {
@@ -31,9 +36,10 @@ export class AlphaPrimeRemainingHeightDirective
       this.setElementHeight();
     }, 1);
 
+    // Check periodically (reduced frequency for better performance)
     this.interval = setInterval(() => {
       this.setElementHeight();
-    }, 500);
+    }, 1000);
   }
 
   ngOnDestroy(): void {

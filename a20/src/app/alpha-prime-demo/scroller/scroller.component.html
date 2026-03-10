@@ -22,33 +22,32 @@
     </div>
   </div>
 
-  <div class="scroller-wrapper"
-       alphaPrimeRemainingHeight [bottomMarginInPx]="16">
-    <alpha-prime-scroller
-      #scroller
-      class="scroll-panel"
-      [itemHeight]="200"
-      [bufferSize]="5"
-      [showLoadingIndicator]="true"
-      (loadMore)="onLoadMore($event)"
-      (scrolled)="onScroll($event)">
+  <alpha-prime-scroller
+    #scroller
+    class="scroller-wrapper"
+    alphaPrimeRemainingHeight
+    [bottomMarginInPx]="16"
+    [itemHeight]="200"
+    [bufferSize]="5"
+    [showLoadingIndicator]="true"
+    (loadMore)="onLoadMore($event)"
+    (scrolled)="onScroll($event)">
 
-      @for (row of scroller.visibleRows(); track row.index) {
-        <div class="item-row">
-          <div class="item-header">
-            <div class="item-id">{{ row.data.id }}</div>
-            <span [class]="'badge ' + getCategoryClass(row.data.category)">
-              {{ row.data.category }}
-            </span>
-            <div class="item-timestamp">{{ row.data.timestamp }}</div>
-          </div>
-          <div class="item-content">
-            <h3>{{ row.data.title }}</h3>
-            <p>{{ row.data.description }}</p>
-          </div>
+    @for (row of scroller.visibleRows(); track row.index) {
+      <div class="item-row">
+        <div class="item-header">
+          <div class="item-id">{{ row.data.id }}</div>
+          <span [class]="'badge ' + getCategoryClass(row.data.category)">
+            {{ row.data.category }}
+          </span>
+          <div class="item-timestamp">{{ row.data.timestamp }}</div>
         </div>
-      }
-    </alpha-prime-scroller>
-  </div>
+        <div class="item-content">
+          <h3>{{ row.data.title }}</h3>
+          <p>{{ row.data.description }}</p>
+        </div>
+      </div>
+    }
+  </alpha-prime-scroller>
 </div>
 

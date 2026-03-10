@@ -8,7 +8,8 @@ import {
   AfterViewInit,
   computed,
   input,
-  inject
+  inject,
+  OnDestroy
 } from '@angular/core';
 import { AlphaPrimeService } from '../../services/alpha-prime.service';
 
@@ -24,8 +25,9 @@ export interface VirtualRow<T> {
   styleUrl: './alpha-prime-scroller.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AlphaPrimeScrollerComponent<T = any> implements AfterViewInit {
+export class AlphaPrimeScrollerComponent<T = any> implements AfterViewInit, OnDestroy {
   private readonly alphaPrimeService = inject(AlphaPrimeService);
+  private resizeObserver?: ResizeObserver;
 
   // Inputs
   loadMoreThreshold = input(200); // pixels from bottom to trigger load
@@ -98,10 +100,27 @@ export class AlphaPrimeScrollerComponent<T = any> implements AfterViewInit {
     const container = this.scrollContainer()?.nativeElement;
     if (container) {
       this.containerHeight.set(container.clientHeight);
+
+      // Observe size changes (e.g., from RemainingHeight directive)
+      this.resizeObserver = new ResizeObserver(entries => {
+        for (const entry of entries) {
+          const newHeight = entry.contentRect.height;
+          if (newHeight > 0) {
+            this.containerHeight.set(newHeight);
+          }
+        }
+      });
+      this.resizeObserver.observe(container);
     }
 
     // Initial check after a small delay
     setTimeout(() => this.checkScroll(), 100);
+  }
+
+  ngOnDestroy() {
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
   }
 
   // Public method to add items

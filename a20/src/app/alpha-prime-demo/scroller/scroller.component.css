@@ -117,8 +117,9 @@
   transform: translateY(-2px);
 }
 
-/* Scroller Wrapper */
+/* Scroller Wrapper - Applied directly to alpha-prime-scroller */
 .scroller-wrapper {
+  display: block;
   overflow: hidden;
   background: white;
   margin: 16px 24px;
