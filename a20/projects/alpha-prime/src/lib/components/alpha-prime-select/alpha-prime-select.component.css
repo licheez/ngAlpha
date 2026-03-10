@@ -6,3 +6,14 @@
   width: 100%;
 }
 
+/* Remove right border-radius from buttons that are not last in the group */
+.alpha-prime-select__group ::ng-deep p-button:not(:last-child) button {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+/* Ensure first button after select has no left border-radius */
+.alpha-prime-select__group ::ng-deep p-button:first-of-type button {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}

@@ -35,6 +35,7 @@ import {FakeOasService} from './fake-oas-service';
         <li><a [routerLink]="['/alpha-prime', 'progress-bar']">ProgressBar</a></li>
         <li><a [routerLink]="['/alpha-prime', 'save-button']">SaveButton</a></li>
         <li><a [routerLink]="['/alpha-prime', 'scroller']">Scroller</a></li>
+        <li><a [routerLink]="['/alpha-prime', 'select']">Select</a></li>
       </ul>
     </section>
   `,

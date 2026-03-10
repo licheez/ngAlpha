@@ -134,6 +134,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./alpha-prime-demo/scroller/scroller.component')
             .then(m => m.ScrollerComponent)
+      },
+      {
+        path: 'select',
+        loadComponent: () =>
+          import('./alpha-prime-demo/select.component')
+            .then(m => m.SelectComponent)
       }
     ]
   },

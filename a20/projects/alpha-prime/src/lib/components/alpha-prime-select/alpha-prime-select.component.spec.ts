@@ -133,12 +133,19 @@ describe('AlphaPrimeSelectComponent', () => {
     component.optionId.set('1');
     fixture.detectChanges();
 
-    const clearButton = fixture.debugElement.query(By.css('.alpha-prime-select__clear'));
+    const clearButtons = fixture.debugElement.queryAll(By.css('p-button'));
+    const clearButton = clearButtons.find(btn =>
+      btn.componentInstance.icon === 'fa fa-times'
+    );
     expect(clearButton).toBeTruthy();
 
     component.optionId.set(undefined);
     fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('.alpha-prime-select__clear'))).toBeNull();
+    const buttonsAfterClear = fixture.debugElement.queryAll(By.css('p-button'));
+    const clearButtonAfter = buttonsAfterClear.find(btn =>
+      btn.componentInstance.icon === 'fa fa-times'
+    );
+    expect(clearButtonAfter).toBeUndefined();
   });
 
   it('should prefer placeholder over placeHolder alias when both are set', () => {
@@ -155,5 +162,19 @@ describe('AlphaPrimeSelectComponent', () => {
     fixture.detectChanges();
 
     expect(component.effectivePlaceholder()).toBe('Legacy');
+  });
+
+  it('should not show clear button when component is disabled', () => {
+    fixture.componentRef.setInput('options', options);
+    fixture.componentRef.setInput('showClear', true);
+    fixture.componentRef.setInput('disabled', true);
+    component.optionId.set('1');
+    fixture.detectChanges();
+
+    const buttons = fixture.debugElement.queryAll(By.css('p-button'));
+    const clearButton = buttons.find(btn =>
+      btn.componentInstance.icon === 'fa fa-times'
+    );
+    expect(clearButton).toBeUndefined();
   });
 });

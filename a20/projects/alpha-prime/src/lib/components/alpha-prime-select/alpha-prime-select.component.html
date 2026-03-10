@@ -1,5 +1,5 @@
 @if (!readonly()) {
-  <div class="p-inputgroup alpha-prime-select__group">
+  <p-inputgroup [styleClass]="'alpha-prime-select__group'">
     <p-select
       class="alpha-prime-select__dropdown"
       [options]="effectiveOptions()"
@@ -12,40 +12,30 @@
       optionLabel="caption"
       optionValue="id"
       optionDisabled="disabled"
-      [style.border-top-right-radius]="showActionButtons() ? '0' : null"
-      [style.border-bottom-right-radius]="showActionButtons() ? '0' : null"
       [ngModel]="optionId()"
       (ngModelChange)="onOptionChange($event)"
       [inputId]="name()"
     ></p-select>
 
-    @if (optionId() && showClear()) {
-      <button
-        type="button"
-        pButton
-        pRipple
+    @if (optionId() && showClear() && !disabled()) {
+      <p-button
+        severity="secondary"
+        icon="fa fa-times"
         tabindex="-1"
-        class="p-button-secondary alpha-prime-select__clear"
         (click)="onClear()"
-      >
-        <i class="fa fa-times"></i>
-      </button>
+      ></p-button>
     }
 
     @if (showAdd()) {
-      <button
-        type="button"
-        pButton
-        pRipple
+      <p-button
+        severity="info"
+        icon="fa fa-plus"
         tabindex="-1"
-        class="p-button-info alpha-prime-select__add"
         [disabled]="disabled()"
         (click)="onAdd()"
-      >
-        <i class="fa fa-plus"></i>
-      </button>
+      ></p-button>
     }
-  </div>
+  </p-inputgroup>
 } @else {
   <input
     type="text"

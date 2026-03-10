@@ -13,6 +13,7 @@ import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
 import { RippleModule } from 'primeng/ripple';
+import { InputGroup } from 'primeng/inputgroup';
 
 import { AlphaPrimeService } from '../../services/alpha-prime.service';
 import { AlphaPrimeSelectInfo, IAlphaPrimeSelectOption } from './alpha-prime-select-info';
@@ -25,7 +26,8 @@ import { AlphaPrimeSelectInfo, IAlphaPrimeSelectOption } from './alpha-prime-sel
     FormsModule,
     ButtonModule,
     RippleModule,
-    InputTextModule
+    InputTextModule,
+    InputGroup
   ],
   templateUrl: './alpha-prime-select.component.html',
   styleUrl: './alpha-prime-select.component.css',
