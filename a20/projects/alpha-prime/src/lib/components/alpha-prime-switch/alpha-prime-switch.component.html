@@ -1,0 +1,21 @@
+<p-toggleswitch
+  [style]="{ 'display': 'inline-block', 'vertical-align': 'middle' }"
+  [ngModel]="effectiveSwitchOption().selected"
+  [ngModelOptions]="{ standalone: true }"
+  (onChange)="onChange($event)"
+  [inputId]="name()"
+  [disabled]="disabled()"
+></p-toggleswitch>
+
+@if (!disabled()) {
+  <span class="p-pl-2"
+        style="display: inline-block; vertical-align: middle; cursor: pointer;"
+        (click)="onCaptionClicked()">
+    {{ effectiveSwitchOption().caption }}
+  </span>
+} @else {
+  <span class="p-pl-2"
+        style="display: inline-block; vertical-align: middle;">
+    {{ effectiveSwitchOption().caption }}
+  </span>
+}
