@@ -37,6 +37,7 @@ import {FakeOasService} from './fake-oas-service';
         <li><a [routerLink]="['/alpha-prime', 'scroller']">Scroller</a></li>
         <li><a [routerLink]="['/alpha-prime', 'select']">Select</a></li>
         <li><a [routerLink]="['/alpha-prime', 'submit-button']">SubmitButton</a></li>
+        <li><a [routerLink]="['/alpha-prime', 'switch']">Switch</a></li>
       </ul>
     </section>
   `,

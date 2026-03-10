@@ -146,6 +146,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./alpha-prime-demo/select.component')
             .then(m => m.SelectComponent)
+      },
+      {
+        path: 'switch',
+        loadComponent: () =>
+          import('./alpha-prime-demo/switch.component')
+            .then(m => m.SwitchComponent)
       }
     ]
   },
