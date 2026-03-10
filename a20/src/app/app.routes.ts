@@ -130,6 +130,12 @@ export const routes: Routes = [
             .then(m => m.SaveButtonComponent)
       },
       {
+        path: 'submit-button',
+        loadComponent: () =>
+          import('./alpha-prime-demo/submit-button.component')
+            .then(m => m.SubmitButtonComponent)
+      },
+      {
         path: 'scroller',
         loadComponent: () =>
           import('./alpha-prime-demo/scroller/scroller.component')
