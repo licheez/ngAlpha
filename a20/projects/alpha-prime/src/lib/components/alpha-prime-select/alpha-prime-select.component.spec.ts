@@ -80,6 +80,20 @@ describe('AlphaPrimeSelectComponent', () => {
     expect(localStorage.getItem('lsKey')).toBe('2');
   });
 
+  it('should remove localStorage key on clear when asi has lsItemKey', () => {
+    const asi = AlphaPrimeSelectInfo.LsOrNone(options, 'lsKey');
+
+    fixture.componentRef.setInput('asi', asi);
+    fixture.detectChanges();
+
+    component.onOptionChange('2');
+    expect(localStorage.getItem('lsKey')).toBe('2');
+
+    component.onClear();
+
+    expect(localStorage.getItem('lsKey')).toBeNull();
+  });
+
   it('should clear value and emit undefined option on onClear', () => {
     fixture.componentRef.setInput('options', options);
     fixture.detectChanges();
@@ -125,5 +139,21 @@ describe('AlphaPrimeSelectComponent', () => {
     component.optionId.set(undefined);
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('.alpha-prime-select__clear'))).toBeNull();
+  });
+
+  it('should prefer placeholder over placeHolder alias when both are set', () => {
+    fixture.componentRef.setInput('placeholder', 'Modern');
+    fixture.componentRef.setInput('placeHolder', 'Legacy');
+    fixture.detectChanges();
+
+    expect(component.effectivePlaceholder()).toBe('Modern');
+  });
+
+  it('should fallback to placeHolder alias when placeholder is empty', () => {
+    fixture.componentRef.setInput('placeholder', '');
+    fixture.componentRef.setInput('placeHolder', 'Legacy');
+    fixture.detectChanges();
+
+    expect(component.effectivePlaceholder()).toBe('Legacy');
   });
 });

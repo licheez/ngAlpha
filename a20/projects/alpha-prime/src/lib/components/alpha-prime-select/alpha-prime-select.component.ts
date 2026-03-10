@@ -37,6 +37,8 @@ export class AlphaPrimeSelectComponent {
   name = input(this.mPs.generateRandomName());
   asi = input<AlphaPrimeSelectInfo | undefined>(undefined);
   options = input<IAlphaPrimeSelectOption[]>([]);
+  placeholder = input('');
+  // Backward-compatible alias kept for existing consumers.
   placeHolder = input('');
   disabled = input(false);
   readonly = input(false);
@@ -50,6 +52,7 @@ export class AlphaPrimeSelectComponent {
   addClicked = output<void>();
 
   effectiveOptions = computed(() => this.asi()?.options ?? this.options());
+  effectivePlaceholder = computed(() => this.placeholder() || this.placeHolder());
   showActionButtons = computed(() => this.showAdd() || (!!this.optionId() && this.showClear()));
 
   constructor() {
@@ -63,9 +66,16 @@ export class AlphaPrimeSelectComponent {
 
   private setOptionId(id: string | undefined): void {
     this.optionId.set(id);
+
     const key = this.asi()?.lsItemKey;
-    if (key && id) {
+    if (!key) {
+      return;
+    }
+
+    if (id) {
       localStorage.setItem(key, id);
+    } else {
+      localStorage.removeItem(key);
     }
   }
 
@@ -77,7 +87,7 @@ export class AlphaPrimeSelectComponent {
   }
 
   onClear(): void {
-    this.optionId.set(undefined);
+    this.setOptionId(undefined);
     this.optionChange.emit(undefined);
   }
 
