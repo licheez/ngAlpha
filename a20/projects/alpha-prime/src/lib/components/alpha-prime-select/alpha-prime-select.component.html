@@ -1,0 +1,56 @@
+@if (!readonly()) {
+  <div class="p-inputgroup alpha-prime-select__group">
+    <p-select
+      class="alpha-prime-select__dropdown"
+      [options]="effectiveOptions()"
+      [disabled]="disabled()"
+      [readonly]="readonly()"
+      [placeholder]="placeHolder()"
+      appendTo="body"
+      [virtualScroll]="true"
+      [virtualScrollItemSize]="30"
+      optionLabel="caption"
+      optionValue="id"
+      optionDisabled="disabled"
+      [style.border-top-right-radius]="showActionButtons() ? '0' : null"
+      [style.border-bottom-right-radius]="showActionButtons() ? '0' : null"
+      [ngModel]="optionId()"
+      (ngModelChange)="onOptionChange($event)"
+      [inputId]="name()"
+    ></p-select>
+
+    @if (optionId() && showClear()) {
+      <button
+        type="button"
+        pButton
+        pRipple
+        tabindex="-1"
+        class="p-button-secondary alpha-prime-select__clear"
+        (click)="onClear()"
+      >
+        <i class="fa fa-times"></i>
+      </button>
+    }
+
+    @if (showAdd()) {
+      <button
+        type="button"
+        pButton
+        pRipple
+        tabindex="-1"
+        class="p-button-info alpha-prime-select__add"
+        [disabled]="disabled()"
+        (click)="onAdd()"
+      >
+        <i class="fa fa-plus"></i>
+      </button>
+    }
+  </div>
+} @else {
+  <input
+    type="text"
+    pInputText
+    [readOnly]="true"
+    [value]="readonlyCaption() ?? ''"
+  >
+}
