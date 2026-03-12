@@ -1,0 +1,12 @@
+/* Keep trailing action buttons visually attached to the input by squaring left corners. */
+.alpha-prime-filter-box__group ::ng-deep p-button.alpha-prime-filter-box__clear-button button,
+.alpha-prime-filter-box__group ::ng-deep p-button.alpha-prime-filter-box__add-button button {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+/* Remove right rounding for middle action buttons (e.g. clear when add is also visible). */
+.alpha-prime-filter-box__group ::ng-deep p-button:not(:last-child) button {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}

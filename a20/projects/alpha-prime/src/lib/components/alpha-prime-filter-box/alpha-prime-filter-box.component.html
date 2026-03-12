@@ -1,6 +1,6 @@
 <alpha-prime-debug-tag tag="alphaFilterBox"></alpha-prime-debug-tag>
 
-<p-inputgroup>
+<p-inputgroup class="alpha-prime-filter-box__group">
 
   <input type="text"
          pInputText
@@ -12,6 +12,7 @@
 
   @if (term()) {
     <p-button
+      class="alpha-prime-filter-box__clear-button"
       pRipple
       icon="fa fa-times"
       severity="secondary"
@@ -22,6 +23,7 @@
 
   @if(showAdd()){
     <p-button
+      class="alpha-prime-filter-box__add-button"
       pRipple
       icon="fa fa-plus"
       severity="info"
