@@ -1,63 +1,91 @@
-# AlphaPrime
+# @pvway/alpha-prime
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.0.
+Reusable Angular UI building blocks built on PrimeNG.
 
-## Code scaffolding
+`@pvway/alpha-prime` is a component library for form controls, action buttons, modals, and utility widgets used in the ngAlpha ecosystem.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Table of Contents
 
-```bash
-ng generate component component-name
-```
+- [Why this library](#why-this-library)
+- [Compatibility](#compatibility)
+- [Installation](#installation)
+- [Quick usage notes](#quick-usage-notes)
+- [Component catalog](#component-catalog)
+- [Extended docs](#extended-docs)
+- [Development](#development)
+- [Publishing](#publishing)
+- [License](#license)
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Why this library
 
-```bash
-ng generate --help
-```
+- Standalone Angular components for common product UI patterns.
+- PrimeNG-based controls with an opinionated visual and UX baseline.
+- Includes components, directives, pipes, and support services.
 
-## Building
+## Compatibility
 
-To build the library, run:
+- Angular: `^20.3.6`
+- PrimeNG: `^20.2.0`
+- PrimeFlex: `^4.0.0`
+- Font Awesome: `^7.1.0`
 
-```bash
-ng build AlphaPrime
-```
+See `package.json` for the authoritative dependency list.
 
-This command will compile your project, and the build artifacts will be placed in the `dist/` directory.
-
-### Publishing the Library
-
-Once the project is built, you can publish your library by following these steps:
-
-1. Navigate to the `dist` directory:
-   ```bash
-   cd dist/alpha-prime
-   ```
-
-2. Run the `npm publish` command to publish your library to the npm registry:
-   ```bash
-   npm publish
-   ```
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Installation
 
 ```bash
-ng test
+npm install @pvway/alpha-prime primeng primeflex @fortawesome/fontawesome-free uuid
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+Peer dependencies (install in your app):
 
 ```bash
-ng e2e
+npm install @angular/core @angular/common
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Quick usage notes
 
-## Additional Resources
+- Components are authored as Angular standalone components.
+- Add required global styles in your Angular app (for example PrimeFlex and Font Awesome CSS).
+- This package currently has an evolving root export surface; check the docs below for the current component inventory and integration guidance.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Component catalog
+
+Current library inventory includes:
+
+- 23 UI components (buttons, inputs, pickers, select, scroller, modals, and helpers)
+- 1 directive: `alphaPrimeRemainingHeight`
+- 1 pipe: `alphaPrimeBoldify`
+- 2 services: `AlphaPrimeService`, `AlphaPrimeModalService`
+
+Full selector and feature list: [`docs/COMPONENTS.md`](https://github.com/licheez/ngAlpha/tree/main/a20/projects/alpha-prime/docs/COMPONENTS.md)
+
+## Extended docs
+
+If you want a split documentation set (npm README + detailed guides), start here:
+
+- Component inventory: [`docs/COMPONENTS.md`](https://github.com/licheez/ngAlpha/tree/main/a20/projects/alpha-prime/docs/COMPONENTS.md)
+- App integration notes: [`docs/INTEGRATION.md`](https://github.com/licheez/ngAlpha/tree/main/a20/projects/alpha-prime/docs/INTEGRATION.md)
+- Maintainer workflows: [`docs/DEVELOPMENT.md`](https://github.com/licheez/ngAlpha/tree/main/a20/projects/alpha-prime/docs/DEVELOPMENT.md)
+
+## Development
+
+From the repository root:
+
+```bash
+npm install
+npx ng test AlphaPrime
+npx ng build AlphaPrime
+```
+
+## Publishing
+
+```bash
+npx ng build AlphaPrime
+cd dist/alpha-prime
+npm publish
+```
+
+## License
+
+MIT
