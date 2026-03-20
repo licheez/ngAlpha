@@ -1,4 +1,4 @@
-# AlphaCommon &nbsp;![npm](https://img.shields.io/npm/v/alpha-common?color=blue) ![Angular](https://img.shields.io/badge/angular-20%2B-red) ![CI](https://img.shields.io/github/actions/workflow/status/your-org/alpha-common/ci.yml?branch=main) ![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
+# AlphaCommon &nbsp;![npm](https://img.shields.io/npm/v/%40pvway%2Falpha-common?color=blue) ![Angular](https://img.shields.io/badge/angular-20.3.18%2B-red) ![CI](https://img.shields.io/github/actions/workflow/status/your-org/alpha-common/ci.yml?branch=main) ![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
 
 > **Reusable Angular utilities, API wrappers, and entity management helpers for scalable web apps.**
 
@@ -10,15 +10,20 @@
 - 🔗 **Standardized HTTP API Results**: Typed wrappers for server responses
 - 🏷️ **Entity Management Service (EMS)**: Abstract CRUD APIs and UI base classes
 - 🛡️ **100% Unit Test Coverage**: Reliable, maintainable code
-- 🚀 **Angular 20+ Ready**: Standalone components, signals, and best practices
+- 🚀 **Angular 20.3.18+ Ready**: Standalone components, signals, and best practices
 
 ---
 
 ## 📦 Installation
 
 ```bash
-npm install alpha-common
+npm install @pvway/alpha-common
 ```
+
+## ✅ Compatibility
+
+- Angular `20.3.18` or above
+- Supported Angular peer range: `>=20.3.18 <21.0.0`
 
 ---
 
@@ -27,8 +32,8 @@ npm install alpha-common
 Import the utilities, services, or base classes you need:
 
 ```typescript
-import { AlphaUtils, AlphaWindow, AlphaYmd } from 'alpha-common';
-import { AlphaEmsBaseApi, AlphaEmsBaseComponent } from 'alpha-common/ems';
+import { AlphaUtils, AlphaWindow, AlphaYmd } from '@pvway/alpha-common';
+import { AlphaEmsBaseApi, AlphaEmsBaseComponent } from '@pvway/alpha-common/ems';
 ```
 
 ---
@@ -261,7 +266,7 @@ MIT
 ## 🏁 Quick Start
 
 ```typescript
-import { AlphaUtils } from 'alpha-common';
+import { AlphaUtils } from '@pvway/alpha-common';
 
 const isEmpty = AlphaUtils.eon('');
 const rounded = AlphaUtils.round(3.14159, 2);
@@ -275,7 +280,7 @@ const rounded = AlphaUtils.round(3.14159, 2);
 - 🧑‍💻 **Developer-friendly utilities**
 - 🏗️ **Scalable entity management**
 - 🧪 **Battle-tested with 100% coverage**
-- 🛠️ **Ready for Angular 20+**
+- 🛠️ **Ready for Angular 20.3.18+**
 
 ---
 

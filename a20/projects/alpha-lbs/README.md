@@ -1,4 +1,4 @@
-# AlphaLbs &nbsp;![npm](https://img.shields.io/npm/v/@pvway/alpha-lbs?color=blue) ![Angular](https://img.shields.io/badge/angular-20%2B-red) ![MIT](https://img.shields.io/badge/license-MIT-green)
+# AlphaLbs &nbsp;![npm](https://img.shields.io/npm/v/@pvway/alpha-lbs?color=blue) ![Angular](https://img.shields.io/badge/angular-20.3.18%2B-red) ![MIT](https://img.shields.io/badge/license-MIT-green)
 
 > **Lightweight local bus service for Angular apps. In-memory publish/subscribe for fast, flexible message passing.**
 
@@ -10,7 +10,7 @@
 - 🏷️ Channel-based messaging with wildcard support
 - ⚡ Fast, in-memory delivery (no server required)
 - 🛡️ 100% unit test coverage
-- 🚀 Angular 20+ compatible
+- 🚀 Angular 20.3.18+ compatible
 
 ---
 
@@ -19,6 +19,11 @@
 ```bash
 npm install @pvway/alpha-lbs
 ```
+
+## ✅ Compatibility
+
+- Angular `20.3.18` or above
+- Supported Angular peer range: `>=20.3.18 <21.0.0`
 
 ---
 

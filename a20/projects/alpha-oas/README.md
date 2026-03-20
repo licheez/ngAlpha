@@ -1,16 +1,16 @@
 <!-- AlphaOas - OAuth Authentication Library for Angular -->
 
-<h1 align="center">AlphaOas <img src="https://img.shields.io/npm/v/alpha-oas.svg" alt="npm version" height="20"> <img src="https://img.shields.io/bundlephobia/min/alpha-oas.svg" alt="bundle size" height="20"> <img src="https://img.shields.io/github/license/your-org/alpha-oas.svg" alt="license" height="20"> <img src="https://img.shields.io/github/workflow/status/your-org/alpha-oas/CI" alt="build status" height="20"></h1>
+<h1 align="center">AlphaOas <img src="https://img.shields.io/npm/v/%40pvway%2Falpha-oas.svg" alt="npm version" height="20"> <img src="https://img.shields.io/bundlephobia/min/%40pvway%2Falpha-oas.svg" alt="bundle size" height="20"> <img src="https://img.shields.io/github/license/your-org/alpha-oas.svg" alt="license" height="20"> <img src="https://img.shields.io/github/workflow/status/your-org/alpha-oas/CI" alt="build status" height="20"></h1>
 
 <p align="center">
-  <img src="https://img.shields.io/npm/dm/alpha-oas.svg" alt="npm downloads" height="20">
+  <img src="https://img.shields.io/npm/dm/%40pvway%2Falpha-oas.svg" alt="npm downloads" height="20">
   <img src="https://img.shields.io/codecov/c/github/your-org/alpha-oas.svg" alt="coverage" height="20">
-  <img src="https://img.shields.io/badge/angular-20+-dd0031.svg" alt="Angular" height="20">
+  <img src="https://img.shields.io/badge/angular-20.3.18%2B-dd0031.svg" alt="Angular" height="20">
 </p>
 
 ---
 
-> <strong>AlphaOas</strong> is a robust, scalable OAuth authentication and authorization library for Angular 20+ applications. It provides a complete solution for managing user sessions, tokens, and secure HTTP communication, following Angular and TypeScript best practices.
+> <strong>AlphaOas</strong> is a robust, scalable OAuth authentication and authorization library for Angular 20.3.18+ applications. It provides a complete solution for managing user sessions, tokens, and secure HTTP communication, following Angular and TypeScript best practices.
 
 ---
 
@@ -28,17 +28,17 @@
 ## 🚀 Installation
 
 ```bash
-npm install alpha-oas uuid
+npm install @pvway/alpha-oas uuid
 ```
 
-> <img src="https://img.shields.io/npm/v/alpha-oas.svg" alt="npm version" height="16"> Requires Angular 20+ and RxJS 7+.
+> <img src="https://img.shields.io/npm/v/%40pvway%2Falpha-oas.svg" alt="npm version" height="16"> Requires Angular `20.3.18` or above, with Angular peer range `>=20.3.18 <21.0.0`, and RxJS 7+.
 
 ## 📦 Usage
 
 ### 1. Import and Provide the Service
 
 ```typescript
-import { AlphaOasService } from 'alpha-oas';
+import { AlphaOasService } from '@pvway/alpha-oas';
 
 // ProvidedIn: 'root' - no need to add to providers
 ```
@@ -69,7 +69,7 @@ service.authorize(httpRequest).subscribe(...);
 
 ```typescript
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AlphaOasInterceptor } from 'alpha-oas';
+import { AlphaOasInterceptor } from '@pvway/alpha-oas';
 
 @NgModule({
   providers: [

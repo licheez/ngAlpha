@@ -24,7 +24,7 @@ Reusable Angular UI building blocks built on PrimeNG.
 
 ## Compatibility
 
-- Angular: `^20.3.6`
+- Angular: `>=20.3.18 <21.0.0` (`20.3.18` or above)
 - PrimeNG: `^20.2.0`
 - PrimeFlex: `^4.0.0`
 - Font Awesome: `^7.1.0`
