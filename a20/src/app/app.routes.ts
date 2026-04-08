@@ -4,7 +4,9 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'alpha-prime'
+    loadComponent: () =>
+      import('./home.component')
+        .then(m => m.HomeComponent)
   },
   {
     path: 'alpha-prime',
@@ -156,7 +158,24 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'explore',
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./explore/index.component')
+            .then(m => m.ExploreIndexComponent)
+      },
+      {
+        path: 'overlay-demo',
+        loadComponent: () =>
+          import('./explore/overlay-demo.component')
+            .then(m => m.OverlayDemoComponent)
+      }
+    ]
+  },
+  {
     path: '**',
-    redirectTo: 'alpha-prime'
+    redirectTo: ''
   }
 ];
