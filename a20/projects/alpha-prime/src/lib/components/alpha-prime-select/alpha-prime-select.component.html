@@ -1,0 +1,46 @@
+@if (!readonly()) {
+  <p-inputgroup [styleClass]="'alpha-prime-select__group'">
+    <p-select
+      class="alpha-prime-select__dropdown"
+      [options]="effectiveOptions()"
+      [disabled]="disabled()"
+      [readonly]="readonly()"
+      [placeholder]="effectivePlaceholder()"
+      appendTo="body"
+      [virtualScroll]="true"
+      [virtualScrollItemSize]="30"
+      optionLabel="caption"
+      optionValue="id"
+      optionDisabled="disabled"
+      [ngModel]="optionId()"
+      (ngModelChange)="onOptionChange($event)"
+      [inputId]="name()"
+    ></p-select>
+
+    @if (optionId() && showClear() && !disabled()) {
+      <p-button
+        severity="secondary"
+        icon="fa fa-times"
+        tabindex="-1"
+        (click)="onClear()"
+      ></p-button>
+    }
+
+    @if (showAdd()) {
+      <p-button
+        severity="info"
+        icon="fa fa-plus"
+        tabindex="-1"
+        [disabled]="disabled()"
+        (click)="onAdd()"
+      ></p-button>
+    }
+  </p-inputgroup>
+} @else {
+  <input
+    type="text"
+    pInputText
+    [readOnly]="true"
+    [value]="readonlyCaption() ?? ''"
+  >
+}

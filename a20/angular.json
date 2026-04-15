@@ -30,6 +30,8 @@
               }
             ],
             "styles": [
+              "node_modules/primeflex/primeflex.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.css",
               "src/styles.scss"
             ]
           },
@@ -38,13 +40,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "5MB",
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "6kB",
+                  "maximumError": "10kB"
                 }
               ],
               "outputHashing": "all"
@@ -88,7 +90,13 @@
               }
             ],
             "styles": [
+              "node_modules/primeflex/primeflex.min.css",
+              "node_modules/primeicons/primeicons.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "src/styles.scss"
+            ],
+            "scripts": [
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.js"
             ]
           }
         }
@@ -266,6 +274,36 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/alpha-ts/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    },
+    "AlphaPrime": {
+      "projectType": "library",
+      "root": "projects/alpha-prime",
+      "sourceRoot": "projects/alpha-prime/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/alpha-prime/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/alpha-prime/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/alpha-prime/tsconfig.spec.json",
             "polyfills": [
               "zone.js",
               "zone.js/testing"

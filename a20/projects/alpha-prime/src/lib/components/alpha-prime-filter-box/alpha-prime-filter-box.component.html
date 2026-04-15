@@ -1,0 +1,35 @@
+<alpha-prime-debug-tag tag="alphaFilterBox"></alpha-prime-debug-tag>
+
+<p-inputgroup class="alpha-prime-filter-box__group">
+
+  <input type="text"
+         pInputText
+         [attr.name]="name"
+         [disabled]="disabled()"
+         [placeholder]="placeholder()"
+         [ngModel]="term()"
+         (ngModelChange)="onTermChanged($event)">
+
+  @if (term()) {
+    <p-button
+      class="alpha-prime-filter-box__clear-button"
+      pRipple
+      icon="fa fa-times"
+      severity="secondary"
+      [disabled]="disabled()"
+      (onClick)="onClear()"
+    ></p-button>
+  }
+
+  @if(showAdd()){
+    <p-button
+      class="alpha-prime-filter-box__add-button"
+      pRipple
+      icon="fa fa-plus"
+      severity="info"
+      [disabled]="disabled()"
+      (onClick)="onAddClicked()"
+    ></p-button>
+  }
+
+</p-inputgroup>

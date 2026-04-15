@@ -1,0 +1,31 @@
+<span (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+  @if (showLabel()) {
+    <button pButton
+            class="p-button-success"
+            [class.p-button-sm]="sm()"
+            type="button"
+            [disabled]="disabled()"
+            (click)="onClicked()">
+      <span>{{ caption() }}</span>
+      @if (!busy()) {
+        <i class="fa fa-cloud-arrow-up"></i>
+      } @else {
+        <i class="fa fa-spinner fa-spin"></i>
+      }
+    </button>
+  } @else {
+    <button pButton
+            class="p-button-success p-button-icon-only"
+            [class.p-button-sm]="sm()"
+            type="button"
+            [disabled]="disabled()"
+            [pTooltip]="caption()"
+            (click)="onClicked()">
+      @if (!busy()) {
+        <i class="fa fa-cloud-arrow-up"></i>
+      } @else {
+        <i class="fa fa-spinner fa-spin"></i>
+      }
+    </button>
+  }
+</span>

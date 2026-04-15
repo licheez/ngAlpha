@@ -1,4 +1,4 @@
-# AlphaLs &nbsp;![npm](https://img.shields.io/npm/v/alpha-ls?color=blue) ![Angular](https://img.shields.io/badge/angular-20%2B-red) ![MIT](https://img.shields.io/badge/license-MIT-green)
+# AlphaLs &nbsp;![npm](https://img.shields.io/npm/v/%40pvway%2Falpha-ls?color=blue) ![Angular](https://img.shields.io/badge/angular-20.3.18%2B-red) ![MIT](https://img.shields.io/badge/license-MIT-green)
 
 > **Logging and navigation tracking service for Angular apps. Easily post error and navigation logs to remote endpoints, or inject custom logging delegates.**
 
@@ -10,22 +10,27 @@
 - 🛠️ Inject custom delegates for logging
 - ⚡ Lightweight, fast, and extensible
 - 🛡️ 100% unit test coverage
-- 🚀 Angular 20+ compatible
+- 🚀 Angular 20.3.18+ compatible
 
 ---
 
 ## 📦 Installation
 
 ```bash
-npm install alpha-ls
+npm install @pvway/alpha-ls
 ```
+
+## ✅ Compatibility
+
+- Angular `20.3.18` or above
+- Supported Angular peer range: `>=20.3.18 <21.0.0`
 
 ---
 
 ## 🛠️ Usage
 
 ```typescript
-import { AlphaLsService } from 'alpha-ls';
+import { AlphaLsService } from '@pvway/alpha-ls';
 
 // Inject AlphaLsService in your component or service
 constructor(private ls: AlphaLsService) {}
@@ -106,7 +111,7 @@ MIT
 ## 🏁 Quick Start
 
 ```typescript
-import { AlphaLsService } from 'alpha-ls';
+import { AlphaLsService } from '@pvway/alpha-ls';
 
 // Initialize
 ls.init(httpClient, 'https://your-error-log-url', 'https://your-navigation-log-url');

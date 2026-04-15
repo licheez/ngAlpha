@@ -1,0 +1,52 @@
+<alpha-prime-debug-tag tag="alphaLoginForm"></alpha-prime-debug-tag>
+@if (fm) {
+  <!-- USERNAME-->
+  <div class="p-field">
+    <label for="username">
+      <alpha-prime-label
+        [caption]="usernameLit()">{{ fm.username() }}
+      </alpha-prime-label>
+    </label>
+    <input id="username"
+           class="w-full"
+           pInputText
+           type="text"
+           maxlength="256"
+           [disabled]="busy()"
+           [(ngModel)]="fm.username">
+  </div>
+
+  <!-- PASSWORD -->
+  <div class="p-field">
+    <label for="password">
+      <alpha-prime-label [caption]="passwordLit()">{{ fm.password() }}</alpha-prime-label>
+    </label>
+    <alpha-prime-password-input
+      [name]="'password'"
+      [disabled]="busy()"
+      [(password)]="fm.password"></alpha-prime-password-input>
+  </div>
+
+  <!-- ERROR -->
+  @if (errorMessage()) {
+    <div class="p-error" style="color:red;">{{ errorMessage() }}</div>
+  }
+
+  <!-- PROGRESS -->
+  <alpha-prime-progress-bar [busy]="busy()"></alpha-prime-progress-bar>
+
+  <!-- BUTTONS -->
+  <div class="text-right mt-4">
+    @if (showCancelButton()) {
+      <alpha-prime-cancel-button class="mr-4"
+                                 (clicked)="onCancel()"
+                                 [disabled]="busy()"></alpha-prime-cancel-button>
+    }
+    <p-button severity="success"
+              pRipple
+              [label]="connectLabelLit()"
+              (click)="onSubmit()"
+              [disabled]="busy() || fm.invalid()"></p-button>
+  </div>
+
+}

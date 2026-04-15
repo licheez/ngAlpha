@@ -1,0 +1,69 @@
+@if (!readonly()) {
+
+  <form autocomplete="off">
+
+    <p-input-group>
+
+      <p-autoComplete
+        [style]="{'width':'100%'}"
+        [inputStyle]="inputStyle"
+        class="p-autocomplete"
+        [(ngModel)]="model"
+        (onClear)="onClear()"
+        (completeMethod)="onFeed($event)"
+        (onSelect)="onSelected($event)"
+        [disabled]="disabled()"
+        [emptyMessage]="emptyMessage()"
+        [placeholder]="placeHolder()"
+        appendTo="body"
+        [suggestions]="suggestions()"
+        [ngModelOptions]="{standalone: true}"
+        [completeOnFocus]="false"
+        optionLabel="caption"
+        [autocomplete]="''"
+        [autoHighlight]="true"
+        [forceSelection]="false">
+        <ng-template let-entry pTemplate="item">
+          <span [innerHTML]="entry.caption | alphaPrimeBoldify:term"></span>
+        </ng-template>
+      </p-autoComplete>
+
+      @if (term) {
+        <p-inputgroup-addon>
+          <p-button
+            severity="secondary"
+            (click)="onClear()"
+            [disabled]="disabled() || searching"
+            [ngClass]="sm() ? 'p-button-sm' : ''"
+            icon="fa fa-times">
+          </p-button>
+        </p-inputgroup-addon>
+      }
+      @if (term && !valid && !searching && showAdd()) {
+        <p-inputgroup-addon>
+          <button type="button"
+                  pButton
+                  severity="info"
+                  pRipple
+                  tabindex="-1"
+                  (click)="onAdd()"
+                  [disabled]="searching"
+                  style="color: #EEF"
+                  [ngClass]="sm() ? 'p-button-sm' : ''"
+                  icon="fa fa-plus">
+          </button>
+        </p-inputgroup-addon>
+      }
+
+    </p-input-group>
+
+  </form>
+
+} @else {
+
+  <input
+    pInputText
+    [readOnly]="true"
+    [value]="readonlyCaption()">
+
+}

@@ -1,0 +1,66 @@
+@if (!readonly) {
+  <p-inputgroup>
+    <p-date-picker
+      [style]="{'width':'100%'}"
+      [inputStyle]="inputStyle"
+      class="p-calendar"
+      selectionMode="range"
+      [disabled]="disabled"
+      [dateFormat]="dateFormat"
+      [firstDayOfWeek]="1"
+      [minDate]="minDate"
+      [maxDate]="maxDate"
+      [readonlyInput]="true"
+      [numberOfMonths]="displayMonths"
+      [placeholder]="placeHolder"
+      appendTo="body"
+      [(ngModel)]="dateRange"
+      (ngModelChange)="onSelection($event)"
+      #cal >
+    </p-date-picker>
+
+    @if (startDate) {
+      <p-inputgroup-addon>
+        <p-button
+          pRipple
+          tabindex="-1"
+          [disabled]="disabled"
+          (click)="onClear()"
+          severity="secondary"
+          [ngClass]="sm ? 'p-button-sm' : ''"
+          icon="fa fa-times">
+        </p-button>
+      </p-inputgroup-addon>
+    }
+
+    @if (endDate && cal.overlayVisible) {
+      <p-inputgroup-addon>
+        <p-button
+          pRipple
+          tabindex="-1"
+          [disabled]="disabled"
+          severity="success"
+          [ngClass]="sm ? 'p-button-sm' : ''"
+          (click)="cal.toggle()"
+          icon="fa fa-check">
+        </p-button>
+      </p-inputgroup-addon>
+    }
+
+    <p-inputgroup-addon>
+      <p-button
+        pRipple
+        severity="info"
+        [ngClass]="sm ? 'p-button-sm' : ''"
+        (click)="cal.toggle()"
+        icon="fa fa-calendar">
+      </p-button>
+    </p-inputgroup-addon>
+
+  </p-inputgroup>
+} @else {
+  <input
+  pInputText
+  [readonly]="true"
+  [value]="readonlyCaption">
+}

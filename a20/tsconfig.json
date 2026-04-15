@@ -19,6 +19,9 @@
       "AlphaOas": [
         "./dist/alpha-oas"
       ],
+      "AlphaPrime": [
+        "./dist/alpha-prime"
+      ],
       "AlphaTs": [
         "./dist/alpha-ts"
       ]
@@ -86,6 +89,12 @@
     },
     {
       "path": "./projects/alpha-ts/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/alpha-prime/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/alpha-prime/tsconfig.spec.json"
     }
   ]
 }

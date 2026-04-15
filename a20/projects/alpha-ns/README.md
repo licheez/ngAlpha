@@ -16,17 +16,20 @@ AlphaNs is an Angular library that provides robust navigation, browser interacti
 Install via npm:
 
 ```bash
-npm install alpha-ns
+npm install @pvway/alpha-ns
 ```
 
-> **Note:** This package requires Angular 16+.
+## ✅ Compatibility
+
+- Angular `20.3.18` or above
+- Supported Angular peer range: `>=20.3.18 <21.0.0`
 
 ## 🚀 Usage
 
 ### 📥 Importing the Service
 
 ```typescript
-import { AlphaNsService } from 'alpha-ns';
+import { AlphaNsService } from '@pvway/alpha-ns';
 ```
 
 ### ⚙️ Initializing the Service
@@ -35,7 +38,7 @@ Inject and initialize the service in your component or root provider:
 
 ```typescript
 // Example in a standalone Angular component
-import { AlphaNsService } from 'alpha-ns';
+import { AlphaNsService } from '@pvway/alpha-ns';
 import { inject } from '@angular/core';
 
 const alphaNs = inject(AlphaNsService);
@@ -64,7 +67,7 @@ alphaNs.downloadDataUrl('data:text/plain;base64,SGVsbG8sIHdvcmxkIQ==', 'hello.tx
 ### 🛠️ Using Utility Methods
 
 ```typescript
-import { AlphaNsUtils } from 'alpha-ns';
+import { AlphaNsUtils } from '@pvway/alpha-ns';
 
 const blob = AlphaNsUtils.dataUrlToBlob(dataUrl);
 const arr = AlphaNsUtils.b64ToUint8Array(base64String);

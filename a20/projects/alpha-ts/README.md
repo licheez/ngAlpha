@@ -1,6 +1,6 @@
-# AlphaTs <img src="https://img.shields.io/badge/Angular-20.3.0-red?logo=angular" alt="Angular" height="20"/> <img src="https://img.shields.io/npm/v/@pvway/alpha-ts.svg?logo=npm" alt="npm version" height="20"/> <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT" height="20"/>
+# AlphaTs <img src="https://img.shields.io/badge/Angular-20.3.18%2B-red?logo=angular" alt="Angular" height="20"/> <img src="https://img.shields.io/npm/v/@pvway/alpha-ts.svg?logo=npm" alt="npm version" height="20"/> <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT" height="20"/>
 
-> **Type-safe, extensible translation and enum utilities for Angular 20+**
+> **Type-safe, extensible translation and enum utilities for Angular 20.3.18+**
 
 ---
 
@@ -20,6 +20,11 @@
 ```bash
 npm install @pvway/alpha-ts
 ```
+
+## ✅ Compatibility
+
+- Angular `20.3.18` or above
+- Supported Angular peer range: `>=20.3.18 <21.0.0`
 
 ---
 

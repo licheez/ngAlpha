@@ -1,0 +1,25 @@
+@if(busy) {
+  @if(mode() === 'indeterminate') {
+    <p-progressBar
+      [color]="color()"
+      mode="indeterminate">
+    </p-progressBar>
+  } @else if(mode() === 'determinate') {
+    <p-progressBar
+      [showValue]="true"
+      [color]="color()"
+      [style]="{'height': '1.3rem' }"
+      mode="determinate"
+      [value]="value()">
+    </p-progressBar>
+  } @else if(mode() === 'tiny') {
+    <p-progressBar
+      class="p-pro"
+      [showValue]="false"
+      [color]="color()"
+      [style]="{'height': '0.5rem' }"
+      mode="determinate"
+      [value]="value()">
+    </p-progressBar>
+  }
+}

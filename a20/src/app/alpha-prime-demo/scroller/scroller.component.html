@@ -1,0 +1,53 @@
+<div class="scroller-demo-container">
+  <div class="demo-header">
+    <h1>AlphaPrimeScroller Demo</h1>
+     <p class="subtitle">Virtual scrolling with variable-height items and dynamic loading</p>
+  </div>
+
+  <!-- Status Panel - Moved to top for remaining height calculation -->
+  <div class="status-panel">
+    <div class="status-grid">
+      <div class="status-item">
+        <span class="status-label">Total Items:</span>
+        <span class="status-value">{{ items().length }}</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Scroll Position:</span>
+        <span class="status-value">{{ lastScrollPosition() }}px</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">All Fetched:</span>
+        <span class="status-value">{{ allItemsFetched() ? 'Yes' : 'No' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <alpha-prime-scroller
+    #scroller
+    class="scroller-wrapper"
+    alphaPrimeRemainingHeight
+    [bottomMarginInPx]="16"
+    [itemHeight]="200"
+    [bufferSize]="5"
+    [showLoadingIndicator]="true"
+    (loadMore)="onLoadMore($event)"
+    (scrolled)="onScroll($event)">
+
+    @for (row of scroller.visibleRows(); track row.index) {
+      <div class="item-row">
+        <div class="item-header">
+          <div class="item-id">{{ row.data.id }}</div>
+          <span [class]="'badge ' + getCategoryClass(row.data.category)">
+            {{ row.data.category }}
+          </span>
+          <div class="item-timestamp">{{ row.data.timestamp }}</div>
+        </div>
+        <div class="item-content">
+          <h3>{{ row.data.title }}</h3>
+          <p>{{ row.data.description }}</p>
+        </div>
+      </div>
+    }
+  </alpha-prime-scroller>
+</div>
+

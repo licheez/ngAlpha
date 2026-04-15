@@ -1,0 +1,24 @@
+@if (!busy()) {
+  <p-button
+    [label]="showLabel() ? effectiveCaption() : ''"
+    [pTooltip]="!showLabel() ? effectiveCaption() : ''"
+    severity="danger"
+    [icon]="'fa fa-trash-alt'"
+    [disabled]="disabled()"
+    [size]="sm() ? 'small' : 'large'"
+    (click)="onClicked()"
+    [attr.aria-label]="effectiveCaption()"
+    [class]="'alpha-prime-button' + (!showLabel() ? ' p-button-icon-only' : '')"
+  ></p-button>
+} @else {
+  <p-button
+    [label]="showLabel() ? effectiveCaption() : ''"
+    [pTooltip]="!showLabel() ? effectiveCaption() : ''"
+    severity="danger"
+    [icon]="'fa fa-spinner fa-spin'"
+    [disabled]="true"
+    [size]="sm() ? 'small' : 'large'"
+    [attr.aria-label]="effectiveCaption()"
+    [class]="'alpha-prime-button' + (!showLabel() ? ' p-button-icon-only' : '')"
+  ></p-button>
+}

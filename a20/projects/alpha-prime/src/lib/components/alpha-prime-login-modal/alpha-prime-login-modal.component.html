@@ -1,0 +1,13 @@
+<alpha-prime-debug-tag tag="alphaLoginModal"></alpha-prime-debug-tag>
+@if(ready()){
+  <alpha-prime-login-form
+    [showCancelButton]="showCancelButton"
+    [usernameLabel]="usernameLabel"
+    [passwordLabel]="passwordLabel"
+    [connectLabel]="connectLabel"
+    [failureMessage]="failureMessage"
+    [invalidCredentialsMessage]="invalidCredentialsMessage"
+    (loggedIn)="onLoggedIn()"
+    (cancelled)="onCancelled()">
+  </alpha-prime-login-form>
+}

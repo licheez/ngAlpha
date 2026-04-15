@@ -1,0 +1,24 @@
+<alpha-prime-debug-tag tag="alpha-prime-debug-tag"></alpha-prime-debug-tag>
+
+<div class="my-6">
+  <h2>{{ message }}</h2>
+</div>
+
+<div class="p-m-3 text-right ">
+
+  <p-button
+    #noButton
+    class="mr-4"
+    severity="secondary"
+    [label]="no"
+    (click)="onNo()">
+  </p-button>
+
+  <p-button
+    severity="secondary"
+    (click)="onYes()"
+    [label]="yes">
+  </p-button>
+
+
+</div>

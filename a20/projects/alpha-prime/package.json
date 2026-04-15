@@ -1,0 +1,48 @@
+{
+  "name": "@pvway/alpha-prime",
+  "version": "20.3.1",
+  "description": "Standalone Angular UI component library built on PrimeNG for forms, actions, modals, and productivity workflows.",
+  "keywords": [
+    "angular",
+    "angular-library",
+    "primeng",
+    "ui-components",
+    "standalone-components",
+    "forms",
+    "datepicker",
+    "autocomplete",
+    "select",
+    "modal",
+    "scroller",
+    "typescript",
+    "enterprise-ui",
+    "pvway",
+    "alpha-prime"
+  ],
+  "author": "Pierre Van Wallendael",
+  "license": "MIT",
+  "peerDependencies": {
+    "@angular/common": ">=20.3.18 <21.0.0",
+    "@angular/core": ">=20.3.18 <21.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0",
+    "@fortawesome/fontawesome-free": "^7.1.0",
+    "uuid": "^9.0.1",
+    "primeflex": "^4.0.0",
+    "primeng": "^20.2.0"
+  },
+  "devDependencies": {
+    "@types/uuid": "^9.0.8"
+  },
+  "sideEffects": false,
+  "readme": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/licheez/ngAlpha.git#main"
+  },
+  "homepage": "https://github.com/licheez/ngAlpha/tree/main/a20/projects/alpha-prime",
+  "bugs": {
+    "url": "https://github.com/licheez/ngAlpha/issues"
+  }
+}

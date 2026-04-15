@@ -1,0 +1,18 @@
+<div #scrollContainer
+     class="scroller-container" (scroll)="onScroll()">
+  <div class="scroller-content"
+       [style.padding-top.px]="paddingTop()"
+       [style.padding-bottom.px]="paddingBottom()">
+
+    <ng-content></ng-content>
+  </div>
+
+  @if (loading() && showLoadingIndicator()) {
+    <div class="scroller-loading">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <span class="loading-text">{{ effectiveLoadingMessage() }}</span>
+      </div>
+    </div>
+  }
+</div>
