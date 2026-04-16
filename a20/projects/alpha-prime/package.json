@@ -1,7 +1,7 @@
 {
   "name": "@pvway/alpha-prime",
-  "version": "20.3.1",
-  "description": "Standalone Angular UI component library built on PrimeNG for forms, actions, modals, and productivity workflows.",
+  "version": "20.3.2",
+  "description": "Standalone Angular 20.3+ UI component library built on PrimeNG, including forms, actions, modals, and a paging-first virtual scroller API.",
   "keywords": [
     "angular",
     "angular-library",
@@ -14,6 +14,9 @@
     "select",
     "modal",
     "scroller",
+    "virtual-scroll",
+    "infinite-scroll",
+    "signals",
     "typescript",
     "enterprise-ui",
     "pvway",

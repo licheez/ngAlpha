@@ -11,6 +11,7 @@ Reusable Angular UI building blocks built on PrimeNG.
 - [Installation](#installation)
 - [Quick usage notes](#quick-usage-notes)
 - [Component catalog](#component-catalog)
+- [Scroller API](#scroller-api)
 - [Extended docs](#extended-docs)
 - [Development](#development)
 - [Publishing](#publishing)
@@ -60,11 +61,25 @@ Current library inventory includes:
 
 Full selector and feature list: [`docs/COMPONENTS.md`](https://github.com/licheez/ngAlpha/tree/main/a20/projects/alpha-prime/docs/COMPONENTS.md)
 
+## Scroller API
+
+`alpha-prime-scroller` keeps its item list encapsulated and exposes explicit list operations.
+
+- `addItems(newItems)` for lazy-loaded pages
+- `resetItems(items?)`
+- `insertAtTop(itemOrItems)` for realtime top insertion (`T | T[]`)
+- `replaceAt(index, item)`
+- `findIndex(predicate)` / `find(predicate)`
+- `itemCount()`
+
+Use a component reference (`viewChild`) to call these APIs from the host component.
+
 ## Extended docs
 
 If you want a split documentation set (npm README + detailed guides), start here:
 
 - Component inventory: [`docs/COMPONENTS.md`](https://github.com/licheez/ngAlpha/tree/main/a20/projects/alpha-prime/docs/COMPONENTS.md)
+- Scroller guide and examples: [`docs/SCROLLER.md`](https://github.com/licheez/ngAlpha/tree/main/a20/projects/alpha-prime/docs/SCROLLER.md)
 - App integration notes: [`docs/INTEGRATION.md`](https://github.com/licheez/ngAlpha/tree/main/a20/projects/alpha-prime/docs/INTEGRATION.md)
 - Maintainer workflows: [`docs/DEVELOPMENT.md`](https://github.com/licheez/ngAlpha/tree/main/a20/projects/alpha-prime/docs/DEVELOPMENT.md)
 

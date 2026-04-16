@@ -19,6 +19,23 @@
         <span class="status-label">All Fetched:</span>
         <span class="status-value">{{ allItemsFetched() ? 'Yes' : 'No' }}</span>
       </div>
+      <div class="status-item">
+        <span class="status-label">Last Find:</span>
+        <span class="status-value">
+          {{ lastFoundIndex() >= 0 ? ('#' + lastFoundIndex() + ' (' + lastFoundId() + ')') : 'Not found' }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="config-panel">
+    <div class="action-buttons">
+      <button type="button" class="btn-primary" (click)="resetScroller()">Reset + Load</button>
+      <button type="button" class="btn-secondary" (click)="clearScroller()">Clear</button>
+      <button type="button" class="btn-secondary" (click)="insertAtTop()">Insert Top</button>
+      <button type="button" class="btn-secondary" (click)="insertBatchAtTop()">Insert Batch Top</button>
+      <button type="button" class="btn-secondary" (click)="findFirstBugFix()">Find First Bug Fix</button>
+      <button type="button" class="btn-secondary" (click)="replaceFoundItem()">Replace Found</button>
     </div>
   </div>
 
@@ -34,17 +51,18 @@
     (scrolled)="onScroll($event)">
 
     @for (row of scroller.visibleRows(); track row.index) {
+      @let item = toDemoItem(row.data);
       <div class="item-row">
         <div class="item-header">
-          <div class="item-id">{{ row.data.id }}</div>
-          <span [class]="'badge ' + getCategoryClass(row.data.category)">
-            {{ row.data.category }}
+          <div class="item-id">{{ item.id }}</div>
+          <span [class]="'badge ' + getCategoryClass(item.category)">
+            {{ item.category }}
           </span>
-          <div class="item-timestamp">{{ row.data.timestamp }}</div>
+          <div class="item-timestamp">{{ item.timestamp }}</div>
         </div>
         <div class="item-content">
-          <h3>{{ row.data.title }}</h3>
-          <p>{{ row.data.description }}</p>
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.description }}</p>
         </div>
       </div>
     }

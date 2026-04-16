@@ -54,4 +54,5 @@ This document lists the current component/directive/pipe/service inventory in `@
 
 - The root package export surface is being finalized.
 - Treat deep import paths as implementation details unless explicitly documented as public API.
+- Scroller-specific API and examples: [`SCROLLER.md`](./SCROLLER.md).
 

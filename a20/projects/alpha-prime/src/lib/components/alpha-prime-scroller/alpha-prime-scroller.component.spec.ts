@@ -133,6 +133,37 @@ describe('AlphaPrimeScrollerComponent', () => {
     expect(component.scrolled.emit).toHaveBeenCalledWith(42);
   });
 
+  it('should insert one item at top and keep new item first', () => {
+    fixture.detectChanges();
+    component.addItems(['B', 'C']);
+
+    component.insertAtTop('A');
+
+    expect(component.visibleRows().map(row => row.data)).toContain('A');
+    expect(component.findIndex(item => item === 'A')).toBe(0);
+  });
+
+  it('should insert multiple items at top preserving input order', () => {
+    fixture.detectChanges();
+    component.addItems(['C', 'D']);
+
+    component.insertAtTop(['A', 'B']);
+
+    expect(component.findIndex(item => item === 'A')).toBe(0);
+    expect(component.findIndex(item => item === 'B')).toBe(1);
+  });
+
+  it('should replace an item at index and support find', () => {
+    fixture.detectChanges();
+    component.addItems(['A', 'B', 'C']);
+
+    const replaced = component.replaceAt(1, 'B2');
+
+    expect(replaced).toBeTrue();
+    expect(component.find(item => item === 'B2')).toBe('B2');
+    expect(component.findIndex(item => item === 'B')).toBe(-1);
+  });
+
   it('should emit loadMore once when entering near-bottom zone, then again after leaving and re-entering', () => {
     fixture.detectChanges();
     spyOn(component.loadMore, 'emit');
