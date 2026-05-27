@@ -158,6 +158,17 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'modal',
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./alpha-prime-demo/modal/open-modal/open-modal')
+            .then(m => m.OpenModal)
+      }
+    ]
+  },
+  {
     path: 'explore',
     children: [
       {

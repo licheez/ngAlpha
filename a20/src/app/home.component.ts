@@ -9,6 +9,7 @@ import {RouterModule} from '@angular/router';
       <h1>A20 - Demo App</h1>
       <ul>
         <li><a [routerLink]="['/alpha-prime']">Alpha Prime Components</a></li>
+        <li><a [routerLink]="['/modal']">Alpha Prime Modal</a></li>
         <li><a [routerLink]="['/explore']">Explore</a></li>
       </ul>
     </section>

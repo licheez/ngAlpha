@@ -195,6 +195,31 @@ export class AlphaNsService {
   }
 
   /**
+   * Parses a query string into a key-value record.
+   *
+   * Accepts strings with or without a leading `?` (e.g. `'?nv=x&p1=y'` or `'nv=x&p1=y'`).
+   * Returns an empty record when `qParams` is `null` or an empty string.
+   *
+   * @param qParams The query string to parse (e.g. `'?nv=NPR&ec=ec00&ac=1256'`).
+   * @returns A `Record<string, string>` mapping each parameter name to its value.
+   *
+   * @example
+   * parseQueryParams('?nv=NPR&ec=ec00&ac=1256')
+   * // → { nv: 'NPR', ec: 'ec00', ac: '1256' }
+   */
+  parseQueryParams(qParams: string | null): Record<string, string> {
+    const result: Record<string, string> = {};
+    if (qParams == null) {
+      return result;
+    }
+    const sParams = qParams.startsWith('?')
+      ? qParams.slice(1) : qParams;
+    const params = new URLSearchParams(sParams);
+    params.forEach((value, key) => result[key] = value);
+    return result;
+  }
+
+  /**
    * Converts a data URL to a Blob and opens it in a new tab for preview/download.
    *
    * @param dataUrl The data URL to convert and open.

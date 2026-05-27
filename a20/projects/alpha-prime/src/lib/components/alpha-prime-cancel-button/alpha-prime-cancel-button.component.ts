@@ -18,7 +18,7 @@ export class AlphaPrimeCancelButtonComponent {
   disabled = input<boolean>(false);
   caption = input<string>('');
   effectiveCaption = computed(() =>
-    this.caption() || this.mPs.getTr('alpha.buttons.add')
+    this.caption() || this.mPs.getTr('alpha.buttons.cancel')
   );
   sm=input<boolean>(false);
   showLabel = input<boolean>(false);

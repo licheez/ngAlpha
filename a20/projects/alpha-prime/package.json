@@ -1,6 +1,6 @@
 {
   "name": "@pvway/alpha-prime",
-  "version": "20.3.2",
+  "version": "20.3.5",
   "description": "Standalone Angular 20.3+ UI component library built on PrimeNG, including forms, actions, modals, and a paging-first virtual scroller API.",
   "keywords": [
     "angular",
@@ -31,7 +31,7 @@
   "dependencies": {
     "tslib": "^2.3.0",
     "@fortawesome/fontawesome-free": "^7.1.0",
-    "uuid": "^9.0.1",
+    "uuid": "^14.0.0",
     "primeflex": "^4.0.0",
     "primeng": "^20.2.0"
   },
