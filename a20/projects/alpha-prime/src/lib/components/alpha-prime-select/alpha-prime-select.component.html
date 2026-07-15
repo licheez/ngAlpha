@@ -1,5 +1,5 @@
 @if (!readonly()) {
-  <p-inputgroup [styleClass]="'alpha-prime-select__group'">
+  <p-inputgroup class="alpha-prime-select__group">
     <p-select
       class="alpha-prime-select__dropdown"
       [options]="effectiveOptions()"
@@ -37,10 +37,12 @@
     }
   </p-inputgroup>
 } @else {
-  <input
-    type="text"
-    pInputText
-    [readOnly]="true"
-    [value]="readonlyCaption() ?? ''"
-  >
+  <div class="alpha-prime-select__readonly">
+    <input
+      type="text"
+      pInputText
+      [readOnly]="true"
+      [value]="readonlyCaption() ?? ''"
+    >
+  </div>
 }

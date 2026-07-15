@@ -162,6 +162,50 @@ describe('AlphaNsService', () => {
     expect(openSpy).toHaveBeenCalledWith(blobUrl, '_blank');
   });
 
+  describe('parseQueryParams', () => {
+
+    it('should parse a query string with leading "?"', () => {
+      const result = service.parseQueryParams('?nv=NPR&ec=ec00&ac=1256');
+      expect(result).toEqual({ nv: 'NPR', ec: 'ec00', ac: '1256' });
+    });
+
+    it('should parse a query string without leading "?"', () => {
+      const result = service.parseQueryParams('nv=NPR&ec=ec00&ac=1256');
+      expect(result).toEqual({ nv: 'NPR', ec: 'ec00', ac: '1256' });
+    });
+
+    it('should return an empty record for null', () => {
+      const result = service.parseQueryParams(null);
+      expect(result).toEqual({});
+    });
+
+    it('should return an empty record for an empty string', () => {
+      const result = service.parseQueryParams('');
+      expect(result).toEqual({});
+    });
+
+    it('should return an empty record for "?" only', () => {
+      const result = service.parseQueryParams('?');
+      expect(result).toEqual({});
+    });
+
+    it('should handle a single param', () => {
+      const result = service.parseQueryParams('?nv=NPR');
+      expect(result).toEqual({ nv: 'NPR' });
+    });
+
+    it('should handle URL-encoded values', () => {
+      const result = service.parseQueryParams('?name=hello%20world&code=a%2Bb');
+      expect(result).toEqual({ name: 'hello world', code: 'a+b' });
+    });
+
+    it('should handle params with empty values', () => {
+      const result = service.parseQueryParams('?nv=&ec=ec00');
+      expect(result).toEqual({ nv: '', ec: 'ec00' });
+    });
+
+  });
+
   it('should download data url using injected window via init', () => {
     // Arrange
     const clickSpy =

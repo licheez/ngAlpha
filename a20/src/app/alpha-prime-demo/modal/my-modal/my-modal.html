@@ -1,0 +1,7 @@
+<alpha-prime-debug-tag tag="myModal"/>
+@if (ready()) {
+  <app-my-form
+    (cancelled)="onCancelled()"
+    (done)="onDone($event)"
+  />
+}

@@ -18,6 +18,12 @@ export interface VirtualRow<T> {
   data: T;
 }
 
+export type AlphaPrimeScrollerPredicate<T> = (
+  item: T,
+  index: number,
+  items: readonly T[]
+) => boolean;
+
 @Component({
   selector: 'alpha-prime-scroller',
   standalone: true,
@@ -25,7 +31,7 @@ export interface VirtualRow<T> {
   styleUrl: './alpha-prime-scroller.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AlphaPrimeScrollerComponent<T = any> implements AfterViewInit, OnDestroy {
+export class AlphaPrimeScrollerComponent<T = unknown> implements AfterViewInit, OnDestroy {
   private readonly alphaPrimeService = inject(AlphaPrimeService);
   private resizeObserver?: ResizeObserver;
 
@@ -78,12 +84,10 @@ export class AlphaPrimeScrollerComponent<T = any> implements AfterViewInit, OnDe
 
     const rows: VirtualRow<T>[] = [];
     for (let i = start; i < end; i++) {
-      if (items[i]) {
-        rows.push({
-          index: i,
-          data: items[i]
-        });
-      }
+      rows.push({
+        index: i,
+        data: items[i]
+      });
     }
     return rows;
   });
@@ -123,10 +127,61 @@ export class AlphaPrimeScrollerComponent<T = any> implements AfterViewInit, OnDe
     }
   }
 
-  // Public method to add items
-  addItems(newItems: T[]) {
-    const current = this.allItems();
-    this.allItems.set([...current, ...newItems]);
+  // Appends newly loaded page items at the bottom.
+  addItems(newItems: readonly T[]) {
+    if (newItems.length === 0) return;
+    this.allItems.update(current => [...current, ...newItems]);
+  }
+
+  // Replaces the current list with a new sequence.
+  resetItems(items: readonly T[] = []) {
+    this.allItems.set([...items]);
+    this.isNearBottom.set(false);
+    this.syncScrollSignals();
+  }
+
+  // Inserts one or more items at the top and keeps viewport anchored.
+  insertAtTop(itemOrItems: T | readonly T[]) {
+    const items = Array.isArray(itemOrItems) ? itemOrItems : [itemOrItems];
+    if (items.length === 0) return;
+
+    this.allItems.update(current => [...items, ...current]);
+    this.shiftScrollTop(items.length);
+  }
+
+
+  replaceAt(index: number, item: T): boolean {
+    const items = this.allItems();
+    if (index < 0 || index >= items.length) {
+      return false;
+    }
+
+    const next = [...items];
+    next[index] = item;
+    this.allItems.set(next);
+    return true;
+  }
+
+  findIndex(predicate: AlphaPrimeScrollerPredicate<T>): number {
+    const items = this.allItems();
+    for (let i = 0; i < items.length; i++) {
+      if (predicate(items[i], i, items)) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  find(predicate: AlphaPrimeScrollerPredicate<T>): T | undefined {
+    const index = this.findIndex(predicate);
+    if (index < 0) {
+      return undefined;
+    }
+    return this.allItems()[index];
+  }
+
+  itemCount(): number {
+    return this.allItems().length;
   }
 
 
@@ -158,6 +213,29 @@ export class AlphaPrimeScrollerComponent<T = any> implements AfterViewInit, OnDe
     } else if (!nearBottom) {
       this.isNearBottom.set(false);
     }
+  }
+
+  private shiftScrollTop(addedItemsCount: number) {
+    if (addedItemsCount <= 0) return;
+
+    const container = this.scrollContainer()?.nativeElement;
+    if (!container) {
+      return;
+    }
+
+    const offset = addedItemsCount * this.itemHeight();
+    container.scrollTop += offset;
+    this.scrollTop.set(container.scrollTop);
+  }
+
+  private syncScrollSignals() {
+    const container = this.scrollContainer()?.nativeElement;
+    if (!container) {
+      this.scrollTop.set(0);
+      return;
+    }
+
+    this.scrollTop.set(container.scrollTop);
   }
 }
 

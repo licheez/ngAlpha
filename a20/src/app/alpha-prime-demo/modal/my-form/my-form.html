@@ -1,0 +1,31 @@
+<alpha-prime-debug-tag tag="myForm"/>
+<form class="grid" autocomplete="off">
+
+  <div class="col-12 field">
+
+    <label for="summary">
+      Summary
+    </label>
+    <textarea
+      pTextarea
+      id="summary"
+      placeholder="Enter summary"
+      rows="3"
+      [(ngModel)]="summary"
+      [ngModelOptions]="{standalone: true}"></textarea>
+
+  </div>
+
+  <div class="col-12 mt-3 text-right">
+    <alpha-prime-cancel-button
+      class="mr-3"
+      (clicked)="onCancel()"
+    />
+    <alpha-prime-save-button
+      [disabled]="invalid()"
+      (clicked)="onSave()"
+    />
+  </div>
+
+</form>
+

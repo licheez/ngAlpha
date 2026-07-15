@@ -1,8 +1,17 @@
 .alpha-prime-select__group {
   font-size: x-small;
+  width: 100%;
 }
 
 .alpha-prime-select__dropdown {
+  width: 100%;
+}
+
+.alpha-prime-select__readonly {
+  width: 100%;
+}
+
+.alpha-prime-select__readonly input {
   width: 100%;
 }
 

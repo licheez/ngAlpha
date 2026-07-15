@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ChangeDetectionStrategy, OnInit} from '@angular/core';
 import {AlphaPrimeService} from '../../services/alpha-prime.service';
 import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
 import {Button} from 'primeng/button';
@@ -11,7 +11,8 @@ import {AlphaPrimeDebugTagComponent} from '../alpha-prime-debug-tag/alpha-prime-
     Button
   ],
   templateUrl: './alpha-prime-confirmation-modal.component.html',
-  styleUrls: ['./alpha-prime-confirmation-modal.component.css']
+  styleUrls: ['./alpha-prime-confirmation-modal.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AlphaPrimeConfirmationModalComponent implements OnInit {
   onClose: (confirmed: boolean) => any = () => { };
